@@ -14,6 +14,11 @@ namespace Borg
             return string.Format(format, (Math.Sign(byteCount) * num), suf[place]);
         }
 
+        public static string BytesToString(this int byteCount, string format = "{0:0.##} {1}")
+        {
+            return ((long)byteCount).BytesToString(format);
+        }
+
         public static int RoundOff(this int i, int round = 10)
         {
             if (round <= 0) throw new ArgumentOutOfRangeException(nameof(round));

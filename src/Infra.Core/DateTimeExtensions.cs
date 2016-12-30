@@ -11,7 +11,7 @@ namespace Borg
 
         public static DateTime RoundDown(this DateTime dt, TimeSpan d)
         {
-            return new DateTime(((dt.Subtract(d).Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
+            return new DateTime((dt.Subtract(d).Ticks + d.Ticks - 1) / d.Ticks * d.Ticks);
         }
     }
 }
