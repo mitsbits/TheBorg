@@ -2,7 +2,7 @@
 
 namespace Borg.Infra.CQRS
 {
-    public interface IEvent : IMessage
+    public interface IEvent
     {
         DateTimeOffset TimeStamp { get; }
     }

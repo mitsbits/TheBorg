@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Borg.Infra.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Borg.Infra.CQRS
@@ -80,9 +82,23 @@ namespace Borg.Infra.CQRS
 
         #region IDispatcherInstance
 
-        public Task Stop()
+        public Task Stop(CancellationToken token = default(CancellationToken))
         {
             return Task.FromResult(0);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //release resources
+            }
         }
 
         #endregion IDispatcherInstance

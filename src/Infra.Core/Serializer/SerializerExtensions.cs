@@ -1,4 +1,4 @@
-﻿using Borg.Infra.Core;
+﻿using Borg.Infra;
 using System;
 using System.Text;
 using System.Threading.Tasks;

@@ -1,4 +1,4 @@
-﻿namespace Borg.Infra.Core
+﻿namespace Borg.Infra
 {
     public interface IHaveSerializer
     {

@@ -1,4 +1,4 @@
 ﻿namespace Borg.Infra.CQRS
 {
-    public interface ICommand : IMessage { }
+    public interface ICommand { }
 }

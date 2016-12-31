@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Core
+namespace Borg.Infra
 {
     public class JsonNetSerializer : ISerializer
     {
