@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Borg.Infra.Relational;
 using Shouldly;
 using Xunit;
 
-namespace Borg.Infra.Relational.Tests
+namespace Borg.Infra.Core.Tests
 {
 
     public class OrderByInfoTests

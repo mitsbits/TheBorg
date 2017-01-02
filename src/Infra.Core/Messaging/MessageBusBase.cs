@@ -130,11 +130,14 @@ namespace Borg.Infra.Messaging
             return nextMessageSendTime;
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
-            _delayedMessages?.Clear();
-            _subscribers?.Clear();
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                _delayedMessages?.Clear();
+                _subscribers?.Clear();
+            }
         }
 
         protected class DelayedMessage

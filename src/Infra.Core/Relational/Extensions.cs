@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Borg
 {
-    public static class Extensions
+    public static class RelationalExtensions
     {
         public static IQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, string orderByProperty, bool desc) where TEntity : class
         {

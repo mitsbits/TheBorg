@@ -3,7 +3,6 @@
 
   "dependencies": {
     "Infra.Core": "1.0.0-*",
-    "Infra.Relational": "1.0.0-*",
     "Mehdime.Entity": "1.0.0"
   },
 

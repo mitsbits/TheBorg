@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Borg.Infra
+namespace Borg.Infra.Relational
 {
     public class PagedResult<T> : IPagedResult<T>
     {

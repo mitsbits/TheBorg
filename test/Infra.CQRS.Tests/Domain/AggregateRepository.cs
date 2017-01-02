@@ -2,6 +2,7 @@
 using Borg.Infra.CQRS;
 using System;
 using System.Threading.Tasks;
+using Shouldly;
 using Xunit;
 
 namespace Infra.CQRS.Tests.Domain
@@ -28,10 +29,21 @@ namespace Infra.CQRS.Tests.Domain
         }
 
         [Fact]
-        public async Task test()
+        public void test()
         {
-            await _inMemoryProcessor.Process(new CreateDummyAggregateCommand() { Id = "xxx-ooooo-xx-ooo", Name = "test" });
-            await _inMemoryProcessor.Process(new ChangeDummyAggregateNameCommand() { Id = "xxx-ooooo-xx-ooo", Name = "test 2" });
+            Should.NotThrow(async () =>
+            {
+                await _inMemoryProcessor.Process(new CreateDummyAggregateCommand()
+                {
+                    Id = "xxx-ooooo-xx-ooo",
+                    Name = "test"
+                });
+                await _inMemoryProcessor.Process(new ChangeDummyAggregateNameCommand()
+                {
+                    Id = "xxx-ooooo-xx-ooo",
+                    Name = "test 2"
+                });
+            });
         }
 
         private class DummyAggregate : AggregateRoot<string>

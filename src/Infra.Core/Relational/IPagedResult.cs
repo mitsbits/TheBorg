@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Borg.Infra
+namespace Borg.Infra.Relational
 {
     public interface IPagedResult<T> : IList<T>
     {

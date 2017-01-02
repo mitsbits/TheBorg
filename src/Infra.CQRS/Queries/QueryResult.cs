@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Borg.Infra.Relational;
 
 namespace Borg.Infra.CQRS
 {

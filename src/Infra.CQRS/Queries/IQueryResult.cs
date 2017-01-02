@@ -1,4 +1,6 @@
-﻿namespace Borg.Infra.CQRS
+﻿using Borg.Infra.Relational;
+
+namespace Borg.Infra.CQRS
 {
     public interface IQueryResult<T> : IPagedResult<T>, IQueryResult
     {

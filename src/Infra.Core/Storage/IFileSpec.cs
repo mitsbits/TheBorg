@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace Borg.Infra.Storage
+{
+    public interface IFileSpec
+    {
+        string FullPath { get; }
+        string Name { get; }
+        DateTime CreationDate { get; }
+        DateTime LastWrite { get; }
+        DateTime? LastRead { get; }
+        long SizeInBytes { get; }
+        string MimeType { get; }
+
+        void ModifyPath(string newPath);
+    }
+}
