@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Core
+namespace Borg.Infra
 {
     public class ScheduledTimer : IDisposable
     {

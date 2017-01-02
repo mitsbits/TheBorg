@@ -1,4 +1,4 @@
-﻿using Borg.Infra.Core;
+﻿using Borg.Infra;
 using System;
 
 namespace Borg

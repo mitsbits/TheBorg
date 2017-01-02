@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Borg.Infra.Core
+namespace Borg.Infra
 {
     internal static class CloneExpressionHelper
     {

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace Borg.Infra.Core
+namespace Borg.Infra
 {
     internal class CloneExpressionBuilder
     {

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Core.Infrastructure
+namespace Borg.Infra
 {
-    public static class Run
+    internal static class Run
     {
         public static async Task DelayedAsync(TimeSpan delay, Func<Task> action)
         {

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Borg.Infra;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Borg.Infra.Core
+namespace Borg
 {
     internal static class ObjectExtensions
     {

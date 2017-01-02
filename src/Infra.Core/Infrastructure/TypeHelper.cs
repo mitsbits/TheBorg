@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Borg.Infra.Core
+namespace Borg.Infra
 {
     public static class TypeHelper
     {
