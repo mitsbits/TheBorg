@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Threading.Tasks;
 
 namespace Borg.Infra
@@ -6,8 +7,8 @@ namespace Borg.Infra
     public class MaintenanceBase : IDisposable
     {
         private ScheduledTimer _maintenanceTimer;
-        //private readonly ILoggerFactory _loggerFactory;
-        //protected readonly ILogger _logger;
+        
+  
 
         public MaintenanceBase(/*ILoggerFactory loggerFactory*/)
         {

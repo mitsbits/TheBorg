@@ -1,9 +1,11 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Infra.Core": "1.0.0-*",
-    "Mehdime.Entity": "1.0.0"
+    "Infra.Core": {
+      "target": "project"
+    },
+    "MailKit": "1.10.1"
   },
 
   "frameworks": {

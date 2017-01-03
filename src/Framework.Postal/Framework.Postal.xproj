@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>806f74da-2a49-464b-ba60-b5cb873b944a</ProjectGuid>
-    <RootNamespace>Borg.Infra.Relational.EF6</RootNamespace>
+    <ProjectGuid>dc1071a0-abad-4d1c-99ee-941a87254ecd</ProjectGuid>
+    <RootNamespace>Borg.Framework.Postal</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>

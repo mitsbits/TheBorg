@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 
-namespace Borg.Infra.Relational.EF6
+namespace Borg.Infra.EF6
 {
     public class ConnectionStringsDictionaryDbContextFactory : IDbContextFactory
     {

@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Relational.EF6
+namespace Borg.Infra.EF6
 {
     public abstract class ContextEmbeddedReadWriteRepositoryWithCommit<T, TDbContext> :
         BaseReadRepository<T, TDbContext>, IRepositoryThatCommits

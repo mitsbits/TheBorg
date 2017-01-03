@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Infra
 {
-    internal static class Run
+    public static class Run
     {
         public static async Task DelayedAsync(TimeSpan delay, Func<Task> action)
         {

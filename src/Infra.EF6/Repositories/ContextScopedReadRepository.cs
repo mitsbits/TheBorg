@@ -2,12 +2,11 @@
 using System;
 using System.Data.Entity;
 
-namespace Borg.Infra.Relational.EF6
+namespace Borg.Infra.EF6
 {
-    public abstract class ContextScopedReadWriteRepository<T, TDbContext> :
-        BaseReadWriteRepository<T, TDbContext>
-        where TDbContext :
-        DbContext
+    public abstract class ContextScopedReadRepository<T, TDbContext> :
+        BaseReadRepository<T, TDbContext>
+        where TDbContext : DbContext
         where T : class
     {
         private readonly IAmbientDbContextLocator _ambientDbContextLocator;
@@ -34,7 +33,7 @@ namespace Borg.Infra.Relational.EF6
             }
         }
 
-        protected ContextScopedReadWriteRepository(IAmbientDbContextLocator ambientDbContextLocator)
+        protected ContextScopedReadRepository(IAmbientDbContextLocator ambientDbContextLocator)
         {
             if (ambientDbContextLocator == null) throw new ArgumentNullException(nameof(ambientDbContextLocator));
             _ambientDbContextLocator = ambientDbContextLocator;

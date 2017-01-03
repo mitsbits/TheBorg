@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Borg.Infra.Relational;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Metadata.Edm;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Relational.EF6
+namespace Borg.Infra.EF6
 {
     public abstract class BaseReadWriteRepository<T, TDbContext> : BaseReadRepository<T, TDbContext>,
         IWriteRepository<T>, IWriteAsyncRepository<T>

@@ -1,5 +1,5 @@
 ﻿using Borg.Infra;
-using Borg.Infra.Core.Infrastructure;
+
 using Borg.Infra.Core.Messaging;
 using Borg.Infra.Messaging;
 using StackExchange.Redis;

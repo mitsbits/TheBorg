@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Borg.Infra.Relational;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Relational.EF6
+namespace Borg.Infra.EF6
 {
     public abstract class BaseReadRepository<T, TDbContext> : BaseRepository, IReadRepository<T>, IReadAsyncRepository<T> where T : class where TDbContext : DbContext
     {

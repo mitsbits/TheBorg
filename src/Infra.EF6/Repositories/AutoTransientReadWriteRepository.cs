@@ -2,9 +2,9 @@
 using System;
 using System.Data.Entity;
 
-namespace Borg.Infra.Relational.EF6
+namespace Borg.Infra.EF6
 {
-    public abstract class AutoTransientReadRepository<T, TDbContext> :
+    public abstract class AutoTransientReadWriteRepository<T, TDbContext> :
       BaseReadRepository<T, TDbContext>
       where TDbContext : DbContext
       where T : class
@@ -12,7 +12,7 @@ namespace Borg.Infra.Relational.EF6
         private readonly IDbContextFactory _contextFactory;
         private TDbContext _dbContext;
 
-        protected AutoTransientReadRepository(IDbContextFactory contextFactory)
+        protected AutoTransientReadWriteRepository(IDbContextFactory contextFactory)
         {
             if (contextFactory == null) throw new ArgumentNullException(nameof(contextFactory));
             _contextFactory = contextFactory;
@@ -24,6 +24,11 @@ namespace Borg.Infra.Relational.EF6
             };
             PostProcessQuery = () =>
             {
+                _dbContext?.Dispose();
+            };
+            PostProcessUpdateAsync = async () =>
+            {
+                await _dbContext?.SaveChangesAsync();
                 _dbContext?.Dispose();
             };
         }
