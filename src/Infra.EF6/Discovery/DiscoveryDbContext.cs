@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Linq;
-using System.Reflection;
 
 namespace Borg.Infra.EF6
 {
-    public interface IDiscoveryDbContext
+    public abstract class DiscoveryDbContext : DbContext, IDiscoveryDbContext, IHaveAssemblyScanner
     {
-    }
+        private readonly string _schemaName;
 
-    public abstract class DiscoveryDbContext : DbContext, IHaveAssemblyScanner
-    {
         protected DiscoveryDbContext(DiscoveryDbContextSpec spec) : base(spec.ConnectionStringOrName)
         {
             Providers = spec.GetProviders();
+            _schemaName = spec.SchemaName;
         }
 
         public IEnumerable<IAssemblyProvider> Providers { get; }
@@ -25,11 +23,18 @@ namespace Borg.Infra.EF6
         {
             base.OnModelCreating(modelBuilder);
 
+            if (!string.IsNullOrWhiteSpace(_schemaName)) modelBuilder.HasDefaultSchema(_schemaName);
+
+            DiscoverEntities(modelBuilder);
+        }
+
+        private void DiscoverEntities(DbModelBuilder modelBuilder)
+        {
             var entityMethod = typeof(DbModelBuilder).GetMethod("Entity");
 
             var addMethod = typeof(ConfigurationRegistrar)
-               .GetMethods()
-               .Single(m => m.Name == "Add" && m.GetGenericArguments().Any(a => a.Name == "TEntityType"));
+                .GetMethods()
+                .Single(m => m.Name == "Add" && m.GetGenericArguments().Any(a => a.Name == "TEntityType"));
 
             var asmbls = Providers
                 .SelectMany(x => x.Assemblies())
@@ -53,24 +58,16 @@ namespace Borg.Infra.EF6
                     }
                     else
                     {
-                        entityMethod.MakeGenericMethod(type)
-                            .Invoke(modelBuilder, new object[] { });
+                        var entityInvocation = entityMethod.MakeGenericMethod(type)
+                               .Invoke(modelBuilder, new object[] { });
+                        if (type.IsSequenceEntity())
+                        {
+                            modelBuilder.SetKeys(type, new[] { "Id" }, entityInvocation);
+                            modelBuilder.SetHasDatabaseGeneratedOption(type, "Id", DatabaseGeneratedOption.None, entityInvocation);
+                        }
                     }
                 }
             }
-        }
-    }
-
-    public class DiscoveryDbContextSpec
-    {
-        public string SchemaName { get; set; } = "dbo";
-        public string ConnectionStringOrName { get; set; } = "default";
-        public IEnumerable<IAssemblyProvider> AssemblyProviders { get; set; }
-
-        public IEnumerable<IAssemblyProvider> GetProviders(bool createDefaultIfEmpty = true, Func<Assembly, bool> createDefaultIfEmptyFilter = null)
-        {
-            if (AssemblyProviders != null && AssemblyProviders.Any()) return AssemblyProviders;
-            return (createDefaultIfEmpty) ? new[] { new CurrentContextAssemblyProvider(createDefaultIfEmptyFilter) } : new IAssemblyProvider[0];
         }
     }
 }

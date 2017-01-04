@@ -9,7 +9,7 @@ namespace Borg.Infra
     {
         private readonly Func<Assembly, bool> _predicate;
 
-        public Lazy<List<Assembly>> _assmbls = new Lazy<List<Assembly>>(() =>
+        public Lazy<List<Assembly>> _asmbls = new Lazy<List<Assembly>>(() =>
 
         {
             var refs = Assembly.GetExecutingAssembly().GetReferencedAssemblies().ToArray();
@@ -43,7 +43,7 @@ namespace Borg.Infra
 
         public Assembly[] Assemblies()
         {
-            return (_predicate == null) ? _assmbls.Value.ToArray() : _assmbls.Value.Where(_predicate).ToArray();
+            return (_predicate == null) ? _asmbls.Value.ToArray() : _asmbls.Value.Where(_predicate).ToArray();
         }
     }
 }
