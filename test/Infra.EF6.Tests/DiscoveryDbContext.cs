@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
+using Borg.Infra.CQRS;
 using Xunit;
 
 namespace Borg.Infra.EF6.Tests
@@ -22,10 +23,11 @@ namespace Borg.Infra.EF6.Tests
         [Fact]
         public void test()
         {
-            Should.NotThrow(() =>
+            Should.NotThrow( () =>
             {
-                var t = _db.Set<GuidClass>();
-                t.Add(new GuidClass() { Name = "xgxdf", Id = Guid.NewGuid() });
+                var t = _db.Set<MySequecedClass>();
+                t.Add(new MySequecedClass() { Name = "xgxdf" });
+                 _db.SaveChanges();
             });
         }
     }
@@ -38,39 +40,40 @@ namespace Borg.Infra.EF6.Tests
     }
 
     [MapEntity]
-    public class MySequecedClass : SequenceEntity
+    [MapSequenceEntity("Id")]
+    public class MySequecedClass :Entity<Guid>
     {
         public string Name { get; set; }
     }
 
-    [MapEntity]
-    public class RogueClass
-    {
-        public string Name { get; set; }
-        public long Size { get; set; }
-        public byte[] Data { get; set; }
-    }
+    //[MapEntity]
+    //public class RogueClass
+    //{
+    //    public string Name { get; set; }
+    //    public long Size { get; set; }
+    //    public byte[] Data { get; set; }
+    //}
 
-    [MapEntity]
-    public class GuidClass
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
+    //[MapEntity]
+    //public class GuidClass
+    //{
+    //    public Guid Id { get; set; }
+    //    public string Name { get; set; }
+    //}
 
-    [MapEntity]
-    public class WithConfigurationClass
-    {
-        public int RealId { get; set; }
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+    //[MapEntity]
+    //public class WithConfigurationClass
+    //{
+    //    public int RealId { get; set; }
+    //    public Guid Id { get; set; }
+    //    public string Name { get; set; }
 
-        public class WithConfigurationClassConfig : EntityTypeConfiguration<WithConfigurationClass>
-        {
-            public WithConfigurationClassConfig()
-            {
-                HasKey(x => x.RealId);
-            }
-        }
-    }
+    //    public class WithConfigurationClassConfig : EntityTypeConfiguration<WithConfigurationClass>
+    //    {
+    //        public WithConfigurationClassConfig()
+    //        {
+    //            HasKey(x => x.RealId);
+    //        }
+    //    }
+    //}
 }

@@ -7,6 +7,7 @@ namespace Borg.Infra.EF6
 {
     public class DiscoveryDbContextSpec
     {
+        public bool TryToCreateSequence { get; set; } = false;
         public string SchemaName { get; set; } = "";
         public string ConnectionStringOrName { get; set; } = "default";
         public IEnumerable<IAssemblyProvider> AssemblyProviders { get; set; }

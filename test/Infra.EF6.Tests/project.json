@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "testRunner": "xunit",
   "buildOptions": {
@@ -21,7 +21,8 @@
     "xunit": "2.2.0-beta2-build3300",
     "xunit.extensibility.core": "2.2.0-beta2-build3300",
     "xunit.extensibility.execution": "2.2.0-beta2-build3300",
-    "xunit.runner.visualstudio": "2.2.0-beta2-build1149"
+    "xunit.runner.visualstudio": "2.2.0-beta2-build1149",
+    "EntityFramework": "6.1.3"
   },
 
   "frameworks": {

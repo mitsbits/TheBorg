@@ -1,8 +1,7 @@
-﻿using Borg.Infra.CQRS;
-using Borg.Infra.EF6;
-using Borg.Infra.EF6.Exceptions;
+﻿using Borg.Infra.EF6.Exceptions;
 using System;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Borg
@@ -31,21 +30,29 @@ namespace Borg
             var seqName = typeof(T).SequenceName();
             return GetNextIdFromSequence(db, seqName, tryToCreate);
         }
+
+        public static int GetNextIdFromSequence(this DbContext db, DbEntityEntry entry, bool tryToCreate = false)
+        {
+            var entity = entry.Entity;
+            var entityType = entity.GetType();
+            var seqName = entityType.SequenceName();
+            return GetNextIdFromSequence(db, seqName, tryToCreate);
+        }
     }
 
     internal static class TypeExtensions
     {
         public static string SequenceName(this Type type, string format = "seq_{0}")
         {
-            if (!type.IsAssignableFrom(typeof(IEntity<int>))) throw new InvalidSequenceEntityException(type);
-            if (!type.IsAssignableFrom(typeof(ISequenceEntity))) throw new InvalidSequenceEntityException(type);
+            if (!type.IsSequenceEntity()) throw new InvalidSequenceEntityException(type);
+
             var seqName = type.Name;
-            var baseType = type.BaseType;
-            while (baseType?.GetInterface(typeof(ISequenceEntity).Name, false) != null)
-            {
-                seqName = baseType.Name;
-                baseType = baseType.BaseType;
-            }
+            //var baseType = type.BaseType;
+            //while (baseType?.GetInterface(typeof(ISequenceEntity).Name, false) != null)
+            //{
+            //    seqName = baseType.Name;
+            //    baseType = baseType.BaseType;
+            //}
             return string.Format(format, seqName);
         }
     }

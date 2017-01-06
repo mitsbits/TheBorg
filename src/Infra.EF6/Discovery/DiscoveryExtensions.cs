@@ -1,10 +1,7 @@
-﻿using Borg.Infra.EF6;
-using Borg.Infra.EF6.Discovery;
+﻿using Borg.Infra.EF6.Discovery;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -22,7 +19,7 @@ namespace Borg
 
         public static bool IsSequenceEntity(this Type entity)
         {
-            return entity.IsMapEntity() && entity.GetInterfaces().Any(i => i == typeof(ISequenceEntity));
+            return entity.IsMapEntity() && Attribute.GetCustomAttribute(entity, typeof(MapSequenceEntityAttribute), false) != null;
         }
     }
 
@@ -43,7 +40,6 @@ namespace Borg
 
             var parameter = Expression.Parameter(type, "entity");
 
-
             if (keyNames.Length > 1)
             {
                 //var args = new ExpandoObject() as IDictionary<string, object>;
@@ -51,7 +47,7 @@ namespace Borg
                 for (var i = 0; i < keyNames.Length; i++)
                 {
                     var keyName = keyNames[i];
-                   // args.Add(keyName, null);
+                    // args.Add(keyName, null);
                     var isFirst = i == 0;
                     var isLast = i == keyNames.Length - 1;
 
@@ -65,12 +61,13 @@ namespace Borg
                     //body = Expression.MemberInit()
                 }
 
-                dynamic lambda = Expression.Lambda( body, parameter);
+                dynamic lambda = Expression.Lambda(body, parameter);
                 var d = entityInvocation as dynamic;
                 d.HasKey(lambda);
             }
             else
             {
+                if (type.GetProperty(keyNames.Single()) == null) throw new ApplicationException($"There is no property {keyNames.Single()} on type {type.Name}. Can not set Entity Key.");
                 var body = Expression.Property(parameter, type, keyNames.Single());
 
                 var pInfo = type.GetProperty(keyNames.Single());
@@ -105,18 +102,18 @@ namespace Borg
                 entityInvocation = entityMethod.MakeGenericMethod(type).Invoke(builder, new object[] { });
             }
 
-        
             var parameter = Expression.Parameter(type, "entity");
             var body = Expression.Property(parameter, type, field);
             var pInfo = type.GetProperty(field);
             var delegateType = typeof(Func<,>).MakeGenericType(type, pInfo.PropertyType);
             dynamic lambda = Expression.Lambda(delegateType, body, parameter);
+
             //var primitivePropertyConfiguration = entityInvocation.GetType()
-            //    .InvokeMember("Property", BindingFlags.Public | BindingFlags.Instance 
+            //    .InvokeMember("Property", BindingFlags.Public | BindingFlags.Instance
             //    | BindingFlags.InvokeMethod | BindingFlags.GetProperty, null, entityInvocation, new[] { lambda });
             var primitivePropertyConfiguration = (entityInvocation as dynamic).Property(lambda);
             primitivePropertyConfiguration.GetType()
-                .InvokeMember("HasDatabaseGeneratedOption", BindingFlags.Public | BindingFlags.Instance 
+                .InvokeMember("HasDatabaseGeneratedOption", BindingFlags.Public | BindingFlags.Instance
                 | BindingFlags.InvokeMethod | BindingFlags.GetProperty, null,
                 primitivePropertyConfiguration, new object[] { option });
         }
