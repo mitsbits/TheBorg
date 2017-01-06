@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Borg.Infra.EF6.Discovery;
+using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
-using System.Data.Entity.ModelConfiguration.Configuration;
-using Borg.Infra.EF6.Discovery;
-using Shouldly;
 using Xunit;
 
 namespace Borg.Infra.EF6.Tests
@@ -15,10 +14,9 @@ namespace Borg.Infra.EF6.Tests
 
         public DiscoveryDbContextTests()
         {
-            var providers = new List<IAssemblyProvider>( new IAssemblyProvider[] {new CurrentContextAssemblyProvider() });
+            var providers = new List<IAssemblyProvider>(new IAssemblyProvider[] { new CurrentContextAssemblyProvider() });
             _spec = new DiscoveryDbContextSpec() { AssemblyProviders = providers, ConnectionStringOrName = @"data source=.\X2014;initial catalog=RDMS;User Id=dbuser;Password=qazwsx123!@#;App=RDMS Web;" };
             _db = new TestContext(_spec);
-
         }
 
         [Fact]
@@ -26,13 +24,11 @@ namespace Borg.Infra.EF6.Tests
         {
             Should.NotThrow(() =>
             {
-                var t = _db.Set<RogueClass>();
-                t.Add(new RogueClass() {Name = "xgxdf", Size = 12});
+                var t = _db.Set<GuidClass>();
+                t.Add(new GuidClass() { Name = "xgxdf", Id = Guid.NewGuid() });
             });
         }
     }
-
-
 
     public class TestContext : DiscoveryDbContext
     {
@@ -60,7 +56,6 @@ namespace Borg.Infra.EF6.Tests
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-  
     }
 
     [MapEntity]
@@ -70,7 +65,6 @@ namespace Borg.Infra.EF6.Tests
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-
         public class WithConfigurationClassConfig : EntityTypeConfiguration<WithConfigurationClass>
         {
             public WithConfigurationClassConfig()
@@ -78,6 +72,5 @@ namespace Borg.Infra.EF6.Tests
                 HasKey(x => x.RealId);
             }
         }
-
     }
 }

@@ -1,16 +1,14 @@
-﻿using System.Threading.Tasks;
-using Shouldly;
+﻿using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Borg.Infra.Core.Tests
 {
-
     public class AsyncHelpersTests
     {
         private DummyWorker _dummyWorker;
 
-
-        public  AsyncHelpersTests()
+        public AsyncHelpersTests()
         {
             _dummyWorker = new DummyWorker();
         }
@@ -50,7 +48,7 @@ namespace Borg.Infra.Core.Tests
                 result = AsyncHelpers.RunSync(() => _dummyWorker.ReturnAsync(input));
             });
             _dummyWorker.Runs.ShouldBe(1);
-            result.ShouldBe($"{DummyWorker.ReturnAsyncStringResult}{input}" );
+            result.ShouldBe($"{DummyWorker.ReturnAsyncStringResult}{input}");
         }
 
         private class DummyWorker

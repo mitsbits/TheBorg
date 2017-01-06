@@ -2,7 +2,7 @@
 
 namespace Borg.Infra.CQRS
 {
-    public interface IEntity<out TKey> where TKey : IEquatable<TKey>
+    public interface IEntity<out TKey> : IEntity where TKey : IEquatable<TKey>
     {
         TKey Id { get; }
     }
