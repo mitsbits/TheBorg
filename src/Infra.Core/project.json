@@ -14,5 +14,10 @@
         "define": [ "NET46" ]
       }
     }
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }
