@@ -57,6 +57,7 @@ namespace Borg.Infra.EF6
 
         private void DiscoverEntities(DbModelBuilder modelBuilder)
         {
+            
             var entityMethod = typeof(DbModelBuilder).GetMethod("Entity");
 
             var addMethod = typeof(ConfigurationRegistrar)
@@ -76,10 +77,10 @@ namespace Borg.Infra.EF6
                 foreach (var type in entityTypes)
                 {
                     var configType = typeof(EntityTypeConfiguration<>).MakeGenericType(type);
-
-                    if (assembly.GetTypes().Any(t => t == configType))
+                    var types = assembly.GetTypes();
+                    if (types.Any(t => t.IsSubclassOf(configType)))
                     {
-                        var entityConfig = assembly.CreateInstance(configType.FullName);
+                        var entityConfig = assembly.CreateInstance(types.First(t => t.IsSubclassOf(configType)).FullName);
                         addMethod.MakeGenericMethod(type)
                             .Invoke(modelBuilder.Configurations, new[] { entityConfig });
                     }
@@ -91,7 +92,7 @@ namespace Borg.Infra.EF6
                         {
                             var keyField =  ((MapSequenceEntityAttribute) type.GetCustomAttribute(typeof(MapSequenceEntityAttribute), false)).IdField;
                             modelBuilder.SetKeys(type, new[] { keyField }, entityInvocation);
-                            modelBuilder.SetHasDatabaseGeneratedOption(type, "Id", DatabaseGeneratedOption.None, entityInvocation);
+                            modelBuilder.SetHasDatabaseGeneratedOption(type, keyField, DatabaseGeneratedOption.None, entityInvocation);
                         }
                     }
                 }
