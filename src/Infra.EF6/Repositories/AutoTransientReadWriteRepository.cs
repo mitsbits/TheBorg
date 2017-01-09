@@ -16,16 +16,16 @@ namespace Borg.Infra.EF6
         {
             if (contextFactory == null) throw new ArgumentNullException(nameof(contextFactory));
             _contextFactory = contextFactory;
-            PreProcess = () =>
-            {
-                var db = _contextFactory.CreateDbContext<TDbContext>();
-                if (db == null) throw new ArgumentNullException(nameof(db));
-                _dbContext = db;
-            };
-            PostProcessQuery = () =>
-            {
-                _dbContext?.Dispose();
-            };
+            //PreProcess = () =>
+            //{
+            //    var db = _contextFactory.CreateDbContext<TDbContext>();
+            //    if (db == null) throw new ArgumentNullException(nameof(db));
+            //    _dbContext = db;
+            //};
+            //PostProcessQuery = () =>
+            //{
+            //    _dbContext?.Dispose();
+            //};
             PostProcessUpdateAsync = async () =>
             {
                 await _dbContext?.SaveChangesAsync();
