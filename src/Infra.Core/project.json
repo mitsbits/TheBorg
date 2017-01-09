@@ -1,5 +1,6 @@
 {
   "version": "1.0.0-*",
+  "authors": [ "mitsbits@gmail.com" ],
 
   "dependencies": {
     "System.Runtime": "4.0.20",
