@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Infra.Core": "1.0.0-CI00009"
+    "Infra.Core": "1.0.0-*"
   },
 
   "frameworks": {
