@@ -4,7 +4,7 @@
   "buildOptions": {
     "debugType": "portable",
     "warningsAsErrors": true,
-    "copyToOutput": {
+    "copyToOutput": { 
       "include": [ "xunit.runner.json" ]
     }
   },

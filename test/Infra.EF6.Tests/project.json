@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Infra.Core": {
+    "Infra.Core":
+    {
       "target": "project"
     },
     "Infra.EF6": {

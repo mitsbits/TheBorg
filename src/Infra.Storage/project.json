@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Infra.Core": "1.0.0-*"
+    "Infra.Core": "1.0.0-CI00009"
   },
 
   "frameworks": {
@@ -11,5 +11,10 @@
         "define": [ "NET46" ]
       }
     }
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }
