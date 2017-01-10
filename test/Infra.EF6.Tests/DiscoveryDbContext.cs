@@ -1,16 +1,13 @@
-﻿using Borg.Infra.EF6.Discovery;
+﻿using Borg.Infra.CQRS;
+using Borg.Infra.EF6.Discovery;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq.Expressions;
-using System.Reflection;
-using Borg.Infra.CQRS;
 using Xunit;
 
 namespace Borg.Infra.EF6.Tests
 {
-
     public class DiscoveryDbContextTests
     {
         private readonly DiscoveryDbContextSpec _spec;
@@ -31,7 +28,7 @@ namespace Borg.Infra.EF6.Tests
                var t = _db.Set<WithConfigurationClass>();
                var tt = _db.Set<MySequecedClass>();
                t.Add(new WithConfigurationClass() { Name = "jdrtnngnhhn" });
-               tt.Add(new MySequecedClass() {  Name = "sdfaszvzs"});
+               tt.Add(new MySequecedClass() { Name = "sdfaszvzs" });
                _db.SaveChanges();
            });
         }
@@ -52,7 +49,7 @@ namespace Borg.Infra.EF6.Tests
     }
 
     [MapEntity]
-    public class RogueClass :Entity<Guid>
+    public class RogueClass : Entity<Guid>
     {
         public string Name { get; set; }
         public long Size { get; set; }

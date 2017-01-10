@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Borg.Infra.EF6.Discovery;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Borg.Infra.EF6.Discovery;
 
 namespace Borg.Infra.EF6
 {
@@ -57,7 +57,6 @@ namespace Borg.Infra.EF6
 
         private void DiscoverEntities(DbModelBuilder modelBuilder)
         {
-            
             var entityMethod = typeof(DbModelBuilder).GetMethod("Entity");
 
             var addMethod = typeof(ConfigurationRegistrar)
@@ -90,7 +89,7 @@ namespace Borg.Infra.EF6
                                .Invoke(modelBuilder, new object[] { });
                         if (type.IsSequenceEntity())
                         {
-                            var keyField =  ((MapSequenceEntityAttribute) type.GetCustomAttribute(typeof(MapSequenceEntityAttribute), false)).IdField;
+                            var keyField = ((MapSequenceEntityAttribute)type.GetCustomAttribute(typeof(MapSequenceEntityAttribute), false)).IdField;
                             modelBuilder.SetKeys(type, new[] { keyField }, entityInvocation);
                             modelBuilder.SetHasDatabaseGeneratedOption(type, keyField, DatabaseGeneratedOption.None, entityInvocation);
                         }

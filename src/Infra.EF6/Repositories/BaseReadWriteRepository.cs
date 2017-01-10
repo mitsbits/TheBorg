@@ -27,14 +27,14 @@ namespace Borg.Infra.EF6
 
         public virtual void Create(T entity)
         {
-            InternallPreProcess();
+            //InternallPreProcess();
             DbContext.Set<T>().Add(entity);
             InternallPostProcessUpdate();
         }
 
         public virtual void Update(T entity)
         {
-            InternallPreProcess();
+            //InternallPreProcess();
             var entitySet = GetEntitySetName(typeof(T));
             var key = ((IObjectContextAdapter)DbContext).ObjectContext.CreateEntityKey(entitySet, entity);
             object originalItem;
@@ -47,7 +47,7 @@ namespace Borg.Infra.EF6
 
         public virtual void Delete(T entity)
         {
-            InternallPreProcess();
+            //InternallPreProcess();
             var entitySet = this.GetEntitySetName(typeof(T));
             EntityKey key = ((IObjectContextAdapter)DbContext).ObjectContext.CreateEntityKey(entitySet, entity);
 
@@ -61,7 +61,7 @@ namespace Borg.Infra.EF6
 
         public virtual void Delete(Expression<Func<T, bool>> predicate)
         {
-            InternallPreProcess();
+            //InternallPreProcess();
             var items = DbContext.Set<T>().Where(predicate);
             foreach (var item in items)
             {
@@ -74,7 +74,7 @@ namespace Borg.Infra.EF6
 
         public virtual async Task<T> CreateAsync(T entity)
         {
-            await InternallPreProcessAsync();
+            //await InternallPreProcessAsync();
             DbContext.Set<T>().Add(entity);
             await InternallPostProcessUpdateAsync();
             return entity;
@@ -82,7 +82,7 @@ namespace Borg.Infra.EF6
 
         public virtual async Task<T> UpdateAsync(T entity)
         {
-            await InternallPreProcessAsync();
+            // await InternallPreProcessAsync();
             var entitySet = GetEntitySetName(typeof(T));
             var key = ((IObjectContextAdapter)DbContext).ObjectContext.CreateEntityKey(entitySet, entity);
             object originalItem;
@@ -96,7 +96,7 @@ namespace Borg.Infra.EF6
 
         public async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
-            await InternallPreProcessAsync();
+            // await InternallPreProcessAsync();
             var items = await DbContext.Set<T>().Where(predicate).ToListAsync();
             foreach (var item in items)
             {
@@ -107,7 +107,7 @@ namespace Borg.Infra.EF6
 
         public async Task DeleteAsync(T entity)
         {
-            await InternallPreProcessAsync();
+            //    await InternallPreProcessAsync();
             DbContext.Set<T>().Remove(entity);
             await InternallPostProcessUpdateAsync();
         }
