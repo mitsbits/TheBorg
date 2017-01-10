@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "authors": [ "mitsbits@gmail.com" ],
+  "authors": ["mitsbits@gmail.com"],
 
   "dependencies": {
     "System.Runtime": "4.0.20",
@@ -12,13 +12,30 @@
   "frameworks": {
     "net46": {
       "buildOptions": {
-        "define": [ "NET46" ]
+        "define": ["NET46"]
       }
     }
   },
+
   "scripts": {
     "postcompile": [
       "dotnet pack --no-build --configuration %compile:Configuration%"
     ]
+  },
+  "packOptions":
+  {
+    "summary": "Base classes for the Borg framework",
+    "tags": [".net 46", "borg", "infrastructure"],
+    "owners": ["mitsbits@gmail.com"],
+    "releaseNotes": "",
+    "iconUrl": "",
+    "projectUrl": "",
+    "licenseUrl": "",
+    "requireLicenseAcceptance": false,
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/mitsbits/Borg"
+    }
   }
 }
