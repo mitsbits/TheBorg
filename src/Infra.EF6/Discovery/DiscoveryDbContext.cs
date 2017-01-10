@@ -80,8 +80,7 @@ namespace Borg.Infra.EF6
                     if (types.Any(t => t.IsSubclassOf(configType)))
                     {
                         var entityConfig = assembly.CreateInstance(types.First(t => t.IsSubclassOf(configType)).FullName);
-                        addMethod.MakeGenericMethod(type)
-                            .Invoke(modelBuilder.Configurations, new[] { entityConfig });
+                        addMethod.MakeGenericMethod(type).Invoke(modelBuilder.Configurations, new[] { entityConfig });
                     }
                     else
                     {
@@ -92,6 +91,7 @@ namespace Borg.Infra.EF6
                             var keyField = ((MapSequenceEntityAttribute)type.GetCustomAttribute(typeof(MapSequenceEntityAttribute), false)).IdField;
                             modelBuilder.SetKeys(type, new[] { keyField }, entityInvocation);
                             modelBuilder.SetHasDatabaseGeneratedOption(type, keyField, DatabaseGeneratedOption.None, entityInvocation);
+                            modelBuilder.ToTable(type, $"{type.Name}00_0", "dbo", entityInvocation);
                         }
                     }
                 }

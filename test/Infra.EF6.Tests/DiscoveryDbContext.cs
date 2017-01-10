@@ -29,6 +29,7 @@ namespace Borg.Infra.EF6.Tests
                var tt = _db.Set<MySequecedClass>();
                t.Add(new WithConfigurationClass() { Name = "jdrtnngnhhn" });
                tt.Add(new MySequecedClass() { Name = "sdfaszvzs" });
+
                _db.SaveChanges();
            });
         }

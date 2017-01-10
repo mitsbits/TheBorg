@@ -3,7 +3,8 @@
 
   "dependencies": {
     "Infra.Core": {
-      "target": "project"
+      "version": "1.0.0-*",
+      "target": "package"
     },
     "StackExchange.Redis": "1.1.608"
   },

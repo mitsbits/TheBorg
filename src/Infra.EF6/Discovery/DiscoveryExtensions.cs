@@ -42,6 +42,7 @@ namespace Borg
 
             if (keyNames.Length > 1)
             {
+                //TODO: what the fuck?
                 //var args = new ExpandoObject() as IDictionary<string, object>;
                 Expression body = parameter;
                 for (var i = 0; i < keyNames.Length; i++)
@@ -73,16 +74,12 @@ namespace Borg
                 var pInfo = type.GetProperty(keyNames.Single());
                 var delegateType = typeof(Func<,>).MakeGenericType(type, pInfo.PropertyType);
                 dynamic lambda = Expression.Lambda(delegateType, body, parameter);
-                //var keyMethod = typeof(EntityTypeConfiguration<>).GetMethod("HasKey");
-                //var generickeyMethod = keyMethod.MakeGenericMethod(pInfo.PropertyType);
-                //var arg = Convert.ChangeType(lambda, generickeyMethod.GetGenericArguments()[0].DeclaringType);
-                //keyMethod.Invoke(entityInvocation, new object[] { arg });
                 var d = entityInvocation as dynamic;
                 d.HasKey(lambda);
             }
         }
 
-        private static LambdaExpression PropertyGetLambda(Type parameterType, string propertyName, Type propertyType)
+        private static LambdaExpression PropertyGetLambda(Type parameterType, string propertyName)
         {
             var parameter = Expression.Parameter(parameterType);
             var memberExpression = Expression.Property(parameter, propertyName);
@@ -98,8 +95,7 @@ namespace Borg
             if (!type.IsMapEntity()) throw new ArgumentOutOfRangeException(nameof(type));
             if (entityInvocation == null)
             {
-                var entityMethod = typeof(DbModelBuilder).GetMethod("Entity");
-                entityInvocation = entityMethod.MakeGenericMethod(type).Invoke(builder, new object[] { });
+                entityInvocation = EntityInvocation(builder, type);
             }
 
             var parameter = Expression.Parameter(type, "entity");
@@ -108,14 +104,29 @@ namespace Borg
             var delegateType = typeof(Func<,>).MakeGenericType(type, pInfo.PropertyType);
             dynamic lambda = Expression.Lambda(delegateType, body, parameter);
 
-            //var primitivePropertyConfiguration = entityInvocation.GetType()
-            //    .InvokeMember("Property", BindingFlags.Public | BindingFlags.Instance
-            //    | BindingFlags.InvokeMethod | BindingFlags.GetProperty, null, entityInvocation, new[] { lambda });
             var primitivePropertyConfiguration = (entityInvocation as dynamic).Property(lambda);
             primitivePropertyConfiguration.GetType()
-                .InvokeMember("HasDatabaseGeneratedOption", BindingFlags.Public | BindingFlags.Instance
-                | BindingFlags.InvokeMethod | BindingFlags.GetProperty, null,
-                primitivePropertyConfiguration, new object[] { option });
+                .InvokeMember("HasDatabaseGeneratedOption", BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.GetProperty, null, primitivePropertyConfiguration, new object[] { option });
+        }
+
+        private static object EntityInvocation(DbModelBuilder builder, Type type)
+        {
+            object entityInvocation;
+            var entityMethod = typeof(DbModelBuilder).GetMethod("Entity");
+            entityInvocation = entityMethod.MakeGenericMethod(type).Invoke(builder, new object[] { });
+            return entityInvocation;
+        }
+
+        public static void ToTable(this DbModelBuilder builder, Type type, string table, string schema = "", object entityInvocation = null)
+        {
+            if (builder == null) throw new ArgumentNullException(nameof(builder));
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (entityInvocation == null)
+            {
+                entityInvocation = EntityInvocation(builder, type);
+            }
+            var dynamic = entityInvocation as dynamic;
+            dynamic.ToTable(table, schema);
         }
     }
 }
