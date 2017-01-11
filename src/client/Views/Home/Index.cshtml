@@ -1,0 +1,21 @@
+﻿@using Borg.Client.Controllers
+@model Borg.Infra.Relational.IPagedResult<Borg.Client.Controllers.HomeController.Mod>
+
+@{
+    ViewBag.Title = "title";
+
+}
+
+<h2>@ViewBag.Title</h2>
+<ul>
+    @foreach (HomeController.Mod o in Model.Records)
+    {
+        <li><strong>@o.Id</strong>
+            @o.Name
+        </li>
+    }
+</ul>
+
+<div>
+    @Html.HtmlPager(Model, (i) => Url.Action("Index", "Home", new { p = i }), ViewContext.HttpContext.Request.QueryString, Pagination.PaginationInfo.PagerInChucks)
+</div>

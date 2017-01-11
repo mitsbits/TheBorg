@@ -22,6 +22,10 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Infra.EF6", "src\Infra.EF6\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Infra.EF6.Tests", "test\Infra.EF6.Tests\Infra.EF6.Tests.xproj", "{E0588448-7F9E-41DF-A868-F832EA7E2480}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "client", "src\client\client.xproj", "{6215FA08-9385-46F2-8D89-0C21F9974C4C}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Framework.MVC.HtmlPager", "src\Framework.MVC.HtmlPager\Framework.MVC.HtmlPager.xproj", "{048CE0A2-552C-4B41-AF45-B4940C52B14C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{E0588448-7F9E-41DF-A868-F832EA7E2480}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0588448-7F9E-41DF-A868-F832EA7E2480}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0588448-7F9E-41DF-A868-F832EA7E2480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6215FA08-9385-46F2-8D89-0C21F9974C4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6215FA08-9385-46F2-8D89-0C21F9974C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6215FA08-9385-46F2-8D89-0C21F9974C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6215FA08-9385-46F2-8D89-0C21F9974C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

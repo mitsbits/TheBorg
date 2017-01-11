@@ -18,12 +18,12 @@
       "target": "project"
     },
     "Shouldly": "2.8.2",
-    "Moq": "4.5.29",
     "xunit": "2.2.0-beta2-build3300",
     "xunit.extensibility.core": "2.2.0-beta2-build3300",
     "xunit.extensibility.execution": "2.2.0-beta2-build3300",
     "xunit.runner.visualstudio": "2.2.0-beta2-build1149",
-    "EntityFramework": "6.1.3"
+    "EntityFramework": "6.1.3",
+    "Moq": "4.5.30"
   },
 
   "frameworks": {
