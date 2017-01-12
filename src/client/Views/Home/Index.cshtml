@@ -15,7 +15,9 @@
         </li>
     }
 </ul>
-
+<div>
+<pagination borg-pagination-model="@Model" borg-pagination-query="@ViewContext.HttpContext.Request.QueryString" borg-pagination-settings="@Pagination.PaginationInfo.DefaultPager" borg-pagination-url-generator="@((i) => Url.Action("Index", "Home", new { p = i }))"></pagination>
+</div>
 <div>
     @Html.HtmlPager(Model, (i) => Url.Action("Index", "Home", new { p = i }), ViewContext.HttpContext.Request.QueryString, Pagination.PaginationInfo.PagerInChucks)
 </div>

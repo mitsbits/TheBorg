@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,6 +14,30 @@ using System.Text.Encodings.Web;
 
 namespace Borg
 {
+    [HtmlTargetElement("pagination")]
+    public class PaginationTagHelper : TagHelper
+    {
+        [HtmlAttributeName("borg-pagination-model")]
+        public IPagedResult Model { get; set; }
+
+        [HtmlAttributeName("borg-pagination-settings")]
+        public Pagination.PaginationInfo Settings { get; set; } = new Pagination.PaginationInfo();
+
+        [HtmlAttributeName("borg-pagination-query")]
+        public QueryString Query { get; set; } = new QueryString(null);
+
+        [HtmlAttributeName("borg-pagination-url-generator")]
+        public Func<int, string> GeneratePageUrl { get; set; } = null;
+
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            if (Model == null) throw new ArgumentNullException(nameof(Model));
+            var sb = new StringBuilder();
+            sb.Append(Pagination.GetHtmlPager(Model, GeneratePageUrl, Query.ToNameValueCollection(), Settings, null));
+            output.Content.SetHtmlContent(sb.ToString());
+        }
+    }
+
     public static class Pagination
     {
         #region Pagination
@@ -29,7 +54,7 @@ namespace Borg
                 throw new ArgumentNullException(nameof(metaData), "A navigation collection is mandatory.");
             if (!metaData.Any()) return HtmlString.Empty;
             if (settings == null) settings = new PaginationInfo();
-            return new HtmlString(GetHtmlPager(helper, metaData, generatePageUrl, query.ToNameValueCollection(), settings, htmlAttributes));
+            return new HtmlString(GetHtmlPager(metaData, generatePageUrl, query.ToNameValueCollection(), settings, htmlAttributes));
         }
 
         public static HtmlString HtmlPager<T>(
@@ -44,14 +69,13 @@ namespace Borg
                 throw new ArgumentNullException(nameof(metaData), "A navigation collection is mandatory.");
             if (!metaData.Any()) return HtmlString.Empty;
             if (settings == null) settings = new PaginationInfo();
-            return new HtmlString(GetHtmlPager(helper, metaData, generatePageUrl, routedValues, settings, htmlAttributes));
+            return new HtmlString(GetHtmlPager(metaData, generatePageUrl, routedValues, settings, htmlAttributes));
         }
 
         #region Private Zurb Pagination
 
-        private static string GetHtmlPager<T>(
-            IHtmlHelper helper,
-            IPagedResult<T> metaData,
+        internal static string GetHtmlPager(
+            IPagedResult metaData,
             Func<int, string> generatePageUrl,
             NameValueCollection routedValues,
             PaginationInfo settings,
@@ -180,7 +204,7 @@ namespace Borg
             return paramBuilder;
         }
 
-        private static TagBuilder Next<T>(IPagedResult<T> metadata,
+        private static TagBuilder Next(IPagedResult metadata,
             Func<int, string> generatePageUrl,
             NameValueCollection routedValues,
             PaginationInfo settings)
@@ -207,7 +231,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder Last<T>(IPagedResult<T> metadata,
+        private static TagBuilder Last(IPagedResult metadata,
             Func<int, string> generatePageUrl,
             NameValueCollection routedValues,
             PaginationInfo settings)
@@ -234,7 +258,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder PageCountAndLocationText<T>(IPagedResult<T> metadata, PaginationInfo settings)
+        private static TagBuilder PageCountAndLocationText(IPagedResult metadata, PaginationInfo settings)
         {
             var item = new TagBuilder("li");
             item.AddCssClass(settings.UnavailableClass);
@@ -247,7 +271,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder ItemSliceAndTotalText<T>(IPagedResult<T> metadata, PaginationInfo settings)
+        private static TagBuilder ItemSliceAndTotalText(IPagedResult metadata, PaginationInfo settings)
         {
             var item = new TagBuilder("li");
             item.AddCssClass(settings.UnavailableClass);
@@ -266,7 +290,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder EllipsesPrevious<T>(IPagedResult<T> metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
+        private static TagBuilder EllipsesPrevious(IPagedResult metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
         {
             var targetPageNumber = metaData.Page - (settings.MaximumPageNumbersToDisplay ?? 10);
             if (targetPageNumber < 1) targetPageNumber = 1;
@@ -291,7 +315,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder EllipsesNext<T>(IPagedResult<T> metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
+        private static TagBuilder EllipsesNext(IPagedResult metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
         {
             var targetPageNumber = metaData.Page + (settings.MaximumPageNumbersToDisplay ?? 10);
             if (targetPageNumber > metaData.TotalPages) targetPageNumber = metaData.TotalPages;
@@ -316,7 +340,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder Page<T>(int i, IPagedResult<T> metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
+        private static TagBuilder Page(int i, IPagedResult metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
         {
             var item = new TagBuilder("li");
 
@@ -343,7 +367,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder Previous<T>(IPagedResult<T> metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
+        private static TagBuilder Previous(IPagedResult metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
         {
             var item = new TagBuilder("li");
             item.AddCssClass(settings.ArrowClass + " previous");
@@ -368,7 +392,7 @@ namespace Borg
             return item;
         }
 
-        private static TagBuilder First<T>(IPagedResult<T> metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
+        private static TagBuilder First(IPagedResult metaData, Func<int, string> generatePageUrl, NameValueCollection routedValues, PaginationInfo settings)
         {
             var item = new TagBuilder("li");
 

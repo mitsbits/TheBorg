@@ -1,13 +1,14 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
     "Infra.Core": {
-      "version": "1.0.0-CI00002",
-      "target": "package"
+      "version": "1.0.0-*",
+      "target": "project"
     },
     "Microsoft.AspNetCore.Html.Abstractions": "1.1.0",
-    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.0"
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.0",
+    "Microsoft.AspNetCore.Razor.Runtime": "1.1.0"
   },
 
   "frameworks": {
