@@ -3,20 +3,21 @@
 
 @{
     ViewBag.Title = "title";
-
+    Func<int, string> _generator = (i) => Url.Action("Index", "Home", new { p = i });
 }
 
 <h2>@ViewBag.Title</h2>
 <ul>
     @foreach (HomeController.Mod o in Model.Records)
     {
-        <li><strong>@o.Id</strong>
+        <li>
+            <strong>@o.Id</strong>
             @o.Name
         </li>
     }
 </ul>
 <div>
-<pagination borg-pagination-model="@Model" borg-pagination-query="@ViewContext.HttpContext.Request.QueryString" borg-pagination-settings="@Pagination.PaginationInfo.DefaultPager" borg-pagination-url-generator="@((i) => Url.Action("Index", "Home", new { p = i }))"></pagination>
+    <ul pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator"></ul>
 </div>
 <div>
     @Html.HtmlPager(Model, (i) => Url.Action("Index", "Home", new { p = i }), ViewContext.HttpContext.Request.QueryString, Pagination.PaginationInfo.PagerInChucks)

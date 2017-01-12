@@ -5,7 +5,6 @@ namespace Borg.Infra.Relational
     public interface IPagedResult<T> : IPagedResult, IList<T>
     {
         IList<T> Records { get; }
-
     }
 
     public interface IPagedResult

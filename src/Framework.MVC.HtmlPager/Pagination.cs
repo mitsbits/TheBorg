@@ -14,27 +14,30 @@ using System.Text.Encodings.Web;
 
 namespace Borg
 {
-    [HtmlTargetElement("pagination")]
+    [HtmlTargetElement("ul", Attributes = "pagination")]
     public class PaginationTagHelper : TagHelper
     {
-        [HtmlAttributeName("borg-pagination-model")]
+        [HtmlAttributeName("model")]
         public IPagedResult Model { get; set; }
 
-        [HtmlAttributeName("borg-pagination-settings")]
+        [HtmlAttributeName("settings")]
         public Pagination.PaginationInfo Settings { get; set; } = new Pagination.PaginationInfo();
 
-        [HtmlAttributeName("borg-pagination-query")]
+        [HtmlAttributeName("query")]
         public QueryString Query { get; set; } = new QueryString(null);
 
-        [HtmlAttributeName("borg-pagination-url-generator")]
+        [HtmlAttributeName("url-generator")]
         public Func<int, string> GeneratePageUrl { get; set; } = null;
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (Model == null) throw new ArgumentNullException(nameof(Model));
-            var sb = new StringBuilder();
-            sb.Append(Pagination.GetHtmlPager(Model, GeneratePageUrl, Query.ToNameValueCollection(), Settings, null));
-            output.Content.SetHtmlContent(sb.ToString());
+            var content = Pagination.GetHtmlPager(Model, GeneratePageUrl, Query.ToNameValueCollection(), Settings, null);
+            var trimstart = content.IndexOf('>') + 1;
+            var trimend = content.Length - content.LastIndexOf('<');
+            var trimmed = content.Substring(trimstart, content.Length - trimend - trimstart);
+            output.Content.SetHtmlContent(trimmed);
+            output.Attributes.Add("class", Settings.ElementClass);
         }
     }
 
