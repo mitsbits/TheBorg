@@ -1,5 +1,5 @@
 ﻿@using Borg.Client.Controllers
-@model Borg.Infra.Relational.IPagedResult<Borg.Client.Controllers.HomeController.Mod>
+@model Borg.Infra.Relational.IPagedResult<HomeController.Mod>
 
 @{
     ViewBag.Title = "title";
@@ -17,7 +17,7 @@
     }
 </ul>
 <div>
-    <ul pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator"></ul>
+    <ul style="float: left;" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator"></ul>
 </div>
 <div>
     @Html.HtmlPager(Model, (i) => Url.Action("Index", "Home", new { p = i }), ViewContext.HttpContext.Request.QueryString, Pagination.PaginationInfo.PagerInChucks)

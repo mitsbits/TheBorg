@@ -19,7 +19,7 @@ namespace Borg.Infra.Messaging
             if (delay.HasValue && delay.Value > TimeSpan.Zero)
                 return AddDelayedMessageAsync(messageType, message, delay.Value);
 
-            Task.Run(async () => await SendMessageToSubscribersAsync(messageType, message.Copy()).AnyContext());
+            Task.Run(async () => await SendMessageToSubscribersAsync(messageType, message.Copy()).AnyContext(), cancellationToken);
             return Task.CompletedTask;
         }
 
