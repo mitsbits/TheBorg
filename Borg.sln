@@ -26,6 +26,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "client", "src\client\client
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Framework.MVC.HtmlPager", "src\Framework.MVC.HtmlPager\Framework.MVC.HtmlPager.xproj", "{048CE0A2-552C-4B41-AF45-B4940C52B14C}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Framework.Services", "src\Framework.Services\Framework.Services.xproj", "{D26A8CF4-05EB-4959-B5CC-BC77B12B6095}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{048CE0A2-552C-4B41-AF45-B4940C52B14C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D26A8CF4-05EB-4959-B5CC-BC77B12B6095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D26A8CF4-05EB-4959-B5CC-BC77B12B6095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D26A8CF4-05EB-4959-B5CC-BC77B12B6095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D26A8CF4-05EB-4959-B5CC-BC77B12B6095}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
