@@ -1,8 +1,8 @@
 ﻿namespace Borg.Infra.CQRS
 {
-    public class ScalarQueryResult<T> : QueryResult<T>
+    public class ScalarQueryResult<TEntity> : QueryResult<TEntity>
     {
-        public ScalarQueryResult(T data) : base(new[] { data }, 1, 1, 1)
+        public ScalarQueryResult(TEntity data) : base(new[] { data }, 1, 1, 1)
         {
         }
     }

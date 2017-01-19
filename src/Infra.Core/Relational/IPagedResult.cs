@@ -2,9 +2,9 @@
 
 namespace Borg.Infra.Relational
 {
-    public interface IPagedResult<T> : IPagedResult, IList<T>
+    public interface IPagedResult<out TEntity> : IPagedResult, IReadOnlyList<TEntity>
     {
-        IList<T> Records { get; }
+        IReadOnlyList<TEntity> Records { get; }
     }
 
     public interface IPagedResult

@@ -4,6 +4,11 @@ namespace Borg.Infra.CQRS
 {
     public interface IHandlesQueryRequest<in T> where T : IQueryRequest
     {
-        Task<IQueryResult<V>> Execute<V>(T message) where V : IResponse;
+        Task<IQueryResult> Execute(T message);
+    }
+
+    public interface IHandlesQueryRequest<in T, TEntity> where T : IQueryRequest<TEntity>
+    {
+        Task<IQueryResult<TEntity>> Execute(T message);
     }
 }

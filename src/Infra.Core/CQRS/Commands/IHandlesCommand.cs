@@ -2,8 +2,8 @@
 
 namespace Borg.Infra.CQRS
 {
-    public interface IHandlesCommand<in T> where T : ICommand
+    public interface IHandlesCommand<in TCommand> where TCommand : ICommand
     {
-        Task<ICommandResult> Execute(T message);
+        Task<ICommandResult> Execute(TCommand message);
     }
 }

@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "Autofac.Extensions.DependencyInjection": "4.0.0",
     "Framework.MVC.HtmlPager": "1.0.0-*",
     "Infra.Core": "1.0.0-CI00002",
+    "Infra.EF6": "1.0.0-*",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",

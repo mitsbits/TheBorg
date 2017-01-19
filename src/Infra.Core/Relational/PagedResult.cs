@@ -78,7 +78,7 @@ namespace Borg.Infra.Relational
         /// <summary>
         /// Gets the data.
         /// </summary>
-        public IList<T> Records => _data;
+        public IReadOnlyList<T> Records => _data;
 
         #endregion IPagedList implementation
 

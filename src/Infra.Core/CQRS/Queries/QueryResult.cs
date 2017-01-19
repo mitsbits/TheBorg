@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using Borg.Infra.Relational;
+﻿using Borg.Infra.Relational;
+using System.Collections.Generic;
 
 namespace Borg.Infra.CQRS
 {
-    public abstract class QueryResult<T> : PagedResult<T>, IQueryResult<T>
+    public abstract class QueryResult<TEntity> : PagedResult<TEntity>, IQueryResult<TEntity>
     {
-        protected QueryResult(IEnumerable<T> data, int pageNumber, int pageSize, int totalRecords)
+        protected QueryResult(IEnumerable<TEntity> data, int pageNumber, int pageSize, int totalRecords)
             : base(data, pageNumber, pageSize, totalRecords)
         {
             Success = true;
             Description = string.Empty;
         }
 
-        protected QueryResult(bool success, string description) : this(new T[0], 1, 1, 0)
+        protected QueryResult(bool success, string description) : this(new TEntity[0], 1, 1, 0)
         {
             Success = success;
             Description = description;

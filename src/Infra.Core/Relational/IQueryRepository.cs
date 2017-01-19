@@ -14,11 +14,11 @@ namespace Borg.Infra.Relational
 
 namespace Borg
 {
-    public static class IQueryRepositoryExtensions
+    public static partial class IQueryRepositoryExtensions
     {
         public static async Task<IPagedResult<T>> FindAsync<T>(this IQueryRepository<T> repo, Expression<Func<T, bool>> predicate, IEnumerable<OrderByInfo<T>> orderBy, params Expression<Func<T, dynamic>>[] paths) where T : class
         {
-            return await repo.FindAsync(predicate, -1, -1, null, paths);
+            return await repo.FindAsync(predicate, -1, -1, orderBy, paths);
         }
 
         public static async Task<T> GetAsync<T>(this IQueryRepository<T> repo, Expression<Func<T, bool>> predicate, params Expression<Func<T, dynamic>>[] paths) where T : class

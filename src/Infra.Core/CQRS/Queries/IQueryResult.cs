@@ -2,7 +2,7 @@
 
 namespace Borg.Infra.CQRS
 {
-    public interface IQueryResult<T> : IPagedResult<T>, IQueryResult
+    public interface IQueryResult<out T> : IPagedResult<T>, IQueryResult
     {
     }
 

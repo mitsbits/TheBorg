@@ -34,5 +34,10 @@ namespace Borg.Infra.Relational
 
             throw new ArgumentException("No property reference expression was found.", nameof(expression));
         }
+
+        public override string ToString()
+        {
+            return $"{typeof(T).Name}.{TruePropertyName}|" + (Ascending ? "ASC" : "DESC");
+        }
     }
 }

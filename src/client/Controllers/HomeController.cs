@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Borg.Infra.Relational;
+using Infra.Core.Caching;
+using Infra.Core.Relational;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,8 +20,11 @@ namespace Borg.Client.Controllers
             var page = random.Next(1,100);
             var records = _db().Skip(page - 1).Take(10);
             var model = new PagedResult<Mod>(records, page, 10, 1000);
+
             return View(model);
         }
+
+
 
         public class Mod
         {
