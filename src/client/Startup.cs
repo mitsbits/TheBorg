@@ -20,7 +20,7 @@ namespace Borg.Client
 {
     public class Startup
     {
-        public IContainer ApplicationContainer { get; private set; }
+        public static IContainer ApplicationContainer { get; private set; }
         public IConfigurationRoot Configuration { get; set; }
 
         public Startup(IHostingEnvironment env)
@@ -68,9 +68,14 @@ namespace Borg.Client
 
             var multiplexer = ConnectionMultiplexer.Connect(Configuration["Redis:Url"]);
             var subscriber = multiplexer.GetSubscriber();
-            builder.Register((c, p) => new RedisMessageBus(subscriber, Constants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>())).As<IMessageBus>().SingleInstance();
-            builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.Resolve<IMessageBus>(), c.Resolve<ISerializer>())).As<IDepedencyCacheClient>().SingleInstance();
+            builder.Register((c, p) => new RedisMessageBus(subscriber, Constants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>()))
+                .Named<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC)
+                .SingleInstance();
+            builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.ResolveNamed<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC), c.Resolve<ISerializer>()))
+                .As<IDepedencyCacheClient>()
+                .SingleInstance();
 
+ 
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);

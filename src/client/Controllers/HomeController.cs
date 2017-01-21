@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Borg.Framework.Redis;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,12 +18,12 @@ namespace Borg.Client.Controllers
     public class HomeController : Controller
     {
         private readonly IDepedencyCacheClient _cache;
-        private readonly IMessageBus _publisher;
 
-        public HomeController(IDepedencyCacheClient cache, IMessageBus publisher)
+
+        public HomeController(IDepedencyCacheClient cache)
         {
             _cache = cache;
-            _publisher = publisher;
+
         }
 
         // GET: /<controller>/
@@ -37,7 +39,9 @@ namespace Borg.Client.Controllers
             var ddd = RandomString(12);
             await _cache.Add<Mod>(ddd, keys);
 
-            _publisher.PublishAsync(new EntityCacheDepedencyEvictionEvent(typeof(Mod), keys.Take(4).ToArray()));
+            var publisher = Startup.ApplicationContainer.ResolveNamed<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC);
+
+            publisher.PublishAsync(new EntityCacheDepedencyEvictionEvent(typeof(Mod), keys.Take(4).ToArray()));
 
             return View(model);
         }

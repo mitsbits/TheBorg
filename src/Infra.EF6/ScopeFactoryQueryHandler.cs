@@ -1,4 +1,5 @@
-﻿using Borg.Infra.BuildingBlocks;
+﻿using System;
+using Borg.Infra.BuildingBlocks;
 using Borg.Infra.Caching;
 using Borg.Infra.CQRS;
 using Borg.Infra.Relational;
@@ -54,7 +55,7 @@ namespace Borg.Infra.EF6
         }
     }
 
-    internal abstract class CachedScopeFactoryEntityQueryHandler<TRequest, TEntity> : ScopeFactoryEntityQueryHandler<TRequest, TEntity> where TRequest : EntityQueryRequest<TEntity> where TEntity : class
+    internal abstract class CachedScopeFactoryEntityQueryHandler<TRequest, TEntity> : ScopeFactoryEntityQueryHandler<TRequest, TEntity>, IDisposable where TRequest : EntityQueryRequest<TEntity> where TEntity : class
     {
         private IDepedencyCacheClient CacheClient { get; }
 
@@ -82,6 +83,12 @@ namespace Borg.Infra.EF6
             await CacheClient.SetAsync(cacheKey, result, (request as ICanProduceCacheExpiresIn)?.ExpiresIn);
             if (typeof(TEntity).GetInterface(nameof(IHavePartitionedKey)) != null)
                 await CacheClient.Add<TEntity>(cacheKey, result.Records.Cast<IHavePartitionedKey>().Select(x => x.Key).ToArray());
+        }
+
+        public virtual void Dispose()
+        {
+            PreProcess -= PreProcessInteral;
+            PostProcess -= PostProcessInteral;
         }
     }
 }
