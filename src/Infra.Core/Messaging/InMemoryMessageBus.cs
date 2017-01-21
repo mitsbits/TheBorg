@@ -10,6 +10,9 @@ namespace Borg.Infra.Messaging
         {
         }
 
+        public string Topic => string.Empty;
+        public override bool SupportsTopics => false;
+
         public override Task PublishAsync(Type messageType, object message, TimeSpan? delay = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (message == null)

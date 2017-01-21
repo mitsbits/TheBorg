@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Borg.Client.Models;
 using Borg.Framework.Redis;
 using Borg.Framework.Redis.Messaging;
 using Borg.Infra;
@@ -69,13 +70,14 @@ namespace Borg.Client
             var multiplexer = ConnectionMultiplexer.Connect(Configuration["Redis:Url"]);
             var subscriber = multiplexer.GetSubscriber();
             builder.Register((c, p) => new RedisMessageBus(subscriber, Constants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>()))
-                .Named<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC)
+                .Named<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC).As<IMessagePublisher>()
                 .SingleInstance();
             builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.ResolveNamed<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC), c.Resolve<ISerializer>()))
                 .As<IDepedencyCacheClient>()
                 .SingleInstance();
 
- 
+            builder.RegisterType<AppBroadcaster>().As<IBroadcaster>().SingleInstance();
+
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);

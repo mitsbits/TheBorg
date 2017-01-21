@@ -13,7 +13,7 @@ namespace Borg.Framework.Redis
     public sealed class RedisDepedencyCacheClient : IDepedencyCacheClient
     {
         private readonly RedisCacheClient _internal;
-        private readonly Func<Type, string> _entityKey = (t) => $"E:{t.Name}" ;
+        private readonly Func<Type, string> _entityKey = (t) => $"E:{t.Name}";
 
         public RedisDepedencyCacheClient(ConnectionMultiplexer connectionMultiplexer, IMessageSubscriber subscriber, ISerializer serializer = null)
         {

@@ -1,5 +1,4 @@
 ﻿using Borg.Infra;
-
 using Borg.Infra.Core.Messaging;
 using Borg.Infra.Messaging;
 using StackExchange.Redis;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Framework.Redis.Messaging
 {
-    public class RedisMessageBus : MessageBusBase, IMessageBus
+    public class RedisMessageBus : MessageBusBase, IMessageBus, ITopicPublisher
     {
         private readonly ISubscriber _subscriber;
         private readonly string _topic;
@@ -119,5 +118,8 @@ namespace Borg.Framework.Redis.Messaging
         {
             return Task.CompletedTask;
         }
+
+        public string Topic => _topic;
+        public override bool SupportsTopics => true;
     }
 }

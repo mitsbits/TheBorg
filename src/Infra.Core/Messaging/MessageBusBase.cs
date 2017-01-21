@@ -139,6 +139,8 @@ namespace Borg.Infra.Messaging
             }
         }
 
+        public abstract bool SupportsTopics { get; }
+
         protected class DelayedMessage
         {
             public DateTime SendTime { get; set; }

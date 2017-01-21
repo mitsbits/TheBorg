@@ -1,4 +1,6 @@
-﻿using Borg.Infra.BuildingBlocks;
+﻿using Autofac;
+using Borg.Framework.Redis;
+using Borg.Infra.BuildingBlocks;
 using Borg.Infra.Caching;
 using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
@@ -8,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
-using Borg.Framework.Redis;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,12 +18,12 @@ namespace Borg.Client.Controllers
     public class HomeController : Controller
     {
         private readonly IDepedencyCacheClient _cache;
+        private readonly IBroadcaster _broadcaster;
 
-
-        public HomeController(IDepedencyCacheClient cache)
+        public HomeController(IDepedencyCacheClient cache, IBroadcaster broadcaster)
         {
             _cache = cache;
-
+            _broadcaster = broadcaster;
         }
 
         // GET: /<controller>/

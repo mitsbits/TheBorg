@@ -4,9 +4,13 @@ using System.Threading.Tasks;
 
 namespace Borg.Infra.Messaging
 {
-    public class NullMessageBus : IMessageBus
+    public class NullMessageBus : ITopicPublisher
     {
         public static readonly NullMessageBus Instance = new NullMessageBus();
+
+        public string Topic => string.Empty;
+
+        public bool SupportsTopics => false;
 
         public Task PublishAsync(Type messageType, object message, TimeSpan? delay = null, CancellationToken cancellationToken = default(CancellationToken))
         {

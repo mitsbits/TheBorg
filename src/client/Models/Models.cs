@@ -1,8 +1,10 @@
 ﻿using Borg.Infra.BuildingBlocks;
 using Borg.Infra.EF6;
 using Borg.Infra.EF6.Discovery;
+using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
 using Mehdime.Entity;
+using System.Collections.Generic;
 
 namespace Borg.Client.Models
 {
@@ -41,6 +43,13 @@ namespace Borg.Client.Models
     public class CrudRepository<TEntity> : ContextScopedReadWriteRepository<TEntity, BlogsDbContext>, ICRUDRespoditory<TEntity> where TEntity : class
     {
         public CrudRepository(IAmbientDbContextLocator ambientDbContextLocator) : base(ambientDbContextLocator)
+        {
+        }
+    }
+
+    public class AppBroadcaster : BroadcasterBase
+    {
+        public AppBroadcaster(IEnumerable<IMessagePublisher> publishers) : base(publishers)
         {
         }
     }
