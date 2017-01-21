@@ -11,8 +11,8 @@ namespace Borg.Client.Models
     {
         public int Id { get; set; }
         public string Display { get; set; }
-
     }
+
     [MapEntity]
     public class Post
     {
@@ -35,9 +35,7 @@ namespace Borg.Client.Models
     {
         public QueryRepository(IAmbientDbContextLocator ambientDbContextLocator) : base(ambientDbContextLocator)
         {
-            
         }
-
     }
 
     public class CrudRepository<TEntity> : ContextScopedReadWriteRepository<TEntity, BlogsDbContext>, ICRUDRespoditory<TEntity> where TEntity : class

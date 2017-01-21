@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Borg.Infra.BuildingBlocks;
 
-namespace Infra.Core.Caching
+namespace Borg.Infra.Caching
 {
     public interface ICanProduceCacheKey
     {
         string CacheKey { get; }
     }
 
-    public interface ICanProduceCacheExpiresIn
+    public interface ICacheDependency<in TEntity>
     {
-        TimeSpan? ExpiresIn { get; }
+        PartitionedKey Key { get; }
     }
 }

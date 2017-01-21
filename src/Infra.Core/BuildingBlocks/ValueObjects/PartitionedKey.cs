@@ -21,7 +21,12 @@ namespace Borg.Infra.BuildingBlocks
 
         public override string ToString()
         {
-            return $"{Partition}{Key}";
+            return $"{Partition}:{Key}";
         }
+    }
+
+    public interface IHavePartitionedKey
+    {
+        PartitionedKey Key { get; }
     }
 }

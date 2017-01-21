@@ -1,5 +1,4 @@
 ﻿using Borg.Infra;
-using Borg.Infra.Core;
 using StackExchange.Redis;
 using System;
 using System.Threading.Tasks;

@@ -1,9 +1,10 @@
-﻿using Borg.Infra.Caching;
+﻿using Borg.Infra.BuildingBlocks;
+using Borg.Infra.Caching;
 using Borg.Infra.CQRS;
 using Borg.Infra.Relational;
-using Infra.Core.Caching;
 using Infra.Core.Relational;
 using Mehdime.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Borg.Infra.EF6
@@ -55,11 +56,12 @@ namespace Borg.Infra.EF6
 
     internal abstract class CachedScopeFactoryEntityQueryHandler<TRequest, TEntity> : ScopeFactoryEntityQueryHandler<TRequest, TEntity> where TRequest : EntityQueryRequest<TEntity> where TEntity : class
     {
-        private ICacheClient CacheClient { get; }
+        private IDepedencyCacheClient CacheClient { get; }
 
-        protected CachedScopeFactoryEntityQueryHandler(IDbContextScopeFactory dbContextScopeFactory, IQueryRepository<TEntity> repository, ICacheClient cacheClient) : base(dbContextScopeFactory, repository)
+        protected CachedScopeFactoryEntityQueryHandler(IDbContextScopeFactory dbContextScopeFactory, IQueryRepository<TEntity> repository, IDepedencyCacheClient cacheClient) : base(dbContextScopeFactory, repository)
         {
             CacheClient = cacheClient;
+
             PreProcess += PreProcessInteral;
             PostProcess += PostProcessInteral;
         }
@@ -76,9 +78,10 @@ namespace Borg.Infra.EF6
         {
             if (result == null) return;
             var cacheKey = (request as ICanProduceCacheKey)?.CacheKey;
-            var expiresin = (request as ICanProduceCacheExpiresIn)?.ExpiresIn;
             if (string.IsNullOrWhiteSpace(cacheKey)) return;
-            await CacheClient.SetAsync(cacheKey, result, expiresin);
+            await CacheClient.SetAsync(cacheKey, result, (request as ICanProduceCacheExpiresIn)?.ExpiresIn);
+            if (typeof(TEntity).GetInterface(nameof(IHavePartitionedKey)) != null)
+                await CacheClient.Add<TEntity>(cacheKey, result.Records.Cast<IHavePartitionedKey>().Select(x => x.Key).ToArray());
         }
     }
 }
