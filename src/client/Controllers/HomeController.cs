@@ -1,8 +1,13 @@
-﻿using Borg.Infra.Relational;
+﻿using Borg.Infra.BuildingBlocks;
+using Borg.Infra.Caching;
+using Borg.Infra.Messaging;
+using Borg.Infra.Relational;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,21 +15,47 @@ namespace Borg.Client.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IDepedencyCacheClient _cache;
+        private readonly IMessageBus _publisher;
+
+        public HomeController(IDepedencyCacheClient cache, IMessageBus publisher)
+        {
+            _cache = cache;
+            _publisher = publisher;
+        }
+
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var page = random.Next(1, 100);
             var records = _db().Skip(page - 1).Take(10);
             var model = new PagedResult<Mod>(records, page, 10, 1000);
 
+            HttpContext.Session.SetString("name", "mitsbits");
+            HttpContext.Session.SetInt32("answer", 42);
+            var keys = model.Records.Select(x => x.Key).ToArray();
+            var ddd = RandomString(12);
+            await _cache.Add<Mod>(ddd, keys);
+
+            _publisher.PublishAsync(new EntityCacheDepedencyEvictionEvent(typeof(Mod), keys.Take(4).ToArray()));
+
             return View(model);
         }
 
-        public class Mod
+        public IActionResult SessionNameYears()
+        {
+            var name = HttpContext.Session.GetString("name");
+            var yearsMember = HttpContext.Session.GetInt32("answer");
+
+            return Content($"Name: \"{name}\",  Membership years: \"{yearsMember}\"");
+        }
+
+        public class Mod : IHavePartitionedKey
         {
             public int Id { get; set; }
             public Guid Identifier { get; set; }
             public string Name { get; set; }
+            public PartitionedKey Key => new PartitionedKey(Id.ToString());
         }
 
         private static Random random = new Random();

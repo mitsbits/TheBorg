@@ -6,7 +6,7 @@
       "version": "1.0.0-*",
       "target": "project"
     },
-    "StackExchange.Redis": "1.1.608"
+    "StackExchange.Redis.StrongName": "1.1.608"
   },
 
   "frameworks": {

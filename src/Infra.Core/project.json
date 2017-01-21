@@ -1,6 +1,7 @@
 {
   "version": "1.0.0-*",
   "authors": [ "mitsbits@gmail.com" ],
+  "description": "Infrastrucre classes for the Borg framework",
 
   "dependencies": {
     "System.Runtime": "4.0.20",
@@ -23,11 +24,11 @@
     ]
   },
   "packOptions": {
-    "summary": "Base classes for the Borg framework",
+    "summary": "Infrastrucre classes for the Borg framework",
     "tags": [ ".net 46", "borg", "infrastructure" ],
     "owners": [ "mitsbits@gmail.com" ],
     "releaseNotes": "",
-    "iconUrl": "http://ubuntuguide.org/images/c/cb/Borg_tux.png",
+    "iconUrl": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",
     "projectUrl": "",
     "licenseUrl": "",
     "requireLicenseAcceptance": false,

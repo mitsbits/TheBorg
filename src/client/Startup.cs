@@ -1,11 +1,20 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Borg.Framework.Redis;
+using Borg.Framework.Redis.Messaging;
+using Borg.Infra;
+using Borg.Infra.Caching;
+using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using StackExchange.Redis;
+using System;
 
 namespace Borg.Client
 {
@@ -36,9 +45,32 @@ namespace Borg.Client
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDistributedCache>(
+              serviceProvider =>
+                  new RedisCache(new RedisCacheOptions
+                  {
+                      Configuration = Configuration["Redis:Url"],
+                      InstanceName = Configuration["Redis:Name"]
+                  }));
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(600);
+                options.CookieHttpOnly = true;
+            });
+
             services.AddMvc();
 
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<JsonNetSerializer>().As<ISerializer>().WithParameter("settings", new JsonSerializerSettings() { Formatting = Formatting.Indented }).InstancePerDependency();
+
+            var multiplexer = ConnectionMultiplexer.Connect(Configuration["Redis:Url"]);
+            var subscriber = multiplexer.GetSubscriber();
+            builder.Register((c, p) => new RedisMessageBus(subscriber, Constants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>())).As<IMessageBus>().SingleInstance();
+            builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.Resolve<IMessageBus>(), c.Resolve<ISerializer>())).As<IDepedencyCacheClient>().SingleInstance();
+
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
@@ -54,6 +86,9 @@ namespace Borg.Client
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",

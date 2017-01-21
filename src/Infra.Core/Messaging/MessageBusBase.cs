@@ -75,7 +75,7 @@ namespace Borg.Infra.Messaging
                 }
             };
 
-            // if (!_subscribers.TryAdd(subscriber.Id, subscriber))
+            if (!_subscribers.TryAdd(subscriber.Id, subscriber)) throw new Exception($"Unable to add subscriber {subscriber.Id}");
             //  _logger.Error("Unable to add subscriber {subscriberId}", subscriber.Id);
         }
 

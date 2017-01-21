@@ -1,4 +1,3 @@
-using Borg.Framework.Redis.Messaging;
 using Borg.Infra;
 using Borg.Infra.BuildingBlocks;
 using Borg.Infra.Caching;
@@ -16,13 +15,14 @@ namespace Borg.Framework.Redis
         private readonly RedisCacheClient _internal;
         private readonly IMessageBus _subscriber;
 
-        private readonly Func<Type, string> _entityKey = (t) => t.AssemblyQualifiedName;
+        private readonly Func<Type, string> _entityKey = (t) => t.Name;
 
-        public RedisDepedencyCacheClient(ConnectionMultiplexer connectionMultiplexer, ISerializer serializer = null)
+        public RedisDepedencyCacheClient(ConnectionMultiplexer connectionMultiplexer, IMessageBus subscriber, ISerializer serializer = null)
         {
             _internal = new RedisCacheClient(connectionMultiplexer, serializer);
-            _subscriber = new RedisMessageBus(connectionMultiplexer.GetSubscriber(), Constants.CACHE_DEPEDENCY_TOPIC, serializer);
-            _subscriber.Subscribe<ICacheDepedencyEvent>(async message => await Invalidate(message.Type, message.Key).AnyContext());
+            //_subscriber = new RedisMessageBus(connectionMultiplexer.GetSubscriber(), Constants.CACHE_DEPEDENCY_TOPIC, serializer);
+            subscriber.Subscribe<EntityCacheDepedencyEvictionEvent>(message => Invalidate((message as IEntityCacheDepedencyEvictionEvent).Type, message.Keys));
+            _subscriber = subscriber;
         }
 
         #region ICacheClient
@@ -231,10 +231,10 @@ namespace Borg.Framework.Redis
                 {
                     valuesToAdd.Add(entityCacheKey, key);
                 }
-                var tasks = valuesToAdd.Select(x => _internal.AddAsync(x.Key, new[] { x.Value }));
-                var addOperations = tasks as Task<bool>[] ?? tasks.ToArray();
-                if (addOperations.Any()) await Task.WhenAll(addOperations).AnyContext();
             }
+            var tasks = valuesToAdd.Select(x => _internal.AddAsync(x.Key, new[] { x.Value }));
+            var addOperations = tasks as Task<bool>[] ?? tasks.ToArray();
+            if (addOperations.Any()) await Task.WhenAll(addOperations).AnyContext();
         }
 
         public async Task Invalidate(Type entiType, PartitionedKey[] identifiers)

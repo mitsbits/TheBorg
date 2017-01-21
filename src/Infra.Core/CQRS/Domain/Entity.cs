@@ -1,8 +1,9 @@
 ﻿using System;
+using Borg.Infra.BuildingBlocks;
 
 namespace Borg.Infra.CQRS
 {
-    public abstract class Entity<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
+    public abstract class Entity<TKey> : IEntity<TKey>, IHavePartitionedKey where TKey : IEquatable<TKey>
     {
         protected Entity()
         {
@@ -16,10 +17,17 @@ namespace Borg.Infra.CQRS
 
         public TKey Id { get; private set; }
 
+        private PartitionedKey _partitionKeyValue;
+        PartitionedKey IHavePartitionedKey.Key => _partitionKeyValue ?? (_partitionKeyValue = new PartitionedKey(Id.ToString()));
+
         protected void SetId(TKey id)
         {
-            if (Id != null && Id.Equals(id)) return;
+            if (id == null || id.Equals(default(TKey))) return;
+            if (Id.Equals(id)) return;
             Id = id;
+            _partitionKeyValue = null;
         }
+
+
     }
 }

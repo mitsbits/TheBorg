@@ -21,7 +21,7 @@ namespace Borg.Infra.BuildingBlocks
 
         public override string ToString()
         {
-            return $"{Partition}:{Key}";
+            return $"{Partition}{(string.IsNullOrWhiteSpace(Key) ? string.Empty : ":")}{Key}";
         }
     }
 
