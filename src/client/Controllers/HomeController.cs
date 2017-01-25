@@ -39,7 +39,7 @@ namespace Borg.Client.Controllers
             var ddd = RandomString(12);
             await _cache.Add<Mod>(ddd, keys);
 
-            var publisher = Startup.ApplicationContainer.ResolveNamed<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC);
+            var publisher = Startup.ApplicationContainer.ResolveNamed<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC);
 
             publisher.PublishAsync(new EntityCacheDepedencyEvictionEvent(typeof(Mod), keys.Take(4).ToArray()));
 

@@ -25,12 +25,5 @@ namespace Borg.Infra.Storage
         Task<IEnumerable<IFileSpec>> GetFileListAsync(string searchPattern = null, int? limit = null, int? skip = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 
-    //public class FileSpec
-    //{
-    //    public string Path { get; set; }
-    //    public DateTime Created { get; set; }
-    //    public DateTime Modified { get; set; }
-    //    public long Size { get; set; }
-    //    // TODO: Add metadata object for custom properties
-    //}
+
 }

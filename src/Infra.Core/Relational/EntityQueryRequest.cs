@@ -1,13 +1,13 @@
-using Borg.Infra.Caching;
-using Borg.Infra.CQRS;
-using Borg.Infra.Relational;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using Borg.Infra.Caching;
+using Borg.Infra.CQRS;
 
-namespace Infra.Core.Relational
+
+namespace Borg.Infra.Relational
 {
     public abstract class EntityQueryRequest<TEntity> : IQueryRequest<TEntity> where TEntity : class
     {

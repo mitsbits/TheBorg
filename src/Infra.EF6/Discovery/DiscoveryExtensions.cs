@@ -111,9 +111,8 @@ namespace Borg
 
         private static object EntityInvocation(DbModelBuilder builder, Type type)
         {
-            object entityInvocation;
             var entityMethod = typeof(DbModelBuilder).GetMethod("Entity");
-            entityInvocation = entityMethod.MakeGenericMethod(type).Invoke(builder, new object[] { });
+            var entityInvocation = entityMethod.MakeGenericMethod(type).Invoke(builder, new object[] { });
             return entityInvocation;
         }
 

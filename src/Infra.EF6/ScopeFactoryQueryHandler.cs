@@ -3,10 +3,10 @@ using Borg.Infra.BuildingBlocks;
 using Borg.Infra.Caching;
 using Borg.Infra.CQRS;
 using Borg.Infra.Relational;
-using Infra.Core.Relational;
 using Mehdime.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace Borg.Infra.EF6
 {

@@ -69,10 +69,10 @@ namespace Borg.Client
 
             var multiplexer = ConnectionMultiplexer.Connect(Configuration["Redis:Url"]);
             var subscriber = multiplexer.GetSubscriber();
-            builder.Register((c, p) => new RedisMessageBus(subscriber, Constants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>()))
-                .Named<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC).As<IMessagePublisher>()
+            builder.Register((c, p) => new RedisMessageBus(subscriber, CacheConstants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>()))
+                .Named<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC).As<IMessagePublisher>()
                 .SingleInstance();
-            builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.ResolveNamed<IMessageBus>(Constants.CACHE_DEPEDENCY_TOPIC), c.Resolve<ISerializer>()))
+            builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.ResolveNamed<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC), c.Resolve<ISerializer>()))
                 .As<IDepedencyCacheClient>()
                 .SingleInstance();
 
