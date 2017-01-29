@@ -1,14 +1,25 @@
-﻿using Borg.Framework.MVC.BuildingBlocks.Devices;
+﻿using Borg.Framework.MVC.BuildingBlocks;
+using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Borg.Client.Controllers
 {
-    public class KokoController : Controller
+    public class KokoController : FrameworkController
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewBag.ContentInfo = new PageContent() { Title = "this came from controller" };
+            var content = PageContent<PageContent>();
+            content.Title = "this came from controller";
+            PageContent(content);
+
+            //await Broadcaster.BroadcastMessage(new message() { Message = "hallo" });
             return View();
+        }
+
+        private class message
+        {
+            public string Message { get; set; }
         }
     }
 }

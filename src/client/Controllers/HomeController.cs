@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Borg.Framework.MVC.BuildingBlocks;
 using Borg.Framework.Redis;
 using Borg.Infra.BuildingBlocks;
 using Borg.Infra.Caching;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Client.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : FrameworkController
     {
         private readonly IDepedencyCacheClient _cache;
         private readonly IBroadcaster _broadcaster;
@@ -44,7 +45,6 @@ namespace Borg.Client.Controllers
             publisher.PublishAsync(new EntityCacheDepedencyEvictionEvent(typeof(Mod), keys.Take(4).ToArray()));
 
             ViewBag.Id = Guid.NewGuid();
-
 
             return View(model);
         }

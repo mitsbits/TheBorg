@@ -19,7 +19,7 @@ namespace Borg.Infra.Messaging
         public virtual Task Broadcast(string[] topics, Type messageType, object message, TimeSpan? delay = default(TimeSpan?), CancellationToken cancellationToken = default(CancellationToken))
         {
             var broadcastEmpty = !topics.Any();
-            var broadcastAll = topics.Length == 1 & topics[0].Equals("ALL", StringComparison.InvariantCultureIgnoreCase);
+            var broadcastAll = !broadcastEmpty && topics.Length == 1 & topics[0].Equals("ALL", StringComparison.InvariantCultureIgnoreCase);
             var sanitized = topics.Select(x => x.Trim()).Distinct().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
             var broadcastTopics = sanitized.Any();
 

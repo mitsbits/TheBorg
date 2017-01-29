@@ -16,10 +16,11 @@ namespace Borg
 {
     public static class MessagePublisherExtensions
     {
+        private const string ALL = "ALL";
         public static Task BroadcastTopics<T>(this IBroadcaster broadcaster, string[] topics, T message, TimeSpan? delay = null) where T : class
         {
             if (topics == null || !topics.Distinct().Any()) throw new ArgumentNullException(nameof(topics));
-            if (topics.Length == 1 && topics[0].Equals("ALL", StringComparison.InvariantCultureIgnoreCase)) throw new ArgumentException(nameof(topics));
+            if (topics.Length == 1 && topics[0].Equals(ALL, StringComparison.InvariantCultureIgnoreCase)) throw new ArgumentException(nameof(topics));
             return broadcaster.Broadcast(topics, typeof(T), message, delay);
         }
 
@@ -30,7 +31,7 @@ namespace Borg
 
         public static Task BroadcastAll<T>(this IBroadcaster broadcaster, T message, TimeSpan? delay = null) where T : class
         {
-            return broadcaster.Broadcast(new[] { "ALL" }, typeof(T), message, delay);
+            return broadcaster.Broadcast(new[] { ALL }, typeof(T), message, delay);
         }
     }
 }

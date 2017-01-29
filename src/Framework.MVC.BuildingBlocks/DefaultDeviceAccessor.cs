@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Borg.Client.Models
+namespace Borg.Framework.MVC
 {
     public class DefaultDeviceAccessor : IPageContentAccessor<IPageContent>, IDeviceAccessor<IDevice>, IViewContextAware
     {

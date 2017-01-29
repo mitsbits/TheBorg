@@ -16,6 +16,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Linq;
+using System.Reflection;
+using Borg.Client.Controllers;
+using Borg.Framework.MVC.BuildingBlocks;
 
 namespace Borg.Client
 {
@@ -61,7 +65,7 @@ namespace Borg.Client
                 options.CookieHttpOnly = true;
             });
 
-            services.AddMvc();
+            services.AddMvc().AddControllersAsServices(); 
 
             var builder = new ContainerBuilder();
 
@@ -80,6 +84,13 @@ namespace Borg.Client
             builder.RegisterType<DefaultDeviceAccessor>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.Populate(services);
+
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(FrameworkController)))
+                .PropertiesAutowired();
+               
+
+
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
         }
