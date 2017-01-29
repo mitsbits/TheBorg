@@ -77,6 +77,7 @@ namespace Borg.Client
                 .SingleInstance();
 
             builder.RegisterType<AppBroadcaster>().As<IBroadcaster>().SingleInstance();
+            builder.RegisterType<DefaultDeviceAccessor>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.Populate(services);
             ApplicationContainer = builder.Build();
@@ -93,6 +94,8 @@ namespace Borg.Client
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseSession();
 

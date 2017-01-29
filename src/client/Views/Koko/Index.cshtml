@@ -1,0 +1,8 @@
+﻿@using Borg.Client
+@{
+    if (_device.Device.Path.Length > 0) { Layout = _device.Device.Path; }
+}
+<h1>@_content.Page.Title</h1>
+@section rightcolumn{
+    <h1>right column</h1>
+}

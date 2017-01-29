@@ -2,7 +2,7 @@
 @model Borg.Infra.Relational.IPagedResult<HomeController.Mod>
 
 @{
-    ViewBag.Title = "title";
+    if (_device.Device.Path.Length > 0) { Layout = _device.Device.Path; }
     Func<int, string> _generator = (i) => Url.Action("Index", "Home", new { p = i });
 }
 
@@ -21,4 +21,16 @@
 </div>
 <div>
     @Html.HtmlPager(Model, (i) => Url.Action("Index", "Home", new { p = i }), ViewContext.HttpContext.Request.QueryString, Pagination.PaginationInfo.PagerInChucks)
+</div>
+
+<div>
+    <h1>
+
+        @ViewBag.Id
+    </h1>
+    @{ Html.RenderPartial("Partial"); }
+</div>
+
+<div>
+    @await Component.InvokeAsync("MyComponent")
 </div>

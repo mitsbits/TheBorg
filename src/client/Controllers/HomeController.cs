@@ -43,6 +43,9 @@ namespace Borg.Client.Controllers
 
             publisher.PublishAsync(new EntityCacheDepedencyEvictionEvent(typeof(Mod), keys.Take(4).ToArray()));
 
+            ViewBag.Id = Guid.NewGuid();
+
+
             return View(model);
         }
 

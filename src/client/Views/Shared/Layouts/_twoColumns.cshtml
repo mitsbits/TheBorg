@@ -1,0 +1,12 @@
+﻿@using Borg.Client
+@{
+    Layout = "_Layout";
+
+}
+
+<div class="col-md-8">
+    @RenderBody()
+</div>
+<div class="col-md-4">
+    @await RenderSectionAsync("rightcolumn", false)
+</div>
