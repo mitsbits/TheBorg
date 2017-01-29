@@ -1,4 +1,4 @@
-﻿using Borg.Framework.MVC.BuildingBlocks;
+﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

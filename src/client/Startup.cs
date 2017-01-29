@@ -19,6 +19,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Borg.Client.Controllers;
+using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks;
 
 namespace Borg.Client
