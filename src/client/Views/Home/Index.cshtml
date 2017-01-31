@@ -8,15 +8,17 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<ul>
-    @foreach (HomeController.Mod o in Model.Records)
-    {
-        <li>
-            <strong>@o.Id</strong>
-            @o.Name
-        </li>
-    }
-</ul>
+<cache expires-after="@TimeSpan.FromMinutes(5)">
+    <ul>
+        @foreach (HomeController.Mod o in Model.Records)
+        {
+            <li>
+                <strong>@o.Id</strong>
+                @o.Name
+            </li>
+        }
+    </ul>
+</cache>
 <div>
     <ul style="float: left;" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator"></ul>
 </div>
@@ -31,7 +33,8 @@
     </h1>
     @{ Html.RenderPartial("Partial"); }
 </div>
-
-<div>
-    @await Component.InvokeAsync(nameof(MyComponent))
-</div>
+<cache expires-after="@TimeSpan.FromMinutes(2)">
+    <div>
+        @await Component.InvokeAsync(nameof(MyComponent))
+    </div>
+</cache>

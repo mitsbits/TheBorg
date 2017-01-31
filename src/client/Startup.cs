@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Borg.Client.Models;
+using Borg.Framework.MVC;
 using Borg.Framework.Redis;
 using Borg.Framework.Redis.Messaging;
 using Borg.Infra;
@@ -18,9 +19,6 @@ using StackExchange.Redis;
 using System;
 using System.Linq;
 using System.Reflection;
-using Borg.Client.Controllers;
-using Borg.Framework.MVC;
-using Borg.Framework.MVC.BuildingBlocks;
 
 namespace Borg.Client
 {
@@ -51,6 +49,11 @@ namespace Borg.Client
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration["Redis:Url"];
+                options.InstanceName = "output";
+            });
             services.AddSingleton<IDistributedCache>(
               serviceProvider =>
                   new RedisCache(new RedisCacheOptions
@@ -66,7 +69,7 @@ namespace Borg.Client
                 options.CookieHttpOnly = true;
             });
 
-            services.AddMvc().AddControllersAsServices(); 
+            services.AddMvc().AddControllersAsServices();
 
             var builder = new ContainerBuilder();
 
@@ -89,8 +92,6 @@ namespace Borg.Client
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                 .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(FrameworkController)))
                 .PropertiesAutowired();
-               
-
 
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
@@ -106,7 +107,7 @@ namespace Borg.Client
             {
                 app.UseDeveloperExceptionPage();
             }
-
+         
             app.UseStaticFiles();
 
             app.UseSession();
