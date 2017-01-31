@@ -4,18 +4,18 @@
     "Framework.MVC.HtmlPager": "1.0.0-*",
     "Infra.Core": "1.0.0-*",
     "Infra.EF6": "1.0.0-*",
-    "Microsoft.AspNetCore.Diagnostics": "1.0.0",
-    "Microsoft.AspNetCore.Mvc": "1.1.0",
-    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
-    "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
-    "Microsoft.Extensions.Logging.Console": "1.0.0",
-    "Microsoft.Extensions.Caching.Redis": "1.0.0",
     "Microsoft.AspNetCore.Session": "1.1.0",
     "Framework.Redis": "1.0.0-*",
     "Microsoft.AspNetCore.Mvc.TagHelpers": "1.1.1",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
-    "Framework.MVC.BuildingBlocks": "1.0.0-*"
+    "Framework.MVC.BuildingBlocks": "1.0.0-*",
+    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.1",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.Extensions.Caching.Redis": "1.1.0",
+    "Microsoft.Extensions.Logging.Console": "1.1.0"
   },
 
   "tools": {
