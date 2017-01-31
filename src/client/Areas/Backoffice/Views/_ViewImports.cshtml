@@ -1,0 +1,9 @@
+﻿@using Borg.Infra.CQRS
+@using Borg
+@using Borg.Framework.MVC.BuildingBlocks.Devices
+
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@addTagHelper "*, Framework.MVC.HtmlPager"
+
+@inject IPageContentAccessor<IPageContent> _content;
+@inject IDeviceAccessor<IDevice> _device;

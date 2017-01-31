@@ -1,5 +1,6 @@
 ﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,13 @@ namespace Borg.Framework.MVC
             this.SetDevice(device);
             return device;
         }
+    }
+
+    public abstract class BackofficeController : FrameworkController
+    {
+        public IEventBus Events { get; set; }
+        public ICommandBus Commands { get; set; }
+        public IQueryBus Queries { get; set; }
     }
 }
 

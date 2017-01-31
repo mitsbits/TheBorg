@@ -19,6 +19,7 @@ using StackExchange.Redis;
 using System;
 using System.Linq;
 using System.Reflection;
+using Borg.Infra.CQRS;
 
 namespace Borg.Client
 {
@@ -86,6 +87,15 @@ namespace Borg.Client
 
             builder.RegisterType<AppBroadcaster>().As<IBroadcaster>().SingleInstance();
             builder.RegisterType<DefaultDeviceAccessor>().AsImplementedInterfaces().InstancePerLifetimeScope();
+
+
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .AsClosedTypesOf(typeof(IHandlesEvent<>)).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .AsClosedTypesOf(typeof(IHandlesCommand<>)).AsImplementedInterfaces();
+            builder.RegisterType<AutofacDispatcher>().As<IDispatcherInstance>().SingleInstance();
+            builder.RegisterType<AutofacDispatcher>().As<ICommandBus>().SingleInstance();
+            builder.RegisterType<AutofacDispatcher>().As<IEventBus>().SingleInstance();
 
             builder.Populate(services);
 
