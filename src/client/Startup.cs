@@ -164,20 +164,34 @@ namespace Borg.Client
             });
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
-
+      
                 ClientId = "openIdConnectClient",
                 Authority = "https://localhost:44383/",
                 SignInScheme = "cookie",
                 RequireHttpsMetadata = false,
-                GetClaimsFromUserInfoEndpoint = true,
+                //GetClaimsFromUserInfoEndpoint = true,
                 SaveTokens = true,
-                ResponseType = "code id_token",
+                //ResponseType = "code id_token",
                 Scope = { "openid", "profile", "email", "role" },
                 TokenValidationParameters = new TokenValidationParameters()
                 {
                     NameClaimType = JwtClaimTypes.Name,
-                    RoleClaimType = JwtClaimTypes.Role,
+                    RoleClaimType = ClaimTypes.Role,
                 }
+
+                //ClientId = "openIdConnectClient",
+                //Authority = "https://localhost:44383/",
+                //SignInScheme = "cookie",
+                //RequireHttpsMetadata = false,
+                //GetClaimsFromUserInfoEndpoint = true,
+                //SaveTokens = true,
+                ////ResponseType = "code id_token",
+                ////Scope = { "openid", "profile", "email", "role" },
+                //TokenValidationParameters = new TokenValidationParameters()
+                //{
+                //    NameClaimType = ClaimTypes.Name,
+                //    RoleClaimType = ClaimTypes.Role,
+                //}
 
                 //AuthenticationScheme = "oidc",
                 //SignInScheme = "Cookies",

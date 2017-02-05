@@ -2,14 +2,15 @@
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Borg.Framework.Identity.Models;
 using Borg.Framework.Identity.Services;
+using IdentityModel;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
@@ -70,7 +71,11 @@ namespace Borg.Framework.Identity
             });
 
             services.AddIdentityServer()
-                .AddInMemoryClients(Clients.Get()).AddInMemoryIdentityResources(Resources.GetIdentityResources()).AddInMemoryPersistedGrants()
+                .AddInMemoryClients(Clients.Get())
+                .AddInMemoryIdentityResources(Resources.GetIdentityResources())
+                .AddInMemoryApiResources(Resources.GetApiResources())
+                //.AddTestUsers(Users.Get())
+                //.AddInMemoryPersistedGrants()
                 //.AddConfigurationStore(builder =>
                 //    builder.UseSqlServer(idsettings.Database.ConnectionString, options =>
                 //        options.MigrationsAssembly(migrationsAssembly)))
@@ -90,8 +95,8 @@ namespace Borg.Framework.Identity
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //InitializeDatabase(app);
-            //Task.WaitAll(InitialiseIdentity(app));
+           // InitializeDatabase(app);
+           // Task.WaitAll(InitialiseIdentity(app));
 
             loggerFactory.AddConsole();
 
@@ -101,7 +106,7 @@ namespace Borg.Framework.Identity
             }
             app.UseIdentity();
             app.UseIdentityServer();
-         
+
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
             //app.Run(async (context) =>
@@ -161,10 +166,12 @@ namespace Borg.Framework.Identity
                 var adminrole =
                     await rmanager.Roles.FirstOrDefaultAsync(
                         x => x.NormalizedName.Equals("admin", StringComparison.InvariantCultureIgnoreCase));
+
                 if (adminrole == null)
                 {
                     adminrole = new IdentityRole("admin");
                     await rmanager.CreateAsync(adminrole);
+                    await rmanager.AddClaimAsync(adminrole, new Claim(JwtClaimTypes.NickName, "adminaras"));
                 }
 
                 var user = await umanager.FindByNameAsync("mitsbits");
@@ -173,16 +180,16 @@ namespace Borg.Framework.Identity
                     user = new ApplicationUser
                     {
                         Email = "mitsbits@gmail.com",
-                        UserName = "mitsbits"
+                        UserName = "mitsbits",
+                        LockoutEnabled = false
                     };
-                    user.LockoutEnabled = false;
                     await umanager.CreateAsync(user, "qazwsx123!@#");
-
+                    await umanager.AddClaimAsync(user, new Claim(JwtClaimTypes.NickName, "mitsaras"));
 
 
                 }
                 await umanager.AddToRoleAsync(user, "admin");
-               
+
             }
         }
 

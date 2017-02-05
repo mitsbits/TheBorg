@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+﻿
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
@@ -24,7 +25,7 @@ namespace Borg.Framework.Identity
 
                 ClientId = "openIdConnectClient",
                 ClientName = "Example Implicit Client Application",
-                AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
                 RequireConsent = true,
                 AllowedScopes = new List<string>
                 {
@@ -77,7 +78,7 @@ namespace Borg.Framework.Identity
             new IdentityResources.Email(),
             new IdentityResource {
                 Name = "role",
-                UserClaims = new List<string> {"role", JwtClaimTypes.Role }
+                UserClaims = new List<string> {"role", ClaimTypes.Role }
             }
         };
         }
@@ -119,3 +120,6 @@ namespace Borg.Framework.Identity
         }
     }
 }
+
+
+

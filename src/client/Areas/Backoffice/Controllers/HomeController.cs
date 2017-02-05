@@ -15,7 +15,7 @@ namespace Borg.Client.Areas.Backoffice.Controllers
     {
         public async Task< IActionResult> Index()
         {
-            var r = await Commands.Process(new ExpCommand());
+            //var r = await Commands.Process(new ExpCommand());
             var u = this.User;
             return View();
         }
