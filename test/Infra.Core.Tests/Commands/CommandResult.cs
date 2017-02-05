@@ -27,16 +27,16 @@ namespace Infra.CQRS.Tests.Commands
         public void check_that_static_factory_methods_return()
         {
             var res = CommandResult.Create(true);
-            res.Success.ShouldBe(true);
+            res.Succeded.ShouldBe(true);
             res.Description.ShouldBe(string.Empty);
             res = CommandResult.Create(false);
-            res.Success.ShouldBe(false);
+            res.Succeded.ShouldBe(false);
             res.Description.ShouldBe(string.Empty);
             res = CommandResult.Create(true, _descriptionText);
-            res.Success.ShouldBe(true);
+            res.Succeded.ShouldBe(true);
             res.Description.ShouldBe(_descriptionText);
             res = CommandResult.Create(false, _descriptionText);
-            res.Success.ShouldBe(false);
+            res.Succeded.ShouldBe(false);
             res.Description.ShouldBe(_descriptionText);
         }
 
@@ -44,7 +44,7 @@ namespace Infra.CQRS.Tests.Commands
         public void check_that_static_factory_methods_return_with_entities()
         {
             var res = CommandResult<IEntity<string>>.Create(true, _entity.Object);
-            res.Success.ShouldBe(true);
+            res.Succeded.ShouldBe(true);
             res.Description.ShouldBe(string.Empty);
             var typedRes = res as ICommandResult<IEntity<string>>;
             typedRes.ShouldNotBeNull();
@@ -52,7 +52,7 @@ namespace Infra.CQRS.Tests.Commands
             typedRes.Entity.Id.ShouldBe(_entityKey.ToString());
 
             res = CommandResult<IEntity<string>>.Create(false, _entity.Object);
-            res.Success.ShouldBe(false);
+            res.Succeded.ShouldBe(false);
             res.Description.ShouldBe(string.Empty);
             typedRes = res as ICommandResult<IEntity<string>>;
             typedRes.ShouldNotBeNull();
@@ -64,7 +64,7 @@ namespace Infra.CQRS.Tests.Commands
         public void check_that_static_factory_methods_returns_from_exception()
         {
             var res = CommandResult.Create(_exception.Object);
-            res.Success.ShouldBe(false);
+            res.Succeded.ShouldBe(false);
             res.Description.ShouldBe(_exceptionText);
         }
     }

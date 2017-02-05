@@ -7,7 +7,7 @@
 
     public interface ICommandResult : IResponse
     {
-        bool Success { get; }
+        bool Succeded { get; }
         string Description { get; }
     }
 }

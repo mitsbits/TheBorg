@@ -4,9 +4,9 @@ namespace Borg.Infra.CQRS
 {
     public class CommandResult : ICommandResult
     {
-        protected CommandResult(bool success, string description)
+        protected CommandResult(bool succeded, string description)
         {
-            Success = success;
+            Succeded = succeded;
             Description = description;
         }
 
@@ -15,7 +15,7 @@ namespace Borg.Infra.CQRS
             get;
         }
 
-        public virtual bool Success
+        public virtual bool Succeded
         {
             get;
         }
@@ -28,6 +28,11 @@ namespace Borg.Infra.CQRS
         public static ICommandResult Create(Exception exception)
         {
             return new CommandResult(false, exception.ToString());
+        }
+
+        public static ICommandResult Success(string description = "")
+        {
+            return new CommandResult(true, description);
         }
     }
 
@@ -46,6 +51,11 @@ namespace Borg.Infra.CQRS
         public static ICommandResult Create(bool success, TEntity entity, string description = "")
         {
             return new CommandResult<TEntity>(success, description, entity);
+        }
+
+        public static ICommandResult Success(TEntity entity, string description = "")
+        {
+            return new CommandResult<TEntity>(true, description, entity);
         }
     }
 }

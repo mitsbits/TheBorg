@@ -98,7 +98,7 @@ namespace Infra.CQRS.Tests.Commands
 
             var resultA = await _inMemoryCommandBus.Process(_commandA);
             resultA.ShouldNotBeNull();
-            resultA.Success.ShouldBe(true);
+            resultA.Succeded.ShouldBe(true);
 
             var typedResA = resultA as ICommandResult<IEntity<string>>;
             typedResA.ShouldNotBeNull();
@@ -107,7 +107,7 @@ namespace Infra.CQRS.Tests.Commands
 
             var resultB = await _inMemoryCommandBus.Process(_commandB);
             resultB.ShouldNotBeNull();
-            resultB.Success.ShouldBe(false);
+            resultB.Succeded.ShouldBe(false);
             resultB.Description.ShouldBe(_exceptionText);
         }
 
@@ -122,13 +122,13 @@ namespace Infra.CQRS.Tests.Commands
 
             var resultA = await _inMemoryCommandBus.Process(_commandA);
             resultA.ShouldNotBeNull();
-            resultA.Success.ShouldBe(true);
+            resultA.Succeded.ShouldBe(true);
             resultA.GetType().GetInterfaces().ShouldContain(typeof(ICommandResult));
             resultA.GetType().GetInterfaces().ShouldContain(typeof(ICommandResult<IEntity<string>>));
 
             var resultB = await _inMemoryCommandBus.Process(_commandB);
             resultB.ShouldNotBeNull();
-            resultB.Success.ShouldBe(false);
+            resultB.Succeded.ShouldBe(false);
             resultB.GetType().GetInterfaces().ShouldContain(typeof(ICommandResult));
         }
 

@@ -10,12 +10,16 @@
     "Microsoft.AspNetCore.Mvc.TagHelpers": "1.1.1",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
     "Framework.MVC.BuildingBlocks": "1.0.0-*",
-    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.1",
+    "Microsoft.Extensions.Caching.Redis": "1.1.0",
+    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
-    "Microsoft.Extensions.Caching.Redis": "1.1.0",
-    "Microsoft.Extensions.Logging.Console": "1.1.0"
+    "Microsoft.Extensions.Logging.Console": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.0",
+    "IdentityModel": "2.5.1",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0"
   },
 
   "tools": {
