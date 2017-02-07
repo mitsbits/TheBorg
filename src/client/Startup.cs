@@ -25,6 +25,7 @@ using System.Security.Claims;
 using Borg.Infra.CQRS;
 using IdentityModel;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace Borg.Client
 {
@@ -49,6 +50,10 @@ namespace Borg.Client
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .ReadFrom.Configuration(Configuration).CreateLogger();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -127,8 +132,7 @@ namespace Borg.Client
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
             IApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole();
-
+            loggerFactory.AddSerilog();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

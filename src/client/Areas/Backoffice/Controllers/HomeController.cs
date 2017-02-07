@@ -6,6 +6,7 @@ using Borg.Framework.MVC;
 using Borg.Infra.CQRS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Client.Areas.Backoffice.Controllers
 {
@@ -13,10 +14,17 @@ namespace Borg.Client.Areas.Backoffice.Controllers
     [Area("Backoffice")]
     public class HomeController : BackofficeController
     {
-        public async Task< IActionResult> Index()
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task< IActionResult> Index( )
         {
             //var r = await Commands.Process(new ExpCommand());
-            var u = this.User;
+            _logger.LogDebug("user is {@user}", User.Identity);
             return View();
         }
     }

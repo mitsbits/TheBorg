@@ -16,6 +16,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Borg.Framework.Identity
 {
@@ -29,6 +30,12 @@ namespace Borg.Framework.Identity
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .ReadFrom.Configuration(Configuration).CreateLogger();
+  
+
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -93,12 +100,14 @@ namespace Borg.Framework.Identity
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+                        IApplicationLifetime appLifetime)
         {
            // InitializeDatabase(app);
            // Task.WaitAll(InitialiseIdentity(app));
 
-            loggerFactory.AddConsole();
+            //loggerFactory.AddConsole(Configuration);
+            loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {
@@ -113,6 +122,7 @@ namespace Borg.Framework.Identity
             //{
             //    await context.Response.WriteAsync("Hello World from Borg Identity!");
             //});
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
         }
 
 
