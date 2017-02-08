@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra
 {
@@ -16,12 +17,18 @@ namespace Borg.Infra
         private bool _isRunning = false;
         private bool _shouldRunAgainImmediately = false;
 
-        public ScheduledTimer(Func<Task<DateTime?>> timerCallback, TimeSpan? dueTime = null, TimeSpan? minimumIntervalTime = null)
+
+        private readonly ILogger _logger;
+
+        public ScheduledTimer(Func<Task<DateTime?>> timerCallback, ILoggerFactory loggerFactory, TimeSpan? dueTime = null, TimeSpan? minimumIntervalTime = null)
         {
             if (timerCallback == null)
                 throw new ArgumentNullException(nameof(timerCallback));
 
+            _logger = loggerFactory.CreateLogger(GetType());
+
             _timerCallback = timerCallback;
+
             _minimumInterval = minimumIntervalTime ?? TimeSpan.Zero;
 
             int dueTimeMs = dueTime.HasValue ? (int)dueTime.Value.TotalMilliseconds : Timeout.Infinite;
@@ -34,11 +41,11 @@ namespace Borg.Infra
             if (!utcDate.HasValue || utcDate.Value < utcNow)
                 utcDate = utcNow;
 
-            //_logger.Trace(() => $"ScheduleNext called: value={utcDate.Value.ToString("O")}");
+            _logger.LogDebug($"ScheduleNext called: value={utcDate.Value:O}");
 
             if (utcDate == DateTime.MaxValue)
             {
-                //  _logger.Trace("Ignoring MaxValue");
+                  _logger.LogDebug("Ignoring MaxValue");
                 return;
             }
 
@@ -47,14 +54,14 @@ namespace Borg.Infra
                 // already have an earlier scheduled time
                 if (_next > utcNow && utcDate > _next)
                 {
-                    //    _logger.Trace(() => $"Ignoring because already scheduled for earlier time {utcDate.Value.Ticks} {_next.Ticks}");
+                       _logger.LogDebug($"Ignoring because already scheduled for earlier time {utcDate.Value.Ticks} {_next.Ticks}");
                     return;
                 }
 
                 // ignore duplicate times
                 if (_next == utcDate)
                 {
-                    //  _logger.Trace("Ignoring because already scheduled for same time");
+                      _logger.LogDebug("Ignoring because already scheduled for same time");
                     return;
                 }
 
@@ -63,7 +70,7 @@ namespace Borg.Infra
                 if (_last == DateTime.MinValue)
                     _last = _next;
 
-                //_logger.Trace(() => $"Scheduling next: delay={delay}");
+                _logger.LogDebug($"Scheduling next: delay={delay}");
 
                 _timer.Change(delay, Timeout.Infinite);
             }
@@ -73,18 +80,18 @@ namespace Borg.Infra
         {
             if (_isRunning)
             {
-                //_logger.Trace("Exiting run callback because its already running, will run again immediately.");
+                _logger.LogDebug("Exiting run callback because its already running, will run again immediately.");
                 _shouldRunAgainImmediately = true;
                 return;
             }
 
-            //_logger.Trace("RunCallbackAsync");
+            _logger.LogDebug("RunCallbackAsync");
 
             using (await _lock.LockAsync())
             {
                 if (_isRunning)
                 {
-                    //      _logger.Trace("Exiting run callback because its already running, will run again immediately.");
+                          _logger.LogDebug("Exiting run callback because its already running, will run again immediately.");
                     _shouldRunAgainImmediately = true;
                     return;
                 }
@@ -103,15 +110,15 @@ namespace Borg.Infra
                 }
                 catch (Exception ex)
                 {
-                    // _logger.Error(ex, () => $"Error running scheduled timer callback: {ex.Message}");
+                     _logger.LogError("Error running scheduled timer callback: {Message} \n{@Exception}", ex.Message, ex);
                     _shouldRunAgainImmediately = true;
                 }
 
                 if (_minimumInterval > TimeSpan.Zero)
                 {
-                    //_logger.Trace("Sleeping for minimum interval: {interval}", _minimumInterval);
+                    _logger.LogDebug("Sleeping for minimum interval: {interval}", _minimumInterval);
                     await Task.Delay(_minimumInterval).AnyContext();//DateTime.SleepAsync(_minimumInterval).AnyContext();
-                    //_logger.Trace("Finished sleeping");
+                    _logger.LogDebug("Finished sleeping");
                 }
 
                 var nextRun = DateTime.UtcNow.AddMilliseconds(10);
@@ -122,7 +129,7 @@ namespace Borg.Infra
             }
             catch (Exception ex)
             {
-                //_logger.Error(ex, () => $"Error running schedule next callback: {ex.Message}");
+               _logger.LogError( "Error running schedule next callback: {Message} \n {@Exception}", ex.Message, ex);
             }
             finally
             {

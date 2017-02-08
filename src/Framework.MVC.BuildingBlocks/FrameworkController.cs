@@ -1,14 +1,23 @@
 ﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Framework.Services;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Framework.MVC
 {
     public abstract class FrameworkController : Controller
     {
         public IBroadcaster Broadcaster { get; set; }
+        protected internal ILogger Logger { get; }
+
+
+        protected FrameworkController()
+        {
+            Logger = ApplicationLogging.LoggerFactory.CreateLogger(GetType());
+        }
 
         protected TContent PageContent<TContent>(TContent content = default(TContent)) where TContent : IPageContent
         {

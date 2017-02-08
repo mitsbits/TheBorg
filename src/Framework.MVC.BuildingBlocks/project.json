@@ -2,6 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
+    "Framework.Services": "1.0.0-*",
     "Infra.Core": {
       "version": "1.0.0-*",
       "target": "project"

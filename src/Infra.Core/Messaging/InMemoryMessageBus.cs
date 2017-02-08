@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra.Messaging
 {
     public class InMemoryMessageBus : MessageBusBase, IMessageBus
     {
-        public InMemoryMessageBus(/*ILoggerFactory loggerFactory = null*/) : base(/*loggerFactory*/)
+        public InMemoryMessageBus(ILoggerFactory loggerFactory = null) : base(loggerFactory)
         {
         }
 

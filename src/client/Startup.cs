@@ -22,6 +22,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using Autofac.Core;
 using Borg.Infra.CQRS;
 using IdentityModel;
 using Microsoft.IdentityModel.Tokens;
@@ -99,12 +100,36 @@ namespace Borg.Client
 
             var multiplexer = ConnectionMultiplexer.Connect(Configuration["Redis:Url"]);
             var subscriber = multiplexer.GetSubscriber();
-            builder.Register((c, p) => new RedisMessageBus(subscriber, CacheConstants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>()))
-                .Named<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC).As<IMessagePublisher>()
+
+            builder.RegisterType<RedisMessageBus>()
+                .Named<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC)
+                .WithParameters(new[]
+                {
+                    new NamedParameter("subscriber", subscriber),
+                    new NamedParameter("topic", CacheConstants.CACHE_DEPEDENCY_TOPIC),
+                })
+                .As<IMessagePublisher>()
                 .SingleInstance();
-            builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.ResolveNamed<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC), c.Resolve<ISerializer>()))
+
+            
+            
+
+            builder.RegisterType<RedisDepedencyCacheClient>()
+                .WithParameters(new Parameter[]
+                {
+                    new NamedParameter("connectionMultiplexer", multiplexer),
+                    new ResolvedParameter((pi, ctx) => pi.Name == "subscriber", (pi, ctx) => ctx.ResolveNamed<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC))
+
+                 })
                 .As<IDepedencyCacheClient>()
                 .SingleInstance();
+
+            //builder.Register((c, p) => new RedisMessageBus(subscriber, CacheConstants.CACHE_DEPEDENCY_TOPIC, c.Resolve<ISerializer>()))
+            //    .Named<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC).As<IMessagePublisher>()
+            //    .SingleInstance();
+            //builder.Register((c, p) => new RedisDepedencyCacheClient(multiplexer, c.ResolveNamed<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC), c.Resolve<ISerializer>()))
+            //    .As<IDepedencyCacheClient>()
+            //    .SingleInstance();
 
             builder.RegisterType<AppBroadcaster>().As<IBroadcaster>().SingleInstance();
             builder.RegisterType<DefaultDeviceAccessor>().AsImplementedInterfaces().InstancePerLifetimeScope();
@@ -117,6 +142,8 @@ namespace Borg.Client
             builder.RegisterType<AutofacDispatcher>().As<IDispatcherInstance>().SingleInstance();
             builder.RegisterType<AutofacDispatcher>().As<ICommandBus>().SingleInstance();
             builder.RegisterType<AutofacDispatcher>().As<IEventBus>().SingleInstance();
+
+
 
             builder.Populate(services);
 
@@ -133,6 +160,7 @@ namespace Borg.Client
             IApplicationLifetime appLifetime)
         {
             loggerFactory.AddSerilog();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -168,7 +196,7 @@ namespace Borg.Client
             });
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
-      
+
                 ClientId = "openIdConnectClient",
                 Authority = "https://localhost:44383/",
                 SignInScheme = "cookie",
@@ -220,18 +248,18 @@ namespace Borg.Client
 
             });
 
-                //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
 
-                //app.UseJwtBearerAuthentication(new JwtBearerOptions()
-                //{
-                //    Authority = "https://localhost:44383",
-                //    Audience = "https://localhost:44383/resources",
-                //    AutomaticAuthenticate = true,
-                //    AutomaticChallenge = true,
-                //});
+            //app.UseJwtBearerAuthentication(new JwtBearerOptions()
+            //{
+            //    Authority = "https://localhost:44383",
+            //    Audience = "https://localhost:44383/resources",
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true,
+            //});
 
 
-                app.UseStaticFiles();
+            app.UseStaticFiles();
 
             app.UseSession();
 

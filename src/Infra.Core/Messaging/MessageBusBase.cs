@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra.Messaging
 {
@@ -13,7 +14,7 @@ namespace Borg.Infra.Messaging
         protected readonly ConcurrentDictionary<string, Subscriber> _subscribers = new ConcurrentDictionary<string, Subscriber>();
         private readonly ConcurrentDictionary<Guid, DelayedMessage> _delayedMessages = new ConcurrentDictionary<Guid, DelayedMessage>();
 
-        protected MessageBusBase(/*ILoggerFactory loggerFactory*/) : base(/*loggerFactory*/)
+        protected MessageBusBase(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             InitializeMaintenance();
         }

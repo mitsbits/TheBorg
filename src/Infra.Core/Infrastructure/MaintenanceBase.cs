@@ -1,24 +1,26 @@
 ﻿
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra
 {
     public class MaintenanceBase : IDisposable
     {
         private ScheduledTimer _maintenanceTimer;
-        
-  
+        private readonly ILoggerFactory _loggerFactory;
 
-        public MaintenanceBase(/*ILoggerFactory loggerFactory*/)
+
+
+        public MaintenanceBase(ILoggerFactory loggerFactory)
         {
-            //_loggerFactory = loggerFactory;
-            //_logger = loggerFactory.CreateLogger(GetType());
+            _loggerFactory = loggerFactory;
+
         }
 
         protected void InitializeMaintenance(TimeSpan? dueTime = null, TimeSpan? intervalTime = null)
         {
-            _maintenanceTimer = new ScheduledTimer(DoMaintenanceAsync, dueTime, intervalTime/*, _loggerFactory*/);
+            _maintenanceTimer = new ScheduledTimer(DoMaintenanceAsync, _loggerFactory, dueTime, intervalTime);
         }
 
         protected void ScheduleNextMaintenance(DateTime utcDate)

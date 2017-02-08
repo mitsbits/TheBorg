@@ -5,6 +5,7 @@ using StackExchange.Redis;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Framework.Redis.Messaging
 {
@@ -16,7 +17,7 @@ namespace Borg.Framework.Redis.Messaging
         private static readonly object _lockObject = new object();
         private bool _isSubscribed;
 
-        public RedisMessageBus(ISubscriber subscriber, string topic = null, ISerializer serializer = null/*, ILoggerFactory loggerFactory = null*/) : base(/*loggerFactory*/)
+        public RedisMessageBus(ISubscriber subscriber, string topic = null, ISerializer serializer = null, ILoggerFactory loggerFactory = null) : base(loggerFactory)
         {
             _subscriber = subscriber;
             _topic = topic ?? "messages";
