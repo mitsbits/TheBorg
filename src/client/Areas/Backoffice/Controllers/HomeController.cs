@@ -15,8 +15,9 @@ namespace Borg.Client.Areas.Backoffice.Controllers
     [Area("Backoffice")]
     public class HomeController : BackofficeController
     {
-
-
+        public HomeController(ILoggerFactory loggerFactory) : base(loggerFactory)
+        {
+        }
 
         public async Task< IActionResult> Index( )
         {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Client
 {
@@ -13,16 +14,23 @@ namespace Borg.Client
     {
         //private readonly ILogger _dLog = Log.Logger.ForContext(typeof(AutofacDispatcher));
         private readonly ILifetimeScope _container;
+        private  ILogger Logger { get; }
         public AutofacDispatcher(ILifetimeScope container)
         {
             _container = container;
+            ILoggerFactory loggerFactory;
+            if (_container.TryResolve(out loggerFactory))
+            {
+                Logger = loggerFactory.CreateLogger(GetType());
+            }
         }
 
         #region ICommandBus
 
         public async Task<ICommandResult> Process<TCommand>(TCommand command) where TCommand : ICommand
         {
-            //_dLog.Debug("Requesting handler for {@Command}", command);
+            //TODO: fix logging
+            //Logger.Debug("Requesting handler for {@Command}", command);
             ICommandResult result;
 
             using (var scope = _container.BeginLifetimeScope())

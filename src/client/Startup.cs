@@ -143,6 +143,7 @@ namespace Borg.Client
             builder.RegisterType<AutofacDispatcher>().As<ICommandBus>().SingleInstance();
             builder.RegisterType<AutofacDispatcher>().As<IEventBus>().SingleInstance();
 
+            //builder.RegisterType<LoggerFactory>().As<ILoggerFactory>().SingleInstance();
 
 
             builder.Populate(services);

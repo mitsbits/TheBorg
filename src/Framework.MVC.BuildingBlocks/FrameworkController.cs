@@ -11,12 +11,15 @@ namespace Borg.Framework.MVC
     public abstract class FrameworkController : Controller
     {
         public IBroadcaster Broadcaster { get; set; }
-        protected internal ILogger Logger { get; }
+        //protected ILoggerFactory LoggerFactory { get; set; }
+
+        protected ILogger Logger { get; }
 
 
-        protected FrameworkController()
+        protected FrameworkController(ILoggerFactory loggerFactory)
         {
-            Logger = ApplicationLogging.LoggerFactory.CreateLogger(GetType());
+            Logger = loggerFactory.CreateLogger(GetType());
+            Logger.LogDebug("{@Controller} is born", this);
         }
 
         protected TContent PageContent<TContent>(TContent content = default(TContent)) where TContent : IPageContent
@@ -36,6 +39,10 @@ namespace Borg.Framework.MVC
 
     public abstract class BackofficeController : FrameworkController
     {
+        protected BackofficeController(ILoggerFactory loggerFactory) : base(loggerFactory)
+        {
+        }
+
         public IEventBus Events { get; set; }
         public ICommandBus Commands { get; set; }
         public IQueryBus Queries { get; set; }

@@ -4,11 +4,16 @@ using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Borg.Infra.CQRS;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Client.Controllers
 {
     public class KokoController : FrameworkController
     {
+        public KokoController(ILoggerFactory loggerFactory) : base(loggerFactory)
+        {
+        }
+
         public async Task<IActionResult> Index()
         {
             var content = PageContent<PageContent>();

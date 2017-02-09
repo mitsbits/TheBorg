@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Borg.Framework.MVC;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,12 +21,12 @@ namespace Borg.Client.Controllers
     public class HomeController : FrameworkController
     {
         private readonly IDepedencyCacheClient _cache;
-        private readonly IBroadcaster _broadcaster;
 
-        public HomeController(IDepedencyCacheClient cache, IBroadcaster broadcaster)
+
+        public HomeController(ILoggerFactory loggerFactory, IDepedencyCacheClient cache):base(loggerFactory)
         {
             _cache = cache;
-            _broadcaster = broadcaster;
+
         }
 
         // GET: /<controller>/
