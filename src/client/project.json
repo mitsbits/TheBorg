@@ -6,7 +6,7 @@
     "Framework.Redis": "1.0.0-*",
     "IdentityModel": "2.5.1",
     "Infra.Core": "1.0.0-*",
-    "Infra.EF6": "1.0.0-*",
+    "Infra.EFCore": "1.0.0-*",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
     "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.0",

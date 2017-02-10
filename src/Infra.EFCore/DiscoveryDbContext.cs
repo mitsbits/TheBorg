@@ -1,28 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Borg.Infra.EFCore
 {
-    public class DiscoveryDbContext : DbContext
+    public abstract class DiscoveryDbContext : BaseSqlDbContext
     {
-        public DiscoveryDbContext() : base() { }
+        protected DiscoveryDbContext(string connectionString) : base(connectionString)
+        {
+        }
     }
 
-    public class DiscoveryDbContextOptions : DbContextOptions
+    public abstract class BaseSqlDbContext : DbContext
     {
-        public DiscoveryDbContextOptions(IReadOnlyDictionary<Type, IDbContextOptionsExtension> extensions) : base(extensions)
+        protected string ConnectionString { get; }
+
+        protected BaseSqlDbContext() : base()
         {
         }
 
-        public override DbContextOptions WithExtension<TExtension>(TExtension extension)
+        protected BaseSqlDbContext(DbContextOptions options) : base(options)
         {
-            throw new NotImplementedException();
         }
 
-        public override Type ContextType { get; }
+        protected BaseSqlDbContext(string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.UseSqlServer(ConnectionString, SqlServerOptionsAction);
+
+        protected virtual void SqlServerOptionsAction(SqlServerDbContextOptionsBuilder sqlServerDbContextOptionsBuilder)
+        {
+        }
     }
-
-
 }

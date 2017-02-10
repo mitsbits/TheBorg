@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Borg.Client.Models;
+
 using Borg.Framework.MVC;
 using Borg.Framework.Redis;
 using Borg.Framework.Redis.Messaging;
@@ -23,6 +23,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using Autofac.Core;
+using Borg.Client.Models;
 using Borg.Infra.CQRS;
 using IdentityModel;
 using Microsoft.IdentityModel.Tokens;
