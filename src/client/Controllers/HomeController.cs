@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Borg.Framework.MVC.BuildingBlocks;
+using Borg.Framework.MVC;
 using Borg.Framework.Redis;
 using Borg.Infra.BuildingBlocks;
 using Borg.Infra.Caching;
@@ -7,12 +7,11 @@ using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Borg.Framework.MVC;
-using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,11 +21,9 @@ namespace Borg.Client.Controllers
     {
         private readonly IDepedencyCacheClient _cache;
 
-
-        public HomeController(ILoggerFactory loggerFactory, IDepedencyCacheClient cache):base(loggerFactory)
+        public HomeController(ILoggerFactory loggerFactory, IDepedencyCacheClient cache) : base(loggerFactory)
         {
             _cache = cache;
-
         }
 
         // GET: /<controller>/

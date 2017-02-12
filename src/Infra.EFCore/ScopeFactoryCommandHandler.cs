@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Borg.Infra.CQRS;
+﻿using Borg.Infra.CQRS;
+using System.Threading.Tasks;
 
 namespace Borg.Infra.EFCore
 {

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Borg.Infra.Relational;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Borg.Infra.Relational;
-using Microsoft.EntityFrameworkCore;
 
 namespace Borg.Infra.EFCore
 {
@@ -15,7 +15,7 @@ namespace Borg.Infra.EFCore
 
     public delegate void PostProcessReadHandler<T>(Expression<Func<T, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<T>> orderBy, Expression<Func<T, dynamic>>[] paths, IPagedResult<T> result) where T : class;
 
-    public abstract class BaseReadRepository<T, TDbContext> :  IReadRepository<T>, IReadAsyncRepository<T> where T : class where TDbContext : DbContext
+    public abstract class BaseReadRepository<T, TDbContext> : IReadRepository<T>, IReadAsyncRepository<T> where T : class where TDbContext : DbContext
     {
         public abstract TDbContext DbContext { get; }
 

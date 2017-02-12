@@ -1,0 +1,18 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Infra.Core": {
+      "version": "1.0.0-*",
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net46": {
+      "buildOptions": {
+        "define": [ "NET46" ]
+      }
+    }
+  }
+}

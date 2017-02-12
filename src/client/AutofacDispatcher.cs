@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Borg.Infra.Core.Log;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Microsoft.Extensions.Logging;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Borg.Client
 {
     public class AutofacDispatcher : IDispatcherInstance, IEventBus, ICommandBus
     {
-
         private readonly ILifetimeScope _container;
-        private  ILogger Logger { get; }
+        private ILogger Logger { get; }
+
         public AutofacDispatcher(ILifetimeScope container)
         {
             _container = container;
@@ -35,7 +34,6 @@ namespace Borg.Client
 
         public async Task<ICommandResult> Process<TCommand>(TCommand command) where TCommand : ICommand
         {
-  
             Logger.LogDebug("Requesting handler for {@Command}", command);
             ICommandResult result;
 
@@ -53,7 +51,7 @@ namespace Borg.Client
                 var collection = hit as IEnumerable<dynamic>;
                 if (collection == null)
                 {
-                     Logger.LogWarning("No command handler for {@Command}", command);
+                    Logger.LogWarning("No command handler for {@Command}", command);
                     return await Task.FromResult(CommandResult.Create(false, $"no command precessor for {nameof(command)}"));
                 }
                 if (collection.Count() > 1)
@@ -129,10 +127,9 @@ namespace Borg.Client
         {
             if (disposing)
             {
-              _container.Dispose();
+                _container.Dispose();
             }
         }
-
 
         #endregion IDisposable
     }

@@ -8,6 +8,14 @@ namespace Borg.Infra.EFCore
         protected DiscoveryDbContext(string connectionString) : base(connectionString)
         {
         }
+
+        protected DiscoveryDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        protected DiscoveryDbContext() : base()
+        {
+        }
     }
 
     public abstract class BaseSqlDbContext : DbContext
@@ -28,9 +36,9 @@ namespace Borg.Infra.EFCore
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer(ConnectionString, SqlServerOptionsAction);
+            => optionsBuilder.UseSqlServer(ConnectionString, OnConfiguringSqlServerOptions);
 
-        protected virtual void SqlServerOptionsAction(SqlServerDbContextOptionsBuilder sqlServerDbContextOptionsBuilder)
+        protected virtual void OnConfiguringSqlServerOptions(SqlServerDbContextOptionsBuilder sqlServerDbContextOptionsBuilder)
         {
         }
     }

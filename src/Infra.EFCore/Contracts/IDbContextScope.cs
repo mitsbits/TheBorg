@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,7 +49,7 @@ namespace Borg.Infra.EFCore
         /// Saves the changes in all the DbContext instances that were created within this scope.
         /// This method can only be called once per scope.
         /// </summary>
-        Task<int> SaveChangesAsync(CancellationToken cancelToken = default (CancellationToken));
+        Task<int> SaveChangesAsync(CancellationToken cancelToken = default(CancellationToken));
 
         /// <summary>
         /// Reloads the provided persistent entities from the data store

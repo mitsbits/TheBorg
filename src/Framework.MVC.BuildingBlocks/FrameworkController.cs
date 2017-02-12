@@ -1,6 +1,5 @@
 ﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
-using Borg.Framework.Services;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,6 @@ namespace Borg.Framework.MVC
         //protected ILoggerFactory LoggerFactory { get; set; }
 
         protected ILogger Logger { get; }
-
 
         protected FrameworkController(ILoggerFactory loggerFactory)
         {

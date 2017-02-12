@@ -92,4 +92,38 @@ namespace Borg.Infra.EFCore
 
         #endregion Async
     }
+
+    public abstract class UowRepository<T, TDbContext> : BaseReadWriteRepository<T, TDbContext>, IUowRepository where TDbContext :
+        DbContext
+        where T : class
+    {
+        protected IContextAwareUnitOfWork UnitOfWork { get; private set; }
+
+        public void SetUnitOfWork(IUnitOfWork unitOfWork)
+        {
+            UnitOfWork = (IContextAwareUnitOfWork)unitOfWork;
+        }
+
+        public override TDbContext DbContext
+        {
+            get
+            {
+                var context = UnitOfWork.GetContext() as TDbContext;
+                if (context == null)
+                    throw CreateIncorrectContextTypeException();
+                return context;
+            }
+        }
+
+        protected Exception CreateIncorrectContextTypeException()
+        {
+            return new IncorrectUnitOfWorkUsageException(
+                        "Unit of work registered context: " + UnitOfWork.GetContext() +
+                        ", type: " + UnitOfWork.GetContext()?.GetType() +
+                        " could not be cast to expected EF DbContext base class. " +
+                        "Make sure the context you registered the unit of work factory with " +
+                        "is correctly registed with IoC container (as self) and that it inherits " +
+                        "from EF DbContext.");
+        }
+    }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace Borg.Infra.EFCore
 {
     /// <summary>

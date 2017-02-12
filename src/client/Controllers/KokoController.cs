@@ -1,10 +1,8 @@
-﻿using System;
-using Borg.Framework.MVC;
+﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Borg.Infra.CQRS;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Borg.Client.Controllers
 {
@@ -21,7 +19,7 @@ namespace Borg.Client.Controllers
             PageContent(content);
 
             await Broadcaster.BroadcastMessage(new message() { Message = "hallo" });
- 
+
             return View();
         }
 
@@ -29,8 +27,5 @@ namespace Borg.Client.Controllers
         {
             public string Message { get; set; }
         }
-
-
-
     }
 }

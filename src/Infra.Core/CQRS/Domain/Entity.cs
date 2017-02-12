@@ -1,5 +1,5 @@
-﻿using System;
-using Borg.Infra.BuildingBlocks;
+﻿using Borg.Infra.BuildingBlocks;
+using System;
 
 namespace Borg.Infra.CQRS
 {
@@ -27,7 +27,5 @@ namespace Borg.Infra.CQRS
             Id = id;
             _partitionKeyValue = null;
         }
-
-
     }
 }

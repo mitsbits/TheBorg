@@ -1,12 +1,10 @@
-﻿
-
-
-
-namespace Borg.Client.Areas.Backoffice.Domain
+﻿namespace Borg.Client.Areas.Backoffice.Domain
 {
     public class ToDo
     {
-        protected ToDo() { }
+        protected ToDo()
+        {
+        }
 
         public ToDo(string title, bool done = false)
         {
@@ -18,6 +16,7 @@ namespace Borg.Client.Areas.Backoffice.Domain
         {
             if (!Done) Done = true;
         }
+
         public int Id { get; protected set; }
         public bool Done { get; protected set; } = false;
         public string Title { get; protected set; }

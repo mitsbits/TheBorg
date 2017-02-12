@@ -6,4 +6,6 @@
         IWriteRepository<T>,
         IWriteAsyncRepository<T> where T : class
     { }
+
+
 }

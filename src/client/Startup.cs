@@ -1,33 +1,38 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
-
+using Borg.Client.Areas.Backoffice.Data;
+using Borg.Client.Models;
 using Borg.Framework.MVC;
 using Borg.Framework.Redis;
 using Borg.Framework.Redis.Messaging;
 using Borg.Infra;
 using Borg.Infra.Caching;
+using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
+using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Serilog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Reflection;
 using System.Security.Claims;
-using Autofac.Core;
-using Borg.Client.Models;
-using Borg.Infra.CQRS;
-using IdentityModel;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
+using Borg.Infra.EF6;
+
+using Borg.Infra.Relational;
+using Framework.System.Domain;
+using Mehdime.Entity;
 
 namespace Borg.Client
 {
@@ -62,7 +67,13 @@ namespace Borg.Client
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var csettings = new ClientSettings();
+            services.ConfigurePOCO(Configuration.GetSection("client"), () => csettings);
+
             var scanner = new CurrentContextAssemblyProvider();
+
+
+
 
 
             services.AddDistributedRedisCache(options =>
@@ -97,6 +108,9 @@ namespace Borg.Client
 
             var builder = new ContainerBuilder();
 
+           
+      
+
             builder.RegisterType<JsonNetSerializer>().As<ISerializer>().WithParameter("settings", new JsonSerializerSettings() { Formatting = Formatting.Indented }).InstancePerDependency();
 
             var multiplexer = ConnectionMultiplexer.Connect(Configuration["Redis:Url"]);
@@ -112,15 +126,11 @@ namespace Borg.Client
                 .As<IMessagePublisher>()
                 .SingleInstance();
 
-            
-            
-
             builder.RegisterType<RedisDepedencyCacheClient>()
                 .WithParameters(new Parameter[]
                 {
                     new NamedParameter("connectionMultiplexer", multiplexer),
                     new ResolvedParameter((pi, ctx) => pi.Name == "subscriber", (pi, ctx) => ctx.ResolveNamed<IMessageBus>(CacheConstants.CACHE_DEPEDENCY_TOPIC))
-
                  })
                 .As<IDepedencyCacheClient>()
                 .SingleInstance();
@@ -135,7 +145,6 @@ namespace Borg.Client
             builder.RegisterType<AppBroadcaster>().As<IBroadcaster>().SingleInstance();
             builder.RegisterType<DefaultDeviceAccessor>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
-
             builder.RegisterAssemblyTypes(scanner.Assemblies())
                 .AsClosedTypesOf(typeof(IHandlesEvent<>)).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(scanner.Assemblies())
@@ -144,8 +153,22 @@ namespace Borg.Client
             builder.RegisterType<AutofacDispatcher>().As<ICommandBus>().SingleInstance();
             builder.RegisterType<AutofacDispatcher>().As<IEventBus>().SingleInstance();
 
-            //builder.RegisterType<LoggerFactory>().As<ILoggerFactory>().SingleInstance();
+            builder.RegisterType<SystemEntityRepository<Page>>().As<ICRUDRespoditory<Page>>().InstancePerLifetimeScope();
 
+            var bdConfigs = new Dictionary<Type, DiscoveryDbContextSpec>
+            {
+                {
+                    typeof(SystemDbContext),
+                    new DiscoveryDbContextSpec() {ConnectionStringOrName = csettings.Database.ConnectionString}
+                }
+            };
+
+            builder.RegisterInstance(new SpecsDictionaryDbContextFactory(bdConfigs))
+                .As<IDbContextFactory>()
+                .SingleInstance();
+
+            services.AddSingleton<IDbContextScopeFactory, DbContextScopeFactory>();
+            services.AddSingleton<IAmbientDbContextLocator, AmbientDbContextLocator>();
 
             builder.Populate(services);
 
@@ -167,7 +190,6 @@ namespace Borg.Client
             {
                 app.UseDeveloperExceptionPage();
             }
-
 
             //app.UseCookieAuthentication(new CookieAuthenticationOptions
             //{
@@ -198,7 +220,6 @@ namespace Borg.Client
             });
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
-
                 ClientId = "openIdConnectClient",
                 Authority = "https://localhost:44383/",
                 SignInScheme = "cookie",
@@ -247,7 +268,6 @@ namespace Borg.Client
                 //    NameClaimType = JwtClaimTypes.Name,
                 //    RoleClaimType = JwtClaimTypes.Role,
                 //}
-
             });
 
             //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
@@ -259,7 +279,6 @@ namespace Borg.Client
             //    AutomaticAuthenticate = true,
             //    AutomaticChallenge = true,
             //});
-
 
             app.UseStaticFiles();
 
@@ -277,6 +296,34 @@ namespace Borg.Client
             });
 
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+        }
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        public static TConfig ConfigurePOCO<TConfig>(this IServiceCollection services, IConfiguration configuration,
+            Func<TConfig> pocoProvider) where TConfig : class
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (pocoProvider == null) throw new ArgumentNullException(nameof(pocoProvider));
+
+            var config = pocoProvider();
+            configuration.Bind(config);
+            services.AddSingleton(config);
+            return config;
+        }
+
+        public static TConfig ConfigurePOCO<TConfig>(this IServiceCollection services, IConfiguration configuration,
+            TConfig config) where TConfig : class
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (config == null) throw new ArgumentNullException(nameof(config));
+
+            configuration.Bind(config);
+            services.AddSingleton(config);
+            return config;
         }
     }
 }
