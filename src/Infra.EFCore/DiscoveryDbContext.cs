@@ -35,8 +35,8 @@ namespace Borg.Infra.EFCore
             ConnectionString = connectionString;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer(ConnectionString, OnConfiguringSqlServerOptions);
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //    => optionsBuilder.UseSqlServer(ConnectionString, OnConfiguringSqlServerOptions);
 
         protected virtual void OnConfiguringSqlServerOptions(SqlServerDbContextOptionsBuilder sqlServerDbContextOptionsBuilder)
         {

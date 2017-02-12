@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Borg.Infra.EFCore;
+using Borg.Infra.Relational;
+using Framework.System.Domain;
 
 namespace Borg.Client.Areas.Backoffice.Controllers
 {
@@ -12,8 +15,12 @@ namespace Borg.Client.Areas.Backoffice.Controllers
     [Area("Backoffice")]
     public class HomeController : BackofficeController
     {
-        public HomeController(ILoggerFactory loggerFactory) : base(loggerFactory)
+        private readonly IDbContextScopeFactory _uow;
+        private readonly ICRUDRespoditory<Page> _repo;
+        public HomeController(ILoggerFactory loggerFactory, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo) : base(loggerFactory)
         {
+            _uow = uow;
+            _repo = repo;
         }
 
         public async Task<IActionResult> Index()
@@ -22,6 +29,12 @@ namespace Borg.Client.Areas.Backoffice.Controllers
             Logger.LogDebug("user is {@user}", User.Identity);
 
             Logger.LogInformation("user is {@user}", User.Identity);
+
+            using (var db = _uow.Create())
+            {
+                var c = db.DbContexts;
+                var page = _repo.Get(x => x.CQRSKey == string.Empty);
+            }
             return View();
         }
     }

@@ -28,11 +28,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Borg.Infra.EF6;
-
+using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
 using Framework.System.Domain;
-using Mehdime.Entity;
+
 
 namespace Borg.Client
 {
@@ -72,7 +71,7 @@ namespace Borg.Client
 
             var scanner = new CurrentContextAssemblyProvider();
 
-
+            services.AddDbContext<SystemDbContext>(options => options.UseSqlServer(csettings.Database.ConnectionString));
 
 
 
@@ -155,23 +154,26 @@ namespace Borg.Client
 
             builder.RegisterType<SystemEntityRepository<Page>>().As<ICRUDRespoditory<Page>>().InstancePerLifetimeScope();
 
-            var bdConfigs = new Dictionary<Type, DiscoveryDbContextSpec>
-            {
-                {
-                    typeof(SystemDbContext),
-                    new DiscoveryDbContextSpec() {ConnectionStringOrName = csettings.Database.ConnectionString}
-                }
-            };
+            //builder.RegisterType<SystemDbContext>().AsSelf().WithParameter("")
 
-            builder.RegisterInstance(new SpecsDictionaryDbContextFactory(bdConfigs))
-                .As<IDbContextFactory>()
-                .SingleInstance();
+            //var bdConfigs = new Dictionary<Type, DiscoveryDbContextSpec>
+            //{
+            //    {
+            //        typeof(SystemDbContext),
+            //        new DiscoveryDbContextSpec() {ConnectionStringOrName = csettings.Database.ConnectionString}
+            //    }
+            //};
 
-            services.AddSingleton<IDbContextScopeFactory, DbContextScopeFactory>();
-            services.AddSingleton<IAmbientDbContextLocator, AmbientDbContextLocator>();
-
+            //builder.RegisterInstance(new SpecsDictionaryDbContextFactory(bdConfigs))
+            //    .As<IDbContextFactory>()
+            //    .SingleInstance();
+            builder.RegisterType<ServiceLocatorDbContextFactory>().As<IDbContextFactory>().SingleInstance();
+            builder.RegisterType<DbContextScopeFactory>().As<IDbContextScopeFactory>().SingleInstance();
+            builder.RegisterType<AmbientDbContextLocator>().As<IAmbientDbContextLocator>().SingleInstance();
+       
             builder.Populate(services);
 
+            //call afyer populate services to overide asp.net behavior
             builder.RegisterAssemblyTypes(scanner.Assemblies())
                 .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(FrameworkController)))
                 .PropertiesAutowired();
