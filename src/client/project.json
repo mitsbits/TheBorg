@@ -4,7 +4,6 @@
     "Framework.MVC.BuildingBlocks": "1.0.0-*",
     "Framework.MVC.HtmlPager": "1.0.0-*",
     "Framework.Redis": "1.0.0-*",
-    "Framework.System.Domain": "1.0.0-*",
     "IdentityModel": "2.5.1",
     "Infra.Core": "1.0.0-*",
     "Infra.EFCore": "1.0.0-*",

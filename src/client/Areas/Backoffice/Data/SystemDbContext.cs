@@ -19,6 +19,7 @@ namespace Borg.Client.Areas.Backoffice.Data
         //public SystemDbContext() : base()
         //{
         //}
+
         public Microsoft.EntityFrameworkCore.DbSet<Page> Pages { get; set; }
 
         //public SystemDbContext():base()  { }
