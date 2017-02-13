@@ -74,7 +74,11 @@ namespace Borg.Client
 
             services.AddDbContext<SystemDbContext>(options => options.UseSqlServer(csettings.Database.ConnectionString));
 
-            services.AddHangfire(x => x.UseSqlServerStorage(csettings.Database.ConnectionString));
+            services.AddHangfire(x =>
+            {
+                x.UseSqlServerStorage(csettings.Database.ConnectionString);
+                x.UseAutofacActivator(ApplicationContainer);
+            });
 
             services.AddDistributedRedisCache(options =>
             {
@@ -291,7 +295,7 @@ namespace Borg.Client
 
             app.UseSession();
 
-            app.UseHangfireServer();
+            app.UseHangfireServer(new BackgroundJobServerOptions() {ServerName = "Borg.Hangfire"});
 
             // Enables the Dashboard UI middleware to listen on `/hangfire`
             // path string.

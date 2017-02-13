@@ -4,6 +4,10 @@
     "Framework.MVC.BuildingBlocks": "1.0.0-*",
     "Framework.MVC.HtmlPager": "1.0.0-*",
     "Framework.Redis": "1.0.0-*",
+    "Hangfire.AspNetCore": "1.6.8",
+    "Hangfire.Autofac": "2.2.0",
+    "Hangfire.Dashboard.Dark": "1.0.6",
+    "Hangfire.SqlServer": "1.6.8",
     "IdentityModel": "2.5.1",
     "Infra.Core": "1.0.0-*",
     "Infra.EFCore": "1.0.0-*",
@@ -17,22 +21,18 @@
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.AspNetCore.Session": "1.1.0",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
+    "Microsoft.EntityFrameworkCore.Tools": {
+      "type": "build",
+      "version": "1.0.0-preview2-final"
+    },
     "Microsoft.Extensions.Caching.Redis": "1.1.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.Binder": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
-    "Microsoft.EntityFrameworkCore.Tools": {
-      "type": "build",
-      "version": "1.0.0-preview2-final"
-    },
     "Serilog.Extensions.Logging.File": "1.0.0",
-    "Serilog.Settings.Configuration": "2.2.0",
-    "Hangfire.SqlServer": "1.6.8",
-    "Hangfire.Dashboard.Dark": "1.0.6",
-    "Hangfire.Autofac": "2.2.0",
-    "Hangfire.AspNetCore": "1.6.8",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0"
+    "Serilog.Settings.Configuration": "2.2.0"
   },
 
   "tools": {

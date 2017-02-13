@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
@@ -29,6 +30,8 @@ namespace Borg.Client.Areas.Backoffice.Controllers
             Logger.LogDebug("user is {@user}", User.Identity);
 
             Logger.LogInformation("user is {@user}", User.Identity);
+
+            Hangfire.BackgroundJob.Schedule(() => Debug.Write("koko"), TimeSpan.FromMinutes(2));
 
             using (var db = _uow.Create())
             {
