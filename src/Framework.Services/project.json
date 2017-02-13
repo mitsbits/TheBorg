@@ -2,6 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
+    "Hangfire": "1.6.8",
     "Infra.Core": {
       "version": "1.0.0-*",
       "target": "project"

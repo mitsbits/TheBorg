@@ -26,10 +26,13 @@
       "type": "build",
       "version": "1.0.0-preview2-final"
     },
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.2",
-    "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.*",
     "Serilog.Extensions.Logging.File": "1.0.0",
-    "Serilog.Settings.Configuration": "2.2.0"
+    "Serilog.Settings.Configuration": "2.2.0",
+    "Hangfire.SqlServer": "1.6.8",
+    "Hangfire.Dashboard.Dark": "1.0.6",
+    "Hangfire.Autofac": "2.2.0",
+    "Hangfire.AspNetCore": "1.6.8",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0"
   },
 
   "tools": {

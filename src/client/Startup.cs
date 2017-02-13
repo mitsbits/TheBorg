@@ -31,6 +31,7 @@ using System.Security.Claims;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
 using Framework.System.Domain;
+using Hangfire;
 
 
 namespace Borg.Client
@@ -73,7 +74,7 @@ namespace Borg.Client
 
             services.AddDbContext<SystemDbContext>(options => options.UseSqlServer(csettings.Database.ConnectionString));
 
-
+            services.AddHangfire(x => x.UseSqlServerStorage(csettings.Database.ConnectionString));
 
             services.AddDistributedRedisCache(options =>
             {
@@ -179,6 +180,9 @@ namespace Borg.Client
                 .PropertiesAutowired();
 
             ApplicationContainer = builder.Build();
+
+     
+
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
@@ -187,6 +191,7 @@ namespace Borg.Client
             IApplicationLifetime appLifetime)
         {
             loggerFactory.AddSerilog();
+
 
             if (env.IsDevelopment())
             {
@@ -286,6 +291,12 @@ namespace Borg.Client
 
             app.UseSession();
 
+            app.UseHangfireServer();
+
+            // Enables the Dashboard UI middleware to listen on `/hangfire`
+            // path string.
+            app.UseHangfireDashboard();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",
@@ -297,8 +308,12 @@ namespace Borg.Client
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+
+
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
+
+
     }
 
     public static class ServiceCollectionExtensions

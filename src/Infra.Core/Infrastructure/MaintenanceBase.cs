@@ -1,7 +1,6 @@
-﻿
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra
 {
@@ -9,13 +8,12 @@ namespace Borg.Infra
     {
         private ScheduledTimer _maintenanceTimer;
         private readonly ILoggerFactory _loggerFactory;
-
-
+        private ILogger Logger { get; }
 
         public MaintenanceBase(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
-
+            Logger = _loggerFactory.CreateLogger(GetType());
         }
 
         protected void InitializeMaintenance(TimeSpan? dueTime = null, TimeSpan? intervalTime = null)
@@ -25,6 +23,7 @@ namespace Borg.Infra
 
         protected void ScheduleNextMaintenance(DateTime utcDate)
         {
+            Logger.LogDebug("Scheduling {maintenance} next for {utcDate}", GetType(), utcDate);
             _maintenanceTimer.ScheduleNext(utcDate);
         }
 
