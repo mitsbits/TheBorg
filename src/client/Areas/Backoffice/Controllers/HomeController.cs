@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
 using Framework.System.Domain;
+using Hangfire;
 
 namespace Borg.Client.Areas.Backoffice.Controllers
 {
@@ -18,10 +19,12 @@ namespace Borg.Client.Areas.Backoffice.Controllers
     {
         private readonly IDbContextScopeFactory _uow;
         private readonly ICRUDRespoditory<Page> _repo;
-        public HomeController(ILoggerFactory loggerFactory, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo) : base(loggerFactory)
+        private readonly IBackgroundJobClient _jobClient;
+        public HomeController(ILoggerFactory loggerFactory, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo, IBackgroundJobClient jobClient) : base(loggerFactory)
         {
             _uow = uow;
             _repo = repo;
+            _jobClient = jobClient;
         }
 
         public async Task<IActionResult> Index()
@@ -31,7 +34,8 @@ namespace Borg.Client.Areas.Backoffice.Controllers
 
             Logger.LogInformation("user is {@user}", User.Identity);
 
-            Hangfire.BackgroundJob.Schedule(() => Debug.Write("koko"), TimeSpan.FromMinutes(2));
+         var ss =   Hangfire.BackgroundJob.Schedule(() => PutToQueue(), TimeSpan.FromMinutes(5));
+
 
             using (var db = _uow.Create())
             {
@@ -39,6 +43,12 @@ namespace Borg.Client.Areas.Backoffice.Controllers
                 var page = _repo.Get(x => x.CQRSKey == string.Empty);
             }
             return View();
+        }
+        [Queue("borg_priority")]
+        public void PutToQueue()
+        {
+            Debug.Write("koko");
+
         }
     }
 
