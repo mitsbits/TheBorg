@@ -296,7 +296,7 @@ namespace Borg.Client
 
             app.UseSession();
 
-            app.UseHangfireServer(new BackgroundJobServerOptions {ServerName = "Borg.Hangfire", Queues = new [] {"borg_priority", "borg_default"}, WorkerCount = 1});
+            app.UseHangfireServer(new BackgroundJobServerOptions {ServerName = "Borg.Hangfire", Queues = new [] {"borg_priority", "default"}, WorkerCount = 1});
 
             // Enables the Dashboard UI middleware to listen on `/hangfire`
             // path string.

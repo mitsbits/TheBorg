@@ -1,0 +1,10 @@
+﻿@using Borg.Famework.Backoffice.Areas.Backoffice.ViewComponents
+
+<section class="sidebar">
+
+    @await Component.InvokeAsync(typeof(SidebarUserInfoViewComponent))
+
+    @await Component.InvokeAsync(typeof(SidebarSearchFormViewComponent))
+
+    @await Component.InvokeAsync(typeof(SidebarMenuViewComponent))
+</section>
