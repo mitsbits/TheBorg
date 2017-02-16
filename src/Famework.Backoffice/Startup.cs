@@ -1,6 +1,5 @@
-﻿
-using System.IO;
-
+﻿using System.IO;
+using Framework.System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +14,11 @@ namespace Famework.Backoffice
     {
         public Startup(IHostingEnvironment env)
         {
+            var apppath = env.ContentRootPath;
+            var rootpath = apppath.Substring(0, apppath.LastIndexOf('\\'));
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .SetBasePath(rootpath)
+                .AddJsonFile("global.appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -28,6 +28,8 @@ namespace Famework.Backoffice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var settings = new BorgSettings();
+            services.ConfigurePOCO(Configuration.GetSection("global"), () => settings);
             // Add framework services.
             services.AddMvc();
         }

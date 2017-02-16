@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Framework.System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Borg.Famework.Backoffice.Areas.Backoffice.ViewComponents
+namespace Borg.Famework.Backoffice.Areas.Backoffice
 {
     public class NavigationViewComponent : ViewComponent
     {
@@ -55,11 +53,29 @@ namespace Borg.Famework.Backoffice.Areas.Backoffice.ViewComponents
 
     public class MainHeaderLogoViewComponent : ViewComponent
     {
+        private readonly BorgSettings _borg; 
+        public MainHeaderLogoViewComponent(BorgSettings borg)
+        {
+            _borg = borg;
+        }
         public Task<IViewComponentResult> InvokeAsync()
         {
-            var result = View() as IViewComponentResult;
+            var result = View(new MainHeaderLogoViewModel(_borg.Backoffice.Application)) as IViewComponentResult;
             return Task.FromResult(result);
         }
+    }
+
+
+    public class MainHeaderLogoViewModel
+    {
+        public MainHeaderLogoViewModel(ApplicationSettings settings)
+        {
+            Title= settings.Title;
+            Logo = settings.Logo;
+
+        }
+        public string Logo { get; }
+        public string Title { get; }
     }
 
     public class MainHeaderNavBarViewComponent : ViewComponent

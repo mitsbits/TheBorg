@@ -1,5 +1,6 @@
-﻿{
+{
   "dependencies": {
+    "Framework.System": "1.0.0-*",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Microsoft.AspNetCore.Razor.Tools": {
@@ -16,7 +17,12 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0"
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
+    "IdentityServer4": "1.1.0",
+    "IdentityServer4.AspNetIdentity": "1.0.0",
+    "IdentityServer4.EntityFramework": "1.0.0",
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.2"
   },
 
   "tools": {
