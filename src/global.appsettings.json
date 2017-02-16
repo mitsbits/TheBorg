@@ -1,0 +1,25 @@
+{
+  "system": {
+    "framework": "Borg",
+    "version": "1.0.0"
+  },
+  "backoffice": {
+    "framework": "Borg",
+    "version": "1.0.0",
+    "application": {
+      "title": "Borg Backoffice",
+      "logo ": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",
+      "data": {
+        "relational": {
+          "connectionStrings": [
+            {
+              "key": "default",
+              "value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true"
+            }
+          ]
+        }
+      }
+	  
+    }
+  }
+}
