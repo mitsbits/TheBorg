@@ -14,13 +14,57 @@
           "relational": {
             "connectionStrings": [
               {
-                "key": "default",
-                "value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true"
+                "key": "borg",
+                "value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+              },
+              {
+                "key": "identity",
+                "value": "Server=.\\x2014;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
               }
             ]
           }
         }
       }
+    }
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Warning"
+      }
+    },
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "WriteTo": [
+      {
+        "Name": "File",
+        "Args": {
+          "restrictedToMinimumLevel": "Information",
+          "path": "..\\..\\Logs\\information.txt",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{SourceContext}] {Message}{NewLine}{Exception}",
+          "shared": true
+        }
+      },
+      {
+        "Name": "RollingFile",
+        "Args": {
+          "pathFormat": "..\\..\\Logs\\rollingfile-{Date}.txt",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{ThreadId}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}",
+          "shared": true
+        }
+      }
+    ],
+    "Properties": {
+      "Application": "Borg.Framework.Identity"
     }
   }
 }

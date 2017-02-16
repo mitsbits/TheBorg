@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,6 +43,8 @@ namespace Framework.System
     public class RelationalSettings
     {
         public ConnectionStringSettings[] ConnectionStrings { get; set; }
+
+        public IReadOnlyDictionary<string, string> ConsectionStringIndex => ConnectionStrings.ToDictionary(x => x.Key, x => x.Value);
     }
 
     public class ConnectionStringSettings
