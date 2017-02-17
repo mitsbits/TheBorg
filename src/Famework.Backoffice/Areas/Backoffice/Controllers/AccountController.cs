@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace Borg.Famework.Backoffice.Areas.Backoffice.Controllers
 {
     [Authorize]
-    [SecurityHeaders]
+    //[SecurityHeaders]
     [Area("backoffice")]
     public class AccountController : Controller
     {

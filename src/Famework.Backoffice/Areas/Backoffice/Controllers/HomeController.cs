@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Borg.Framework.Identity.Quickstart;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Borg.Famework.Backoffice.Areas.Backoffice.Controllers
 {
     [Area("backoffice")]
+    //[SecurityHeaders]
     public class HomeController : Controller
     {
         public IActionResult Index()

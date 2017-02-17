@@ -19,30 +19,16 @@
     </environment>
     @RenderSection("headscripts", required: false)
 </head>
-<body class="hold-transition skin-black-light sidebar-mini">
+<body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
-        @await Component.InvokeAsync(typeof(MainHeaderViewComponent))
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar">
-            @await Component.InvokeAsync(typeof(NavigationViewComponent))
-        </aside>
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-            
-            @RenderSection("contentheader", required: false)
 
-            <!-- Main content -->
             <section class="content">
                 @RenderBody()
             </section>
-            <!-- /.content -->
+   
         </div>
-        <!-- /.content-wrapper -->
 
-    </div>
-    @await Component.InvokeAsync(typeof(MainFooterViewComponent))
-    @await Component.InvokeAsync(typeof(HiddenSidebarViewComponent))
+
     <environment names="Development">
         <script src="~/Areas/Backoffice/Static/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
 

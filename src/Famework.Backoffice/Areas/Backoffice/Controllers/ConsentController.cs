@@ -14,7 +14,7 @@ namespace Borg.Famework.Backoffice.Areas.Backoffice.Controllers
     /// <summary>
     /// This controller processes the consent UI
     /// </summary>
-    [SecurityHeaders]
+    //[SecurityHeaders]
     [Area("backoffice")]
     public class ConsentController : Controller
     {
