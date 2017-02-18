@@ -4,6 +4,11 @@ namespace Borg.Framework.Backoffice.Identity.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+
+        [Required]
+        [Display(Name = "User")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
