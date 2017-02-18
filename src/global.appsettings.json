@@ -15,13 +15,13 @@
             "connectionStrings": [
               {
                 "key": "borg",
-                //value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
-                "value": "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                "value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                //"value": "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
               },
               {
                 "key": "identity",
-                //"value": "Server=.\\x2014;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
-                "value": "Server=.\\SQL2016;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                "value": "Server=.\\x2014;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                //"value": "Server=.\\SQL2016;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
               }
             ]
           }

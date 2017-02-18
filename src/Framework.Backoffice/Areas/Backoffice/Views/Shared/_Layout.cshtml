@@ -1,0 +1,40 @@
+﻿@using Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Framework.Backoffice</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Html.Partial("_HeadScriptsPartial")
+    @RenderSection("headscripts", required: false)
+</head>
+<body class="hold-transition skin-black-light sidebar-mini">
+    <div class="wrapper">
+        @await Component.InvokeAsync(typeof(MainHeaderViewComponent))
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            @await Component.InvokeAsync(typeof(NavigationViewComponent))
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+
+            @RenderSection("contentheader", required: false)
+
+            <!-- Main content -->
+            <section class="content">
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+    @await Component.InvokeAsync(typeof(MainFooterViewComponent))
+    @await Component.InvokeAsync(typeof(HiddenSidebarViewComponent))
+    @Html.Partial("_BottomScriptsPartial")
+    @RenderSection("bottomscripts", required: false)
+</body>
+</html>

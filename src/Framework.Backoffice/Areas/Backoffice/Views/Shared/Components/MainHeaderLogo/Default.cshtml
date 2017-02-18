@@ -1,0 +1,6 @@
+﻿@using Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
+@model Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents.MainHeaderLogoViewModel
+<a  asp-controller="Home" asp-action="Index" class="logo">
+    <span class="logo-mini"> <img src="@Model.Logo" style="width: 38px; height: 38px;"/>  </span>
+    <span class="logo-lg"><img src="@Model.Logo" style="width: 20px; height: 20px; margin-bottom: 5px;" /> @Model.Title</span>
+</a>

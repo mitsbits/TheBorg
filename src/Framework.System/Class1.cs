@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Framework.System
+namespace Borg.Framework.System
 {
 
 
