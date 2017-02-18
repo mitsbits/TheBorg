@@ -1,4 +1,6 @@
-﻿<nav class="navbar navbar-static-top">
+﻿@using Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
+@model MainHeaderNavBarViewModel
+<nav class="navbar navbar-static-top">
     <!-- Sidebar toggle button-->
     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
@@ -206,15 +208,15 @@
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                    <span class="hidden-xs">Alexander Pierce</span>
+                    <img src="@Model.UserInfo.Avatar" class="user-image" alt="User Image">
+                    <span class="hidden-xs">@Model.UserInfo.Nickname</span>
                 </a>
                 <ul class="dropdown-menu">
                     <!-- User image -->
                     <li class="user-header">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="@Model.UserInfo.Avatar" class="img-circle" alt="User Image">
                         <p>
-                            Alexander Pierce - Web Developer
+                            @Model.UserInfo.Nickname
                             <small>Member since Nov. 2012</small>
                         </p>
                     </li>
@@ -239,7 +241,7 @@
                             <a href="#" class="btn btn-default btn-flat">Profile</a>
                         </div>
                         <div class="pull-right">
-                            <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                            <a asp-controller="Account" asp-action="Logout" asp-area="backoffice" class="btn btn-default btn-flat">Sign out</a>
                         </div>
                     </li>
                 </ul>

@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "Framework.System": "1.0.0-*",
     "IdentityServer4": "1.1.0",
@@ -27,7 +27,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Serilog.Extensions.Logging.File": "1.0.0",
-    "Serilog.Settings.Configuration": "2.2.0"
+    "Serilog.Settings.Configuration": "2.2.0",
+    "Framework.MVC.BuildingBlocks": "1.0.0-*"
   },
 
   "tools": {

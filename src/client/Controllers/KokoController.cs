@@ -3,12 +3,13 @@ using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Borg.Framework.System;
 
 namespace Borg.Client.Controllers
 {
     public class KokoController : FrameworkController
     {
-        public KokoController(ILoggerFactory loggerFactory) : base(loggerFactory)
+        public KokoController(ISystemService<BorgSettings> loggerFactory) : base(loggerFactory)
         {
         }
 

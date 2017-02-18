@@ -6,6 +6,9 @@ using Borg.Framework.Backoffice.Identity.Account;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Models.AccountViewModels;
 using Borg.Framework.Backoffice.Identity.Services;
+using Borg.Framework.MVC;
+using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Framework.System;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +24,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     //[SecurityHeaders]
     [Area("backoffice")]
-    public class AccountController : Controller
+    public class AccountController : BackofficeController
     {
         private readonly UserManager<BorgUser> _userManager;
         private readonly SignInManager<BorgUser> _signInManager;
@@ -33,20 +36,20 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly AccountService _account;
 
         public AccountController(
+            ISystemService<BorgSettings> system,
             UserManager<BorgUser> userManager,
             SignInManager<BorgUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory,
             IIdentityServerInteractionService interaction,
             IHttpContextAccessor httpContext,
-            IClientStore clientStore)
+            IClientStore clientStore):base(system)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<AccountController>();
+            _logger = System.CreateLogger<AccountController>();
             _interaction = interaction;
             _clientStore = clientStore;
 
@@ -60,6 +63,8 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         public async Task<IActionResult> Login(string returnUrl)
         {
             var vm = await _account.BuildLoginViewModelAsync(returnUrl);
+
+            PageContent(new PageContent() {Title = "Log in"});
 
             if (vm.IsExternalLoginOnly)
             {
@@ -121,7 +126,10 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 // no need to show prompt
                 return await Logout(vm);
             }
-
+            PageContent(new PageContent()
+            {
+                Title = "Logout confirmation"
+            });
             return View(vm);
         }
 
@@ -154,6 +162,12 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             // delete authentication cookie
             await _signInManager.SignOutAsync();
 
+            PageContent(new PageContent()
+            {
+                Title = System.Settings.Backoffice.Application.Title
+            });
+            if (string.IsNullOrWhiteSpace(vm.PostLogoutRedirectUri))
+                vm.PostLogoutRedirectUri = Url.Action( "Index", "Home", new {area="Backoffice"});
             return View("LoggedOut", vm);
         }
 

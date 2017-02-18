@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Models.ManageViewModels;
 using Borg.Framework.Backoffice.Identity.Services;
+using Borg.Framework.MVC;
+using Borg.Framework.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     //[SecurityHeaders]
     [Area("backoffice")]
-    public class ManageController : Controller
+    public class ManageController : BackofficeController
     {
         private readonly UserManager<BorgUser> _userManager;
         private readonly SignInManager<BorgUser> _signInManager;
@@ -22,17 +24,17 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly ILogger _logger;
 
         public ManageController(
+            ISystemService<BorgSettings> system,
         UserManager<BorgUser> userManager,
         SignInManager<BorgUser> signInManager,
         IEmailSender emailSender,
-        ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ISmsSender smsSender):base(system)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<ManageController>();
+            _logger = System.CreateLogger<ManageController>();
         }
 
         //

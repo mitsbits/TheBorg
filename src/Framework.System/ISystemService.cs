@@ -2,8 +2,8 @@
 
 namespace Borg.Framework.System
 {
-    public interface ISystemService : ILoggerFactory
+    public interface ISystemService<out TSettings> : ILoggerFactory where TSettings : BorgSettings
     {
-
+        TSettings Settings { get; }
     }
 }

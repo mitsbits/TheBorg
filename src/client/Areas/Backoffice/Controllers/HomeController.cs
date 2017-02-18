@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Borg.Framework.System;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
 using Framework.System.Domain;
@@ -20,7 +21,7 @@ namespace Borg.Client.Areas.Backoffice.Controllers
         private readonly IDbContextScopeFactory _uow;
         private readonly ICRUDRespoditory<Page> _repo;
         private readonly IBackgroundJobClient _jobClient;
-        public HomeController(ILoggerFactory loggerFactory, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo, IBackgroundJobClient jobClient) : base(loggerFactory)
+        public HomeController(ISystemService<BorgSettings> systemService, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo, IBackgroundJobClient jobClient) : base(systemService)
         {
             _uow = uow;
             _repo = repo;

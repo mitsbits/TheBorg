@@ -3,6 +3,8 @@
 
 using System.Threading.Tasks;
 using Borg.Framework.Backoffice.Identity.Consent;
+using Borg.Framework.MVC;
+using Borg.Framework.System;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +17,17 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     /// </summary>
     //[SecurityHeaders]
     [Area("backoffice")]
-    public class ConsentController : Controller
+    public class ConsentController : BackofficeController
     {
         private readonly ConsentService _consent;
 
         public ConsentController(
+            ISystemService<BorgSettings> system,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
-            IResourceStore resourceStore,
-            ILogger<ConsentController> logger)
+            IResourceStore resourceStore) :base(system)
         {
-            _consent = new ConsentService(interaction, clientStore, resourceStore, logger);
+            _consent = new ConsentService(interaction, clientStore, resourceStore, system.CreateLogger<ConsentController>());
         }
 
         /// <summary>

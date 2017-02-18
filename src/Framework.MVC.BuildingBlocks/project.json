@@ -3,6 +3,7 @@
 
   "dependencies": {
     "Framework.Services": "1.0.0-*",
+    "Framework.System": "1.0.0-*",
     "Infra.Core": {
       "version": "1.0.0-*",
       "target": "project"

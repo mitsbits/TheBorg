@@ -8,7 +8,7 @@ namespace Borg.Framework.MVC
     {
         private ViewContext _viewContext;
         private IPageContent _page;
-        private static readonly IPageContent _defaultContent = new PageContent() { Title = "default" };
+        private static readonly IPageContent _defaultContent = new PageContent() { Title = "Borg" };
 
         private IDevice _device;
         private static readonly IDevice _defaultDevice = new Device() { FriendlyName = "Default", Path = string.Empty };

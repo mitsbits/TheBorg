@@ -8,4 +8,9 @@ namespace Borg.Framework.MVC.BuildingBlocks.Navigation
         string Key { get; }
         string Description { get; }
     }
+
+    public interface INavigationItem : IWeighted
+    {
+        
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Framework.System;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +12,15 @@ namespace Borg.Framework.MVC
     {
         public IBroadcaster Broadcaster { get; set; }
         //protected ILoggerFactory LoggerFactory { get; set; }
+        protected ISystemService<BorgSettings> System { get; } 
+
 
         protected ILogger Logger { get; }
 
-        protected FrameworkController(ILoggerFactory loggerFactory)
+        protected FrameworkController(ISystemService<BorgSettings> system)
         {
-            Logger = loggerFactory.CreateLogger(GetType());
+            System = system;
+            Logger = System.CreateLogger(GetType());
             Logger.LogDebug("{@Controller} is born", this);
         }
 
@@ -37,7 +41,7 @@ namespace Borg.Framework.MVC
 
     public abstract class BackofficeController : FrameworkController
     {
-        protected BackofficeController(ILoggerFactory loggerFactory) : base(loggerFactory)
+        protected BackofficeController(ISystemService<BorgSettings> systemService) : base(systemService)
         {
         }
 

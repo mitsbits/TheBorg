@@ -1,4 +1,9 @@
 ﻿@using Borg.Framework.Backoffice
 @using System.Threading.Tasks
+@using Borg.Framework.MVC.BuildingBlocks.Devices
 @using Borg.Framework.System
+
+@inject IPageContentAccessor<IPageContent> Content;
+@inject IDeviceAccessor<IDevice> Device;
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

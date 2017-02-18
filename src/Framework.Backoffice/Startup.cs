@@ -5,6 +5,8 @@ using Borg.Framework.Backoffice.Identity;
 using Borg.Framework.Backoffice.Identity.Data.Seeds;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Services;
+using Borg.Framework.MVC;
+using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -90,6 +92,12 @@ namespace Borg.Framework.Backoffice
 
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddScoped<IPageContentAccessor<IPageContent>, DefaultDeviceAccessor>();
+            services.AddScoped<IDeviceAccessor<IDevice>, DefaultDeviceAccessor>();
+
+            services.AddSingleton<ISystemService<BorgSettings>, SystemService>();
+
             services.AddMvc();
         }
 
@@ -97,7 +105,7 @@ namespace Borg.Framework.Backoffice
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
 
-           IdentityDbSeed.InitialiseIdentity(app);
+            IdentityDbSeed.InitialiseIdentity(app);
 
 
 
@@ -113,7 +121,7 @@ namespace Borg.Framework.Backoffice
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error");
             }
 
             app.UseStaticFiles();
@@ -125,7 +133,7 @@ namespace Borg.Framework.Backoffice
             });
 
             app.UseIdentity();
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
 
             app.UseMvc(routes =>
             {

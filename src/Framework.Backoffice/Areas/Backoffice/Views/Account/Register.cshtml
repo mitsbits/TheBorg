@@ -3,8 +3,13 @@
 @model Borg.Framework.Backoffice.Identity.Models.AccountViewModels.RegisterViewModel
 @inject BorgSettings _settings
 @{
+
     Layout = "_EmptyLayout";
-    ViewData["Title"] = "Register";
+    var returnurl = string.Empty;
+    if (Context.Request.Query.ContainsKey("returnurl"))
+    {
+        returnurl = Context.Request.Query["returnurl"];
+    }
 }
 
 <div class="row">
@@ -60,8 +65,10 @@
                 <div class="box-footer">
                     <button type="submit" class="btn btn-default pull-right">Register</button>
                 </div>
-               
-            </form>
+                <div class="box-footer">
+                    Back to <a asp-controller="Account" asp-action="Login" asp-area="backoffice"> log in</a>
+                </div>
+</form>
         </div>
     </div>
 </div>

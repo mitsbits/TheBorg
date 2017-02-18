@@ -1,15 +1,19 @@
-﻿using Borg.Framework.System;
+﻿using System;
+using Borg.Framework.System;
 using Microsoft.Extensions.Logging;
 
 namespace Borg.Framework.Backoffice
 {
-    public class SystemService : ISystemService
+    public class SystemService : ISystemService<BorgSettings>
     {
         private readonly ILoggerFactory _loggerFactory;
 
-        public SystemService(ILoggerFactory loggerFactory)
+        public BorgSettings Settings { get; }
+
+        public SystemService(ILoggerFactory loggerFactory, BorgSettings settings)
         {
             _loggerFactory = loggerFactory;
+            Settings = settings;
         }
 
 
