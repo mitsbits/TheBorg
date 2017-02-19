@@ -12,7 +12,7 @@ namespace Borg.Framework.MVC
     {
         public IBroadcaster Broadcaster { get; set; }
         //protected ILoggerFactory LoggerFactory { get; set; }
-        protected ISystemService<BorgSettings> System { get; } 
+        protected ISystemService<BorgSettings> System { get; }
 
 
         protected ILogger Logger { get; }
@@ -48,6 +48,44 @@ namespace Borg.Framework.MVC
         public IEventBus Events { get; set; }
         public ICommandBus Commands { get; set; }
         public IQueryBus Queries { get; set; }
+
+        #region Pager
+
+
+
+        private RequestPager _pager;
+
+        protected RequestPager Pager
+        {
+            get
+            {
+                string pageNumerVariableName = System.Settings.Backoffice.Pager.PageVariable;
+                string rowCountVariableName = System.Settings.Backoffice.Pager.RowsVariable;
+
+                if (_pager != null) return _pager;
+
+                var p = 1;
+
+                if (!string.IsNullOrWhiteSpace(Request.Query[pageNumerVariableName]))
+                    int.TryParse(Request.Query[pageNumerVariableName], out p);
+
+                var r = 10;
+
+                if (!string.IsNullOrWhiteSpace(Request.Query[rowCountVariableName]))
+                    int.TryParse(Request.Query[rowCountVariableName], out r);
+
+                _pager = new RequestPager() { Current = p, RowCount = r };
+                return _pager;
+            }
+        }
+
+        protected class RequestPager
+        {
+            public int Current { get; internal set; }
+            public int RowCount { get; internal set; }
+        }
+
+        #endregion Pager
     }
 }
 

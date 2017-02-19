@@ -3,7 +3,7 @@ using System;
 
 namespace Framework.System.Domain
 {
-    public abstract class Component : IEntity<string>, IActivatable
+    public abstract class Component : IEntity<string>, IEntity<int>, IActivatable
     {
         protected Component()
         {

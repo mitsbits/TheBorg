@@ -26,6 +26,14 @@ namespace Borg.Framework.System
         public string Framework { get; set; }
         public string Version { get; set; }
         public ApplicationSettings Application { get; set; }
+        public PagerSettings Pager { get; set; } = new PagerSettings();
+    }
+    public class PagerSettings
+    {
+        public int DefaultRowCount { get; set; } = 10;
+        public int MaxRowCount { get; set; } = 500;
+        public string PageVariable { get; set; } = "p";
+        public string RowsVariable { get; set; } = "r";
     }
 
     public class ApplicationSettings

@@ -26,6 +26,12 @@
             ]
           }
         }
+      },
+      "pager": {
+        "defaultRowCount": 20,
+        "maxRowCount": 500,
+        "pageVariable": "p",
+        "rowsVariable" : "r" 
       }
     }
   },

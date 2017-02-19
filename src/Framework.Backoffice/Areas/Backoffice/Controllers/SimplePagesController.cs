@@ -1,14 +1,23 @@
-﻿using Borg.Framework.MVC;
+﻿using System.Threading.Tasks;
+using Borg.Framework.Backoffice.Pages.Data;
+using Borg.Framework.MVC;
 using Borg.Framework.System;
+using Borg.Infra.EFCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
-    [Authorize]
-    public class SimplePagesController : BackofficeController
+    [Authorize][Area("backoffice")]
+    public class SimplePagesController : ComponentController<SimplePage>
     {
-        public SimplePagesController(ISystemService<BorgSettings> systemService) : base(systemService)
+        public SimplePagesController(ISystemService<BorgSettings> systemService, IDbContextScopeFactory scopeFactory) : base(systemService, scopeFactory)
         {
+        }
+
+        public async Task<IActionResult> Index(int? id)
+        {
+            return id.HasValue ? View("Item", await ReadOne(id.Value)) : View(await ReadPage());
         }
     }
 }
