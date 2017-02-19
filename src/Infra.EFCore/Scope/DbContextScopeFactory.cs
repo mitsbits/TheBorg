@@ -1,4 +1,6 @@
 ﻿using System;
+using Borg.Infra.Relational;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Borg.Infra.EFCore
 {
@@ -57,6 +59,32 @@ namespace Borg.Infra.EFCore
         public IDisposable SuppressAmbientContext()
         {
             return new AmbientContextSuppressor();
+        }
+
+        public virtual TRepository CreateRepo<TRepository>() where TRepository : IRepository
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+    public class ServiceLocatorDbContextScopeFactory : DbContextScopeFactory
+    {
+        private readonly IServiceProvider _serviceLocator;
+
+        public ServiceLocatorDbContextScopeFactory(IServiceProvider serviceLocator, IDbContextFactory dbContextFactory = null) : base(dbContextFactory)
+        {
+            _serviceLocator = serviceLocator;
+        }
+
+        public override TRepository CreateRepo<TRepository>()
+        {
+            using (var scope = _serviceLocator.CreateScope())
+            {
+                var obj = scope.ServiceProvider.GetService(typeof(TRepository));
+                return (TRepository)obj;
+            }
         }
     }
 }

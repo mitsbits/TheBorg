@@ -5,7 +5,11 @@ using System.Linq.Expressions;
 
 namespace Borg.Infra.Relational
 {
-    public interface IReadRepository<T> where T : class
+    public interface IRepository  //marker
+    {
+        
+    }
+    public interface IReadRepository<T> : IRepository where T : class
     {
         IPagedResult<T> Find(Expression<Func<T, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<T>> orderBy, params Expression<Func<T, dynamic>>[] paths);
     }

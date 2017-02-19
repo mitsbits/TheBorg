@@ -28,7 +28,9 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Serilog.Extensions.Logging.File": "1.0.0",
     "Serilog.Settings.Configuration": "2.2.0",
-    "Framework.MVC.BuildingBlocks": "1.0.0-*"
+    "Framework.MVC.BuildingBlocks": "1.0.0-*",
+    "Framework.System.Domain": "1.0.0-*",
+    "Infra.EFCore": "1.0.0-*"
   },
 
   "tools": {

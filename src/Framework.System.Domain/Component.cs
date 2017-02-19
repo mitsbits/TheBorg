@@ -20,7 +20,7 @@ namespace Framework.System.Domain
             Id = id;
         }
 
-        public int Id { get; protected set; }
+        public abstract int Id { get; protected set; }
 
         public string CQRSKey { get; protected set; }
         string IEntity<string>.Id => CQRSKey;
@@ -59,7 +59,7 @@ namespace Framework.System.Domain
             Body = body;
         }
 
-
+        public override int Id { get; protected set; }
     }
     public enum ActivationStatus
     {

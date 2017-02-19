@@ -15,7 +15,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     //[SecurityHeaders]
     [Area("backoffice")]
-    public class ManageController : BackofficeController
+    public class UserProfileController : BackofficeController
     {
         private readonly UserManager<BorgUser> _userManager;
         private readonly SignInManager<BorgUser> _signInManager;
@@ -23,8 +23,8 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
-        public ManageController(
-            ISystemService<BorgSettings> system,
+        public UserProfileController(
+        ISystemService<BorgSettings> system,
         UserManager<BorgUser> userManager,
         SignInManager<BorgUser> signInManager,
         IEmailSender emailSender,
@@ -34,7 +34,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = System.CreateLogger<ManageController>();
+            _logger = System.CreateLogger<UserProfileController>();
         }
 
         //
@@ -128,7 +128,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation(1, "User enabled two-factor authentication.");
             }
-            return RedirectToAction(nameof(Index), "Manage");
+            return RedirectToAction(nameof(Index), "UserProfile");
         }
 
         //
@@ -144,7 +144,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation(2, "User disabled two-factor authentication.");
             }
-            return RedirectToAction(nameof(Index), "Manage");
+            return RedirectToAction(nameof(Index), "UserProfile");
         }
 
         //
@@ -305,7 +305,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         public IActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
-            var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
+            var redirectUrl = Url.Action("LinkLoginCallback", "UserProfile");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
             return Challenge(properties, provider);
         }

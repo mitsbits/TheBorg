@@ -1,4 +1,5 @@
 ﻿using System;
+using Borg.Infra.Relational;
 
 namespace Borg.Infra.EFCore
 {
@@ -36,6 +37,10 @@ namespace Borg.Infra.EFCore
         /// </summary>
         IDbContextReadOnlyScope CreateReadOnly(/*DbContextScopeOption joiningOption = DbContextScopeOption.JoinExisting*/);
 
+
+
+
+        TRepository CreateRepo<TRepository>() where TRepository :  IRepository;
         /// <summary>
         /// Forces the creation of a new ambient DbContextScope (i.e. does not
         /// join the ambient scope if there is one) and wraps all DbContext instances

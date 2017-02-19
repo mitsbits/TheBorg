@@ -5,8 +5,14 @@ using Borg.Framework.Backoffice.Identity;
 using Borg.Framework.Backoffice.Identity.Data.Seeds;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Services;
+using Borg.Framework.Backoffice.Pages.Commands;
+using Borg.Framework.Backoffice.Pages.Data;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Infra.CQRS;
+using Borg.Infra.EFCore;
+using Borg.Infra.Messaging;
+using Borg.Infra.Relational;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -45,6 +51,9 @@ namespace Borg.Framework.Backoffice
         {
             var settings = new BorgSettings();
             services.ConfigurePOCO(Configuration.GetSection("global"), () => settings);
+
+            services.AddDbContext<PagesDbContext>(options =>
+                options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
 
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["identity"]));
@@ -97,6 +106,20 @@ namespace Borg.Framework.Backoffice
             services.AddScoped<IDeviceAccessor<IDevice>, DefaultDeviceAccessor>();
 
             services.AddSingleton<ISystemService<BorgSettings>, SystemService>();
+
+            services.AddSingleton<IDbContextFactory, ServiceLocatorDbContextFactory>();
+            services.AddSingleton<IDbContextScopeFactory, ServiceLocatorDbContextScopeFactory>();
+            services.AddSingleton<IAmbientDbContextLocator, AmbientDbContextLocator>();
+
+            services.AddScoped<IRepository, PagesDbRepository<SimplePage>>();
+            services.AddScoped<ICRUDRespoditory<SimplePage>, PagesDbRepository<SimplePage>>();
+            services.AddScoped<IHandlesCommand<SimplePageCreateCommand>, SimplePageCreateCommandHandler>();
+
+            services.AddSingleton<IDispatcherInstance, ServiceLocatorDispatcher>();
+            services.AddSingleton<ICommandBus, ServiceLocatorDispatcher>();
+            services.AddSingleton<IEventBus, ServiceLocatorDispatcher>();
+
+
 
             services.AddMvc();
         }
