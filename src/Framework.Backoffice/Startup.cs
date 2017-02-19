@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Borg.Framework.System;
-using Borg.Framework.Backoffice.Identity;
+﻿using Borg.Framework.Backoffice.Identity;
 using Borg.Framework.Backoffice.Identity.Data.Seeds;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Services;
@@ -9,6 +6,7 @@ using Borg.Framework.Backoffice.Pages.Commands;
 using Borg.Framework.Backoffice.Pages.Data;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Framework.System;
 using Borg.Infra.CQRS;
 using Borg.Infra.EFCore;
 using Borg.Infra.Messaging;
@@ -24,6 +22,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
+using System.IO;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
 
 namespace Borg.Framework.Backoffice
@@ -43,8 +43,9 @@ namespace Borg.Framework.Backoffice
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .ReadFrom.Configuration(Configuration).CreateLogger();
+                .ReadFrom.Configuration(Configuration.GetSection("global:backoffice")).CreateLogger();
         }
+
         public IHostingEnvironment Environment { get; }
         public IConfigurationRoot Configuration { get; }
 
@@ -135,11 +136,7 @@ namespace Borg.Framework.Backoffice
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-
             IdentityDbSeed.InitialiseIdentity(app);
-
-
-
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

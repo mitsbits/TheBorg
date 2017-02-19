@@ -1,5 +1,4 @@
-﻿using System;
-using Borg.Framework.System;
+﻿using Borg.Framework.System;
 using Microsoft.Extensions.Logging;
 
 namespace Borg.Framework.Backoffice
@@ -15,8 +14,6 @@ namespace Borg.Framework.Backoffice
             _loggerFactory = loggerFactory;
             Settings = settings;
         }
-
-
 
         public ILogger CreateLogger(string categoryName)
         {

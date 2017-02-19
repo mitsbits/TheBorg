@@ -34,7 +34,15 @@ namespace Borg
                     query = paths.Aggregate(query, (current, path) => current.Include(path));
                 }
 
-                IOrderedQueryable<T> orderedQueryable = query.Apply(orderBy as OrderByInfo<T>[] ?? orderBy.ToArray());
+                IOrderedQueryable<T> orderedQueryable;
+                if (orderBy == null)
+                {
+                    orderedQueryable = (IOrderedQueryable<T>)query;
+                }
+                else
+                {
+                    orderedQueryable = query.Apply(orderBy as OrderByInfo<T>[] ?? orderBy.ToArray());
+                }
 
                 if (orderedQueryable == null)
                 {

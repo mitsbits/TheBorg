@@ -11,9 +11,9 @@ namespace Borg.Framework.MVC
     public abstract class FrameworkController : Controller
     {
         public IBroadcaster Broadcaster { get; set; }
+
         //protected ILoggerFactory LoggerFactory { get; set; }
         protected ISystemService<BorgSettings> System { get; }
-
 
         protected ILogger Logger { get; }
 
@@ -50,8 +50,6 @@ namespace Borg.Framework.MVC
         public IQueryBus Queries { get; set; }
 
         #region Pager
-
-
 
         private RequestPager _pager;
 

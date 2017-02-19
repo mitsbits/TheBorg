@@ -1,6 +1,6 @@
-﻿using System;
-using Borg.Infra.Relational;
+﻿using Borg.Infra.Relational;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Borg.Infra.EFCore
 {
@@ -67,8 +67,6 @@ namespace Borg.Infra.EFCore
         }
     }
 
-
-
     public class ServiceLocatorDbContextScopeFactory : DbContextScopeFactory
     {
         private readonly IServiceProvider _serviceLocator;
@@ -80,10 +78,11 @@ namespace Borg.Infra.EFCore
 
         public override TRepository CreateRepo<TRepository>()
         {
-        
-                var obj = _serviceLocator.GetService(typeof(TRepository));
+            using (var scope = _serviceLocator.CreateScope())
+            {
+                var obj = scope.ServiceProvider.GetService(typeof(TRepository));
                 return (TRepository)obj;
-            
+            }
         }
     }
 }

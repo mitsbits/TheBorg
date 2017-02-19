@@ -1,21 +1,23 @@
-﻿using System;
-using Framework.System.Domain;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Borg.Framework.System;
+﻿using Borg.Framework.System;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
+using Framework.System.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Borg.Framework.Backoffice.Pages.Data
 {
     public class PagesDbContext : DbContext
     {
         public DbSet<SimplePage> Simples { get; set; }
+
         public PagesDbContext() : base()
         {
         }
+
         public PagesDbContext(DbContextOptions<PagesDbContext> options)
             : base(options)
         {
@@ -66,7 +68,7 @@ namespace Borg.Framework.Backoffice.Pages.Data
 
         public PagesDbContext Create(DbContextFactoryOptions options)
         {
-           var builder = new DbContextOptionsBuilder<PagesDbContext>();
+            var builder = new DbContextOptionsBuilder<PagesDbContext>();
             var ops =
                 builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
                     .Options;
@@ -84,13 +86,14 @@ namespace Borg.Framework.Backoffice.Pages.Data
 
         [StringLength(256)]
         [OrderBy(Ascending = true, Precedence = 100)]
-        public string Title { get;  set; }
+        public string Title { get; set; }
 
         [StringLength(256)]
-        public string Path { get;  set; }
+        public string Path { get; set; }
 
         public string Body { get; protected set; }
     }
+
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class OrderByAttribute : Attribute
     {
@@ -99,4 +102,3 @@ namespace Borg.Framework.Backoffice.Pages.Data
         public int Precedence { get; set; } = 0;
     }
 }
-

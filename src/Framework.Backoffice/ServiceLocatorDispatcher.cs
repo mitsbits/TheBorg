@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Borg.Infra.Core.Log;
+﻿using Borg.Infra.Core.Log;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice
 {
@@ -45,23 +45,23 @@ namespace Borg.Framework.Backoffice
 
                 if (hit == null)
                 {
-                    Logger.LogWarning("No command handler for {@Command}", command);
+                    Logger.LogWarning("No command handler for {Command}", command);
                     return await Task.FromResult(CommandResult.Create(false, $"no command precessor for {nameof(command)}"));
                 }
                 var collection = hit as IEnumerable<dynamic>;
                 if (collection == null)
                 {
-                    Logger.LogWarning("No command handler for {@Command}", command);
+                    Logger.LogWarning("No command handler for {Command}", command);
                     return await Task.FromResult(CommandResult.Create(false, $"no command precessor for {nameof(command)}"));
                 }
                 if (collection.Count() > 1)
                 {
-                    Logger.LogWarning("Multiple command handlers for {@Command}, {@Handlers}", command, collection);
+                    Logger.LogWarning("Multiple command handlers for {Command}, {@Handlers}", command, collection);
                     return await Task.FromResult(CommandResult.Create(false, $"multiple command precessors for {nameof(command)}"));
                 }
                 var handler = collection.Single();
                 Type handlerType = handler.GetType();
-                Logger.LogDebug("Found {Handler} for {@Command}", handlerType, command);
+                Logger.LogDebug("Found {Handler} for {Command}", handlerType, command);
                 Task<ICommandResult> task = handler.Execute(command);
 
                 result = await task;
@@ -85,7 +85,7 @@ namespace Borg.Framework.Backoffice
                 var hit = scope.ServiceProvider.GetService(collectionType);
                 if (hit == null)
                 {
-                    Logger.LogDebug("No subscribers event {@Event}", @event);
+                    Logger.LogDebug("No subscribers event {Event}", @event);
                     return;
                 }
 
@@ -97,7 +97,7 @@ namespace Borg.Framework.Backoffice
                     Task task = handler1.Handle(@event);
                     tasks.Add(task);
                 }
-                Logger.LogDebug("Publishing {@Event} to {@Subscribers}", @event, collection);
+                Logger.LogDebug("Publishing {Event} to {@Subscribers}", @event, collection);
                 await Task.WhenAll(tasks.ToArray());
             }
         }
@@ -133,6 +133,4 @@ namespace Borg.Framework.Backoffice
 
         #endregion IDisposable
     }
-
-
 }

@@ -1,7 +1,8 @@
-﻿@using Borg
-@model Borg.Infra.Relational.IPagedResult
+﻿
+@model dynamic
 @{
     Func<int, string> _generator = (i) => Url.Action("Index", "Home", new { p = i });
+    var d = Model.GetType();
 }
 @section contentheader
 {
@@ -20,6 +21,3 @@
 
 <strong> body</strong>
 
-<div>
-    <ul style="float: left;" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator"></ul>
-</div>

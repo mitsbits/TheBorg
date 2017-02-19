@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Borg.Framework.Backoffice.Pages.Commands;
+﻿using Borg.Framework.Backoffice.Pages.Commands;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
 using Borg.Infra.CQRS;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -16,6 +13,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     public class UsersController : BackofficeController
     {
         private readonly ICommandBus _bus;
+
         public UsersController(ISystemService<BorgSettings> systemService, ICommandBus bus) : base(systemService)
         {
             _bus = bus;
@@ -28,8 +26,8 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 Title = "Users"
             });
 
-            await _bus.Process(new SimplePageCreateCommand() { Title = "test", Path = "test" });
-            Logger.LogDebug("{@request}", Request);
+            await _bus.Process(new SimplePageCreateCommand(User.Identity) { Title = "test", Path = "test" });
+            Logger.LogCritical("{@request}", Request);
             return View();
         }
     }

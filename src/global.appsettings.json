@@ -31,9 +31,49 @@
         "defaultRowCount": 20,
         "maxRowCount": 500,
         "pageVariable": "p",
-        "rowsVariable" : "r" 
+        "rowsVariable": "r"
+      },
+      "Logging": {
+        "IncludeScopes": false,
+        "LogLevel": {
+          "Default": "Debug",
+          "System": "Information",
+          "Microsoft": "Information"
+        }
+      },
+      "Serilog": {
+        "MinimumLevel": {
+          "Default": "Debug",
+          "Override": {
+            "Microsoft": "Warning"
+          }
+        },
+        "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+        "WriteTo": [
+          {
+            "Name": "File",
+            "Args": {
+              "restrictedToMinimumLevel": "Information",
+              "path": "..\\..\\Logs\\information.txt",
+              "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{SourceContext}] {Message}{NewLine}{Exception}",
+              "shared": true
+            }
+          },
+          {
+            "Name": "RollingFile",
+            "Args": {
+              "pathFormat": "..\\..\\Logs\\rollingfile-{Date}.txt",
+              "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{ThreadId}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}",
+              "shared": true
+            }
+          }
+        ],
+        "Properties": {
+          "Application": "Borg.Framework.Backoffice"
+        }
       }
     }
+
   },
   "Logging": {
     "IncludeScopes": false,

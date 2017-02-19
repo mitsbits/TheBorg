@@ -1,22 +1,24 @@
 ﻿@using Borg
+@using Microsoft.AspNetCore.Routing
 @model Borg.Infra.Relational.IPagedResult<Borg.Infra.DTO.Tidings>
 @{
-    Func<int, string> _generator = (i) => Url.Action("Index", "Home", new { p = i });
+    var controller = Context.GetRouteValue("controller");
+    Func<int, string> _generator = (i) => Url.Action("Index", "SimplePages", new { p = i });
 
     var headrs = Model.Records.SelectMany(x => x.Keys).Distinct();
 }
 @section contentheader
 {
     <section class="content-header">
-    <h1>
-        @Content.Page.Title
-        <small>@Content.Page.Subtitle</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-    </ol>
-</section>
+        <h1>
+            @Content.Page.Title
+            <small>@Content.Page.Subtitle</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
 }
 <table>
     <tr>
@@ -30,7 +32,16 @@
         <tr>
             @foreach (var hdr in headrs)
             {
-                <td>@t[hdr]</td>
+                if (hdr.Equals("id", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    <td>
+                        <a asp-controller="SimplePages" asp-action="Index" asp-route-id="@t[hdr]">@t[hdr]</a>
+                    </td>
+                }
+                else
+                {
+                    <td>@t[hdr]</td>
+                }
             }
         </tr>
     }
