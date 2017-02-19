@@ -80,11 +80,10 @@ namespace Borg.Infra.EFCore
 
         public override TRepository CreateRepo<TRepository>()
         {
-            using (var scope = _serviceLocator.CreateScope())
-            {
-                var obj = scope.ServiceProvider.GetService(typeof(TRepository));
+        
+                var obj = _serviceLocator.GetService(typeof(TRepository));
                 return (TRepository)obj;
-            }
+            
         }
     }
 }

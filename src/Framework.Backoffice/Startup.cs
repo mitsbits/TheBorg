@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -31,6 +32,7 @@ namespace Borg.Framework.Backoffice
     {
         public Startup(IHostingEnvironment env)
         {
+            Environment = env;
             var apppath = env.ContentRootPath;
             var rootpath = apppath.Substring(0, apppath.LastIndexOf('\\'));
             var builder = new ConfigurationBuilder()
@@ -43,7 +45,7 @@ namespace Borg.Framework.Backoffice
                 .Enrich.FromLogContext()
                 .ReadFrom.Configuration(Configuration).CreateLogger();
         }
-
+        public IHostingEnvironment Environment { get; }
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -107,7 +109,7 @@ namespace Borg.Framework.Backoffice
 
             services.AddSingleton<ISystemService<BorgSettings>, SystemService>();
 
-            services.AddSingleton<IDbContextFactory, ServiceLocatorDbContextFactory>();
+            services.AddSingleton<IDbContextFactory, FactoryDbContextFactory>();
             services.AddSingleton<IDbContextScopeFactory, ServiceLocatorDbContextScopeFactory>();
             services.AddSingleton<IAmbientDbContextLocator, AmbientDbContextLocator>();
 
@@ -119,7 +121,13 @@ namespace Borg.Framework.Backoffice
             services.AddSingleton<ICommandBus, ServiceLocatorDispatcher>();
             services.AddSingleton<IEventBus, ServiceLocatorDispatcher>();
 
-
+            services.AddSingleton(new DbContextFactoryOptions()
+            {
+                ContentRootPath = Environment.ContentRootPath,
+                ApplicationBasePath = Environment.WebRootPath,
+                EnvironmentName = Environment.EnvironmentName
+            });
+            services.AddSingleton<IDbContextFactory<PagesDbContext>, PagesDbContextFactory>();
 
             services.AddMvc();
         }

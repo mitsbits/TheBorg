@@ -3,8 +3,10 @@ using Framework.System.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Borg.Framework.System;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Borg.Framework.Backoffice.Pages.Data
 {
@@ -50,6 +52,26 @@ namespace Borg.Framework.Backoffice.Pages.Data
         {
             if (ambientDbContextLocator == null) throw new ArgumentNullException(nameof(ambientDbContextLocator));
             _ambientDbContextLocator = ambientDbContextLocator;
+        }
+    }
+
+    public class PagesDbContextFactory : IDbContextFactory<PagesDbContext>
+    {
+        private readonly BorgSettings _settings;
+
+        public PagesDbContextFactory(BorgSettings settings)
+        {
+            _settings = settings;
+        }
+
+        public PagesDbContext Create(DbContextFactoryOptions options)
+        {
+           var builder = new DbContextOptionsBuilder<PagesDbContext>();
+            var ops =
+                builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
+                    .Options;
+            var context = new PagesDbContext(ops);
+            return context;
         }
     }
 
