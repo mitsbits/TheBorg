@@ -1,0 +1,25 @@
+﻿@using Borg
+@model Borg.Infra.Relational.IPagedResult
+@{
+    Func<int, string> _generator = (i) => Url.Action("Index", "Home", new { p = i });
+}
+@section contentheader
+{
+    <section class="content-header">
+    <h1>
+        @Content.Page.Title
+        <small>@Content.Page.Subtitle</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+}
+
+
+<strong> body</strong>
+
+<div>
+    <ul style="float: left;" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator"></ul>
+</div>

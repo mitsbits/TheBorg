@@ -15,9 +15,6 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         {
         }
 
-        public async Task<IActionResult> Index(int? id)
-        {
-            return id.HasValue ? View("Item", await ReadOne(id.Value)) : View(await ReadPage());
-        }
+
     }
 }

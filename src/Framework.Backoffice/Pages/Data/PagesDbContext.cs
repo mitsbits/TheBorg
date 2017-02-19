@@ -79,9 +79,11 @@ namespace Borg.Framework.Backoffice.Pages.Data
     public class SimplePage : Component
     {
         [Key]
+        [OrderBy(Ascending = false, Precedence = 1)]
         public override int Id { get; protected set; }
 
         [StringLength(256)]
+        [OrderBy(Ascending = true, Precedence = 100)]
         public string Title { get;  set; }
 
         [StringLength(256)]
@@ -89,4 +91,12 @@ namespace Borg.Framework.Backoffice.Pages.Data
 
         public string Body { get; protected set; }
     }
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public class OrderByAttribute : Attribute
+    {
+        public bool Ascending { get; set; } = true;
+
+        public int Precedence { get; set; } = 0;
+    }
 }
+
