@@ -6,6 +6,9 @@ using Borg.Infra.CQRS;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Borg.Framework.Backoffice.Identity.Models;
+using Borg.Framework.Backoffice.Identity.Queries;
+using Borg.Infra.Relational;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -13,10 +16,12 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     public class UsersController : BackofficeController
     {
         private readonly ICommandBus _bus;
+        private readonly IQueryBus _queries;
 
-        public UsersController(ISystemService<BorgSettings> systemService, ICommandBus bus) : base(systemService)
+        public UsersController(ISystemService<BorgSettings> systemService, ICommandBus bus, IQueryBus queries) : base(systemService)
         {
             _bus = bus;
+            _queries = queries;
         }
 
         public async Task<IActionResult> Index()
@@ -26,8 +31,11 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 Title = "Users"
             });
 
-            await _bus.Process(new SimplePageCreateCommand(User.Identity) { Title = "test", Path = "test" });
-            Logger.LogCritical("{@request}", Request);
+            var q = new UsersQueryRequest(x => x.UserName.StartsWith("m"), Pager.Current, Pager.RowCount,
+                new[] { new OrderByInfo<BorgUser>() { Ascending = false, Property = u => u.Email } }, u => u.Claims,
+                u => u.Logins);
+            var result = await _queries.Fetch<UsersQueryRequest>(q);
+
             return View();
         }
     }

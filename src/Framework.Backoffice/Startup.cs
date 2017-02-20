@@ -1,4 +1,5 @@
 ﻿using Borg.Framework.Backoffice.Identity;
+using Borg.Framework.Backoffice.Identity.Data;
 using Borg.Framework.Backoffice.Identity.Data.Seeds;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Services;
@@ -24,6 +25,8 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
+using Borg.Framework.Backoffice.Identity.Queries;
+using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
 
 namespace Borg.Framework.Backoffice
@@ -118,9 +121,17 @@ namespace Borg.Framework.Backoffice
             services.AddScoped<ICRUDRespoditory<SimplePage>, PagesDbRepository<SimplePage>>();
             services.AddScoped<IHandlesCommand<SimplePageCreateCommand>, SimplePageCreateCommandHandler>();
 
+            services.AddScoped<IHandlesQueryRequest<UsersQueryRequest>, UsersQueryRequestHandler>();
+
+            services.AddScoped<IRepository, IdentityDbTransactionRepository<BorgUser>>();
+            services.AddScoped<ICRUDRespoditory<BorgUser>, IdentityDbTransactionRepository<BorgUser>>();
+            services.AddScoped<IRepository, IdentityDbQueryRepository<BorgUser>>();
+            services.AddScoped<IQueryRepository<BorgUser>, IdentityDbQueryRepository<BorgUser>>();
+
             services.AddSingleton<IDispatcherInstance, ServiceLocatorDispatcher>();
             services.AddSingleton<ICommandBus, ServiceLocatorDispatcher>();
             services.AddSingleton<IEventBus, ServiceLocatorDispatcher>();
+            services.AddSingleton<IQueryBus, ServiceLocatorDispatcher>();
 
             services.AddSingleton(new DbContextFactoryOptions()
             {
@@ -128,7 +139,11 @@ namespace Borg.Framework.Backoffice
                 ApplicationBasePath = Environment.WebRootPath,
                 EnvironmentName = Environment.EnvironmentName
             });
+
             services.AddSingleton<IDbContextFactory<PagesDbContext>, PagesDbContextFactory>();
+            services.AddSingleton<IDbContextFactory<IdentityDbContext>, IdentityDbContextFactory>();
+
+
 
             services.AddMvc();
         }

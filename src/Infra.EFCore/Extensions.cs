@@ -23,7 +23,7 @@ namespace Borg
             {
                 page = totalPages;
             }
-            if (totalRecords == 0)
+            if (!fetchAll && totalRecords == 0)
             {
                 result = new PagedResult<T>(new List<T>(), page, size, 0);
             }

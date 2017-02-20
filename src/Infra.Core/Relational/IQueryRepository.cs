@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Infra.Relational
 {
-    public interface IQueryRepository<T> where T : class
+    public interface IQueryRepository<T> : IRepository where T : class
     {
         Task<IPagedResult<T>> FindAsync(Expression<Func<T, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<T>> orderBy, params Expression<Func<T, dynamic>>[] paths);
     }

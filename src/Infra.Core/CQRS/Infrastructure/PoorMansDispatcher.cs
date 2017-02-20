@@ -101,6 +101,11 @@ namespace Borg.Infra.CQRS
             }
         }
 
+        public Task<IQueryResult> Fetch<T>(T request) where T : IQueryRequest
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion IDispatcherInstance
     }
 }

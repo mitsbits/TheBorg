@@ -4,6 +4,6 @@ namespace Borg.Infra.CQRS
 {
     public interface IQueryBus
     {
-        Task<IQueryResult<V>> Fetch<T, V>(T request) where T : IQueryRequest where V : IResponse;
+        Task<IQueryResult> Fetch<T>(T request) where T : IQueryRequest;
     }
 }

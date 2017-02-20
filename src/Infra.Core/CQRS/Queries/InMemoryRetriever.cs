@@ -40,5 +40,10 @@ namespace Borg.Infra.CQRS
         {
             return await Process(request) as IQueryResult<V>;
         }
+
+        public Task<IQueryResult> Fetch<T>(T request) where T : IQueryRequest
+        {
+            throw new NotImplementedException();
+        }
     }
 }

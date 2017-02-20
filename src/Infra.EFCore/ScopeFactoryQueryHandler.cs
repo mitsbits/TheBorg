@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Infra.EFCore
 {
-    internal abstract class ScopeFactoryQueryHandler<TRequest> : IHandlesQueryRequest<TRequest> where TRequest : IQueryRequest
+    public abstract class ScopeFactoryQueryHandler<TRequest> : IHandlesQueryRequest<TRequest> where TRequest : IQueryRequest
     {
         protected ScopeFactoryQueryHandler(IDbContextScopeFactory dbContextScopeFactory)
         {
@@ -20,11 +20,11 @@ namespace Borg.Infra.EFCore
         public abstract Task<IQueryResult> Execute(TRequest message);
     }
 
-    internal delegate Task<IQueryResult<TEntity>> PreProcessQueryRequestAsyncHandler<TEntity>(EntityQueryRequest<TEntity> request) where TEntity : class;
+    public delegate Task<IQueryResult<TEntity>> PreProcessQueryRequestAsyncHandler<TEntity>(EntityQueryRequest<TEntity> request) where TEntity : class;
 
-    internal delegate Task PostProcessQueryRequestAsyncHandler<TEntity>(EntityQueryRequest<TEntity> request, IQueryResult<TEntity> result) where TEntity : class;
+    public delegate Task PostProcessQueryRequestAsyncHandler<TEntity>(EntityQueryRequest<TEntity> request, IQueryResult<TEntity> result) where TEntity : class;
 
-    internal abstract class ScopeFactoryEntityQueryHandler<TRequest, TEntity> : IHandlesQueryRequest<TRequest, TEntity> where TRequest : EntityQueryRequest<TEntity> where TEntity : class
+    public abstract class ScopeFactoryEntityQueryHandler<TRequest, TEntity> : IHandlesQueryRequest<TRequest, TEntity> where TRequest : EntityQueryRequest<TEntity> where TEntity : class
     {
         protected ScopeFactoryEntityQueryHandler(IDbContextScopeFactory dbContextScopeFactory, IQueryRepository<TEntity> repository)
         {

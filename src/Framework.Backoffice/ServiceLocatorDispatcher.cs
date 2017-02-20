@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice
 {
-    public class ServiceLocatorDispatcher : IDispatcherInstance, IEventBus, ICommandBus
+    public class ServiceLocatorDispatcher : IDispatcherInstance, IEventBus, ICommandBus, IQueryBus
     {
         private readonly IServiceProvider _container;
         private ILogger Logger { get; }
@@ -104,6 +104,48 @@ namespace Borg.Framework.Backoffice
 
         #endregion IEventBus
 
+
+
+        #region IQueryBus
+        public async Task<IQueryResult> Fetch<T>(T request) where T : IQueryRequest
+        {
+            Logger.LogDebug("Requesting handler for {@request}", request);
+            IQueryResult result;
+
+            using (var scope = _container.CreateScope())
+            {
+                var type = typeof(IHandlesQueryRequest<>).MakeGenericType(request.GetType());
+                var collectionType = typeof(IEnumerable<>).MakeGenericType(type);
+                var hit = scope.ServiceProvider.GetService(collectionType);
+
+                if (hit == null)
+                {
+                    Logger.LogWarning("No command handler for {request}", request);
+                    return await Task.FromResult(new FailQueryResult<T>());
+                }
+                var collection = hit as IEnumerable<dynamic>;
+                if (collection == null)
+                {
+                    Logger.LogWarning("No command handler for {request}", request);
+                    return await Task.FromResult(new FailQueryResult<T>( $"no request handler for {nameof(request)}"));
+                }
+                if (collection.Count() > 1)
+                {
+                    Logger.LogWarning("Multiple request handlers for {request}, {@Handlers}", request, collection);
+                    return await Task.FromResult(new FailQueryResult<T>($"multiple request handlers for {nameof(request)}"));
+                }
+                var handler = collection.Single();
+                Type handlerType = handler.GetType();
+                Logger.LogDebug("Found {Handler} for {Command}", handlerType, request);
+                Task<IQueryResult> task = handler.Execute(request);
+
+                result = await task;
+            }
+
+            return result;
+        } 
+        #endregion
+
         #region IDispatcherInstance
 
         public Task Stop(CancellationToken token = default(CancellationToken))
@@ -130,6 +172,8 @@ namespace Borg.Framework.Backoffice
                 //_container.Dispose();
             }
         }
+
+
 
         #endregion IDisposable
     }
