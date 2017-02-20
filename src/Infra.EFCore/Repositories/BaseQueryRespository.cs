@@ -21,9 +21,11 @@ namespace Borg.Infra.EFCore
         public async Task<IPagedResult<T>> FindAsync(Expression<Func<T, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<T>> orderBy, params Expression<Func<T, dynamic>>[] paths)
         {
             IPagedResult<T> result;
-            //await PreProcess?.Invoke(predicate, page, size, orderBy, paths, out result);
+            if (PreProcess != null)
+                await PreProcess.Invoke(predicate, page, size, orderBy, paths, out result);
             result = await DbContext.FetchAsync(predicate, page, size, orderBy, paths, true);
-            //await PostProcess?.Invoke(predicate, page, size, orderBy, paths, result);
+            if (PreProcess != null)
+                await PostProcess.Invoke(predicate, page, size, orderBy, paths, result);
             return result;
         }
     }

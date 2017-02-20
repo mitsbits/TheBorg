@@ -1,4 +1,12 @@
-﻿@section contentheader
+﻿@using Borg
+@using Microsoft.AspNetCore.Routing
+@model Borg.Infra.Relational.IPagedResult<Borg.Framework.Backoffice.Identity.Models.BorgUser>
+@{
+    var controller = Context.GetRouteValue("controller");
+    var action = Context.GetRouteValue("action");
+    Func<int, string> _generator = (i) => Url.Action(action.ToString(), controller.ToString(), new { p = i });
+}
+@section contentheader
 {
     <section class="content-header">
     <h1>
@@ -13,4 +21,13 @@
 }
 
 
-<strong> body</strong>
+
+<div class="box box-default">
+
+        @Html.Partial("Partials/UserList", Model)
+
+
+    <div class="box-footer">
+        <ul class="pull-right"  pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@_generator" ></ul>
+    </div>
+</div>

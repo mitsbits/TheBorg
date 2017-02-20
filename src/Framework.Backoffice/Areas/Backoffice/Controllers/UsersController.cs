@@ -36,7 +36,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 u => u.Logins);
             var result = await _queries.Fetch<UsersQueryRequest>(q);
 
-            return View();
+            return View(result);
         }
     }
 }

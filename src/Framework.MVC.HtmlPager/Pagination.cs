@@ -32,13 +32,22 @@ namespace Borg
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (Model == null) throw new ArgumentNullException(nameof(Model));
-  
+
             var content = Pagination.GetHtmlPager(Model, x => GeneratePageUrl?.Invoke(x), Query.ToNameValueCollection(), Settings, null);
             var trimstart = content.IndexOf('>') + 1;
             var trimend = content.Length - content.LastIndexOf('<');
             var trimmed = content.Substring(trimstart, content.Length - trimend - trimstart);
-            output.Content.SetHtmlContent(trimmed);
-            output.Attributes.Add("class", Settings.ElementClass);
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            var oprslt = output.Content.SetHtmlContent(trimmed);
+
+            var cls = Settings.ElementClass;
+
+            if (output.Attributes.ContainsName("class"))
+            {
+                cls += $" {output.Attributes["class"].Value}";
+            }
+            output.Attributes.SetAttribute("class", cls);
         }
 
 

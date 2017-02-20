@@ -1,0 +1,37 @@
+﻿@using Borg.Framework.Backoffice.Identity.Models
+@model Borg.Infra.Relational.IPagedResult<BorgUser>
+@inject BorgSettings _settings;
+<div class="box-body table-responsive">
+    <table class="table table-hover table-condensed sever-table">
+        <thead>
+        <tr>
+        <th style="width: 40px">#</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Locked</th>
+        </thead>
+        <tbody>
+            @foreach (BorgUser u in Model.Records)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Users" asp-action="Index" asp-route-id="@u.Id">
+                            @if (!u.Claims.Any(x => x.ClaimType.Equals(BorgClaims.Profile.Avatar)))
+                            {
+                                <img src="@u.Claims.First(x => x.ClaimType.Equals(BorgClaims.Profile.Avatar)).ClaimValue" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <img src="@_settings.Backoffice.Application.Logo" class="img-thumbnail" />
+                            }
+                        </a>
+                    </td>
+                        <td style="vertical-align:middle;">@u.Email</td>
+                    <td style="vertical-align:middle;">@u.UserName</td>
+                    <td style="vertical-align:middle;">@u.LockoutEnabled</td>
+               
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
