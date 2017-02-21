@@ -1,4 +1,6 @@
-﻿using Borg.Framework.Backoffice.Pages.Commands;
+﻿using System;
+using System.Linq.Expressions;
+using Borg.Framework.Backoffice.Pages.Commands;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
@@ -24,18 +26,27 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             _queries = queries;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string q)
         {
-            PageContent(new PageContent()
+            var page = new PageContent()
             {
                 Title = "Users"
-            });
+            };
+            
 
-            var q = new UsersQueryRequest(x => x.UserName.StartsWith("m"), Pager.Current, Pager.RowCount,
-                new[] { new OrderByInfo<BorgUser>() { Ascending = false, Property = u => u.Email } }, u => u.Claims,
-                u => u.Logins);
-            var result = await _queries.Fetch<UsersQueryRequest>(q);
+            Expression<Func<BorgUser, bool>> where = x => true;
+            if (!string.IsNullOrWhiteSpace(q.TrimStart().TrimEnd()))
+            {
+                where = x => x.Email.Contains(q.TrimStart().TrimEnd()) || x.UserName.Contains(q.TrimStart().TrimEnd());
+                page.Subtitle = $"filter: {q.TrimStart().TrimEnd()}";
+            }
 
+            var query = new UsersQueryRequest(where, Pager.Current, Pager.RowCount,
+                new[] { new OrderByInfo<BorgUser>() { Ascending = true, Property = u => u.Email } }, 
+                u => u.Claims, u => u.Logins, u=>u.Roles);
+            var result = await _queries.Fetch(query);
+
+            PageContent(page);
             return View(result);
         }
     }
