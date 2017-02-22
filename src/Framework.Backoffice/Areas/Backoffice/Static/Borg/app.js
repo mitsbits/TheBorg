@@ -1,4 +1,8 @@
-﻿$(function () {
+﻿jQuery.expr[':'].icontains = function (a, i, m) {
+    return jQuery(a).text().toUpperCase()
+        .indexOf(m[3].toUpperCase()) >= 0;
+};
+$(function () {
 
     $(".server-table").dataTable({
         "bPaginate": false,
@@ -54,4 +58,22 @@
     //    if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
     //    return i;
     //}
+    var menusnapshot = $("ul.sidebar-menu").html();
+    $("#menu-search").submit(function (event) {
+        var q = $("#q").val();
+        if (q !== "undefined" && q.length > 0) {
+            $("ul.sidebar-menu").hide();
+            $("ul.sidebar-menu").html(menusnapshot);
+            var lis = $("ul.sidebar-menu a:icontains('" + q + "')").closest("li");
+            //$("ul.sidebar-menu").fadeOut("normal", function () { $("ul.sidebar-menu").empty(); });
+            $("ul.sidebar-menu").empty();
+            lis.hide();
+            $("ul.sidebar-menu").append(lis);
+            $("ul.sidebar-menu").show();
+            $("ul.sidebar-menu li").fadeIn("normal");
+        } else {
+            $("ul.sidebar-menu").html(menusnapshot);
+        }
+        event.preventDefault();
+    });
 });
