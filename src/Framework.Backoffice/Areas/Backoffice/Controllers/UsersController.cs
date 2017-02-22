@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq.Expressions;
 using Borg.Framework.Backoffice.Pages.Commands;
 using Borg.Framework.MVC;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Queries;
 using Borg.Infra.Relational;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -19,11 +22,15 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     {
         private readonly ICommandBus _bus;
         private readonly IQueryBus _queries;
+        private readonly UserManager<BorgUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(ISystemService<BorgSettings> systemService, ICommandBus bus, IQueryBus queries) : base(systemService)
+        public UsersController(ISystemService<BorgSettings> systemService, ICommandBus bus, IQueryBus queries, UserManager<BorgUser> userManager, RoleManager<IdentityRole> roleManager) : base(systemService)
         {
             _bus = bus;
             _queries = queries;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index(string q)
@@ -35,7 +42,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             
 
             Expression<Func<BorgUser, bool>> where = x => true;
-            if (!string.IsNullOrWhiteSpace(q.TrimStart().TrimEnd()))
+            if (!string.IsNullOrWhiteSpace(q))
             {
                 where = x => x.Email.Contains(q.TrimStart().TrimEnd()) || x.UserName.Contains(q.TrimStart().TrimEnd());
                 page.Subtitle = $"filter: {q.TrimStart().TrimEnd()}";
@@ -48,6 +55,24 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 
             PageContent(page);
             return View(result);
+        }
+        [Route("[area]/user/{id}")]
+        public async Task<IActionResult> Details(string id)
+        {
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null) throw new FileNotFoundException(nameof(BorgUser));
+
+            var page = new PageContent()
+            {
+                Title = user.UserName,
+                Subtitle = user.Email
+            };
+
+
+            PageContent(page);
+            return View(user);
         }
     }
 }
