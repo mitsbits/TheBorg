@@ -1,0 +1,80 @@
+﻿@using Borg.Framework.Backoffice.Identity.Models.AccountViewModels
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Microsoft.EntityFrameworkCore
+
+@model CreateUserViewModel
+@{
+
+}
+@section contentheader
+{
+    <section class="content-header">
+        <h1>
+            @Content.Page.Title
+            <small>@Content.Page.Subtitle</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+
+        <div class="box">
+            <form asp-controller="Users" asp-action="NewUser" method="post">
+                <div class="box-header">
+                </div>
+                <div class="box-body">
+
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label"></label>
+
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Roles" class="control-label"></label>
+
+                        @for (int i = 0; i < Model.Roles.Count(); i++)
+                        {
+                            <div>
+                                <input asp-for="@Model.Roles[i].Selected" type="checkbox" />
+                                <label asp-for="@Model.Roles[i].Selected">@Model.Roles[i].Name</label>
+                                <input asp-for="@Model.Roles[i].Name" type="hidden" />
+                            </div>
+                        }
+                        <span asp-validation-for="Roles" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EnableOnCreate" class="control-label"></label>
+
+                        <input asp-for="EnableOnCreate" type="checkbox" />
+                        <span asp-validation-for="EnableOnCreate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div asp-validation-summary="All" class="text-danger box-footer"></div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-default pull-right">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

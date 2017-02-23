@@ -1,5 +1,4 @@
-﻿
-@using Borg.Framework.Backoffice.Identity.Models.AccountViewModels
+﻿@using Borg.Framework.Backoffice.Identity.Models.AccountViewModels
 @model Borg.Framework.Backoffice.Identity.Models.AccountViewModels.RegisterViewModel
 @inject BorgSettings _settings
 @{
@@ -15,9 +14,7 @@
 <div class="row">
     <div class="col-md-12">
 
-
         <img src="@_settings.Backoffice.Application.Logo" class="img-responsive center-block margin-bottom" alt="borg logo" />
-
     </div>
     <div class="col-md-4 col-md-offset-4">
 
@@ -27,7 +24,6 @@
                     <h3 class="box-title">Create a new account</h3>
                 </div>
                 <div class="box-body">
-
 
                     <div class="form-group">
                         <label asp-for="UserName" class="col-md-2 control-label"></label>
@@ -57,9 +53,6 @@
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
                     </div>
-              
-
-
                 </div>
                 <div asp-validation-summary="All" class="text-danger box-footer"></div>
                 <div class="box-footer">
@@ -68,11 +61,7 @@
                 <div class="box-footer">
                     Back to <a asp-controller="Account" asp-action="Login" asp-area="backoffice"> log in</a>
                 </div>
-</form>
+            </form>
         </div>
     </div>
 </div>
-
-
-
-

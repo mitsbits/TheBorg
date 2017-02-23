@@ -4,7 +4,6 @@ namespace Borg.Framework.Backoffice.Identity.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
-
         [Required]
         [Display(Name = "User")]
         public string UserName { get; set; }
@@ -24,5 +23,20 @@ namespace Borg.Framework.Backoffice.Identity.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class CreateUserViewModel : RegisterViewModel
+    {
+        [Display(Name = "Roles")]
+        public RoleOption[] Roles { get; set; }
+
+        [Display(Name = "Enable")]
+        public bool EnableOnCreate { get; set; } = true;
+
+        public class RoleOption
+        {
+            public string Name { get; set; }
+            public bool Selected { get; set; }
+        }
     }
 }

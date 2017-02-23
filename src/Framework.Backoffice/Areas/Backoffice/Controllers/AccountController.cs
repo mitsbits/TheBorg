@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Borg.Framework.Backoffice.Identity.Account;
+﻿using Borg.Framework.Backoffice.Identity.Account;
 using Borg.Framework.Backoffice.Identity.Models;
 using Borg.Framework.Backoffice.Identity.Models.AccountViewModels;
 using Borg.Framework.Backoffice.Identity.Services;
@@ -18,6 +14,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -43,7 +43,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             ISmsSender smsSender,
             IIdentityServerInteractionService interaction,
             IHttpContextAccessor httpContext,
-            IClientStore clientStore):base(system)
+            IClientStore clientStore) : base(system)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -64,7 +64,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         {
             var vm = await _account.BuildLoginViewModelAsync(returnUrl);
 
-            PageContent(new PageContent() {Title = "Log in"});
+            PageContent(new PageContent() { Title = "Log in" });
 
             if (vm.IsExternalLoginOnly)
             {
@@ -167,7 +167,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 Title = System.Settings.Backoffice.Application.Title
             });
             if (string.IsNullOrWhiteSpace(vm.PostLogoutRedirectUri))
-                vm.PostLogoutRedirectUri = Url.Action( "Index", "Home", new {area="Backoffice"});
+                vm.PostLogoutRedirectUri = Url.Action("Index", "Home", new { area = "Backoffice" });
             return View("LoggedOut", vm);
         }
 
