@@ -25,6 +25,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
+using Borg.Framework.Backoffice.Assets.Data;
 using Borg.Framework.Backoffice.Identity.Queries;
 using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
@@ -59,6 +60,9 @@ namespace Borg.Framework.Backoffice
             services.ConfigurePOCO(Configuration.GetSection("global"), () => settings);
 
             services.AddDbContext<PagesDbContext>(options =>
+                options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
+
+            services.AddDbContext<AssetsDbContext>(options =>
                 options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
 
             services.AddDbContext<IdentityDbContext>(options =>
