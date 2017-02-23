@@ -1,5 +1,4 @@
 ﻿@using Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,27 +10,30 @@
     @RenderSection("headscripts", required: false)
 </head>
 <body class="hold-transition skin-black-light sidebar-mini">
-    <div class="wrapper">
-        @await Component.InvokeAsync(typeof(MainHeaderViewComponent))
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar">
-            @await Component.InvokeAsync(typeof(NavigationViewComponent))
-        </aside>
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
+<div class="wrapper">
+    
+    @await Component.InvokeAsync(typeof(MainHeaderViewComponent))
 
-            @RenderSection("contentheader", required: false)
 
-            <!-- Main content -->
-            <section class="content">
-                @RenderBody()
-            </section>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
+    <aside class="main-sidebar">
+        @await Component.InvokeAsync(typeof(NavigationViewComponent))
+    </aside>
+
+
+    <div class="content-wrapper">
+
+
+        @RenderSection("contentheader", required: false)
+
+
+        <section class="content">
+            @RenderBody()
+        </section>
 
     </div>
+
+
+</div>
     @await Component.InvokeAsync(typeof(MainFooterViewComponent))
     @await Component.InvokeAsync(typeof(HiddenSidebarViewComponent))
     @Html.Partial("_BottomScriptsPartial")

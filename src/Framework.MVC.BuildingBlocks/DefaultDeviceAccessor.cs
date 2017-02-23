@@ -1,4 +1,5 @@
-﻿using Borg.Framework.MVC.BuildingBlocks.Devices;
+﻿using System;
+using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -6,6 +7,8 @@ namespace Borg.Framework.MVC
 {
     public class DefaultDeviceAccessor : IPageContentAccessor<IPageContent>, IDeviceAccessor<IDevice>, IViewContextAware
     {
+
+
         private ViewContext _viewContext;
         private IPageContent _page;
         private static readonly IPageContent _defaultContent = new PageContent() { Title = "Borg" };
@@ -15,8 +18,12 @@ namespace Borg.Framework.MVC
 
         public void Contextualize(ViewContext viewContext)
         {
+
             _viewContext = viewContext;
+            ((Device)Device).Populate(_viewContext);
         }
+
+
 
         public IPageContent Page
         {
