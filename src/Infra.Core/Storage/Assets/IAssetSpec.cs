@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Borg.Infra.Storage
 {
@@ -12,5 +13,7 @@ namespace Borg.Infra.Storage
         AssetState State { get; }
         IVersionSpec CurrentFile { get; }
         string Name { get; }
+
+        IEnumerable<IVersionSpec> Versions { get; }
     }
 }

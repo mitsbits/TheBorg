@@ -9,7 +9,7 @@ namespace Borg.Infra.Storage
         Task Activate(TKey id);
         Task Deactivate(TKey id);
         Task Remove(TKey id);
-        Task AddVersion(IVersionSpec spec);
+        Task AddVersion(TKey id,IVersionSpec spec);
         Task<IAssetSpec<TKey>> Get(TKey id);
     }
 }

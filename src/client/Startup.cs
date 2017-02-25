@@ -173,7 +173,7 @@ namespace Borg.Client
             //builder.RegisterInstance(new SpecsDictionaryDbContextFactory(bdConfigs))
             //    .As<IDbContextFactory>()
             //    .SingleInstance();
-            builder.RegisterType<ServiceLocatorDbContextFactory>().As<IDbContextFactory>().SingleInstance();
+            //builder.RegisterType<ServiceLocatorDbContextFactory>().As<IDbContextFactory>().SingleInstance();
             builder.RegisterType<DbContextScopeFactory>().As<IDbContextScopeFactory>().SingleInstance();
             builder.RegisterType<AmbientDbContextLocator>().As<IAmbientDbContextLocator>().SingleInstance();
        

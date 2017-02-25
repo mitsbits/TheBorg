@@ -28,6 +28,8 @@ using System.IO;
 using Borg.Framework.Backoffice.Assets.Data;
 using Borg.Framework.Backoffice.Identity.Queries;
 using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
+using Borg.Infra;
+using Borg.Infra.Storage;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
 
 namespace Borg.Framework.Backoffice
@@ -58,6 +60,7 @@ namespace Borg.Framework.Backoffice
         {
             var settings = new BorgSettings();
             services.ConfigurePOCO(Configuration.GetSection("global"), () => settings);
+            var scanner = new CurrentContextAssemblyProvider();
 
             services.AddDbContext<PagesDbContext>(options =>
                 options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
@@ -131,6 +134,8 @@ namespace Borg.Framework.Backoffice
             services.AddScoped<ICRUDRespoditory<BorgUser>, IdentityDbTransactionRepository<BorgUser>>();
             services.AddScoped<IRepository, IdentityDbQueryRepository<BorgUser>>();
             services.AddScoped<IQueryRepository<BorgUser>, IdentityDbQueryRepository<BorgUser>>();
+            services.AddScoped<IRepository, AssetsDbRepository<Assets.Data.AssetSpec>>();
+            services.AddScoped<ICRUDRespoditory<Assets.Data.AssetSpec>, AssetsDbRepository<Assets.Data.AssetSpec>>();
 
             services.AddSingleton<IDispatcherInstance, ServiceLocatorDispatcher>();
             services.AddSingleton<ICommandBus, ServiceLocatorDispatcher>();
@@ -146,6 +151,18 @@ namespace Borg.Framework.Backoffice
 
             services.AddSingleton<IDbContextFactory<PagesDbContext>, PagesDbContextFactory>();
             services.AddSingleton<IDbContextFactory<IdentityDbContext>, IdentityDbContextFactory>();
+            services.AddSingleton<IDbContextFactory<AssetsDbContext>, AssetsDbContextFactory>();
+
+            services.AddScoped<IAssetMetadataStorage<int>, AssetsMetadataStorage>();
+            services.AddTransient<AssetSequence>();
+
+            services.AddScoped<IMediaService, MediaService>(provider =>
+            {
+                var storage = new FolderFileStorage(Path.Combine(Environment.WebRootPath, "media"));
+
+                return new MediaService(provider.GetService<ILoggerFactory>(), storage, provider.GetService<AssetSequence>(),
+                    new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>());
+            });
 
 
 
@@ -155,7 +172,9 @@ namespace Borg.Framework.Backoffice
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            IdentityDbSeed.InitialiseIdentity(app);
+            //IdentityDbSeed.InitialiseIdentity(app);
+
+
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

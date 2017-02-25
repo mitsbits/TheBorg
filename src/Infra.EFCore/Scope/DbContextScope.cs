@@ -287,7 +287,7 @@ namespace Borg.Infra.EFCore
 
             // Pop ourself from the ambient scope stack
             var currentAmbientScope = GetAmbientScope();
-            if (currentAmbientScope != this) // This is a serious programming error. Worth throwing here.
+            if (this != null && currentAmbientScope != this) // This is a serious programming error. Worth throwing here.
                 throw new InvalidOperationException("DbContextScope instances must be disposed of in the order in which they were created!");
 
             RemoveAmbientScope();

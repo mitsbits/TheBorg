@@ -37,7 +37,7 @@ namespace Borg.Infra.EFCore
         /// Saves the changes in all the DbContext instances that were created within this scope.
         /// This method can only be called once per scope.
         /// </summary>
-        //int SaveChanges();
+        int SaveChanges();
 
         /// <summary>
         /// Saves the changes in all the DbContext instances that were created within this scope.

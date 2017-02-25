@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Borg.Infra.Storage
 {
@@ -38,5 +39,7 @@ namespace Borg.Infra.Storage
         {
             if (State == AssetState.Suspended) return; State = AssetState.Suspended;
         }
+
+        public IEnumerable<IVersionSpec> Versions { get; set; } = new HashSet<IVersionSpec>(); 
     }
 }

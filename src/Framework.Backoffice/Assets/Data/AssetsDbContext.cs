@@ -4,7 +4,13 @@ using Borg.Infra.Relational;
 using Borg.Infra.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice.Assets.Data
 {
@@ -19,77 +25,91 @@ namespace Borg.Framework.Backoffice.Assets.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ForSqlServerHasSequence<int>("AssetsSequence").StartsAt(1).IncrementsBy(1);
+            modelBuilder.Entity<AssetSpec>().Property(x => x.Id).HasDefaultValueSql("NEXT VALUE FOR AssetsSequence");
+        }
+
         public DbSet<FileSpec> Files { get; set; }
         public DbSet<VersionSpec> Versions { get; set; }
         public DbSet<AssetSpec> Assets { get; set; }
+        internal DbSet<AssetSequenceValue> AssetSequence { get; set; }
+
+        internal class AssetSequenceValue
+        {
+            protected AssetSequenceValue()
+            {
+            }
+
+            [Key]
+            public int NextId { get; protected set; }
+        }
     }
 
     public class AssetsDbRepository<T> : BaseReadWriteRepository<T, AssetsDbContext>, ICRUDRespoditory<T> where T : class
     {
-        private readonly IAmbientDbContextLocator _ambientDbContextLocator;
+        public override AssetsDbContext DbContext { get; }
 
-        public override AssetsDbContext DbContext
+        public AssetsDbRepository(AssetsDbContext dbContext)
         {
-            get
-            {
-                var dbContext = _ambientDbContextLocator.Get<AssetsDbContext>();
-
-                if (dbContext == null)
-                    throw new InvalidOperationException(
-                        $@"No ambient DbContext of type {typeof(AssetsDbContext).Name} found.
-                                        This means that this repository method has been called outside of the scope of a DbContextScope.
-                                        A repository must only be accessed within the scope of a DbContextScope,
-                                        which takes care of creating the DbContext instances that the repositories need and making them available as ambient contexts.
-                                        This is what ensures that, for any given DbContext-derived type, the same instance is used throughout the duration of a business transaction.
-                                        To fix this issue, use IDbContextScopeFactory in your top-level business logic service method to create a DbContextScope that wraps the entire business transaction
-                                        that your service method implements.
-                                        Then access this repository within that scope.
-                                        Refer to the comments in the IDbContextScope.cs file for more details.");
-
-                return dbContext;
-            }
-        }
-
-        public AssetsDbRepository(IAmbientDbContextLocator ambientDbContextLocator)
-        {
-            if (ambientDbContextLocator == null) throw new ArgumentNullException(nameof(ambientDbContextLocator));
-            _ambientDbContextLocator = ambientDbContextLocator;
+            if (dbContext == null) throw new ArgumentNullException(nameof(dbContext));
+            DbContext = dbContext;
         }
     }
 
     public class AssetsDbContextFactory : IDbContextFactory<AssetsDbContext>
     {
         private readonly BorgSettings _settings;
+        private readonly string _cs = string.Empty;
 
         public AssetsDbContextFactory(BorgSettings settings)
         {
             _settings = settings;
         }
 
+        public AssetsDbContextFactory()
+        {
+            _cs = "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
+        }
         public AssetsDbContext Create(DbContextFactoryOptions options)
         {
             var builder = new DbContextOptionsBuilder<AssetsDbContext>();
-            var ops =
-                builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
-                    .Options;
-            var context = new AssetsDbContext(ops);
-            return context;
+            if (_settings != null)
+            {
+                var ops =
+                    builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
+                        .Options;
+                var context = new AssetsDbContext(ops);
+                return context;
+            }
+            else
+            {
+                var ops =
+                   builder.UseSqlServer(_cs)
+                       .Options;
+                var context = new AssetsDbContext(ops);
+                return context;
+            }
         }
     }
 
     public class FileSpec : IFileSpec<int>
     {
-        protected FileSpec()
+        public FileSpec()
         {
         }
 
-        public string FullPath { get; protected set; }
-        public string Name { get; protected set; }
-        public DateTime CreationDate { get; protected set; }
-        public DateTime LastWrite { get; protected set; }
-        public DateTime? LastRead { get; protected set; }
-        public long SizeInBytes { get; protected set; }
-        public string MimeType { get; protected set; }
+        public int VersionId { get; set; }
+        public virtual VersionSpec Version { get; set; }
+
+        public string FullPath { get; set; }
+        public string Name { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastWrite { get; set; }
+        public DateTime? LastRead { get; set; }
+        public long SizeInBytes { get; set; }
+        public string MimeType { get; set; }
 
         public void ModifyPath(string newPath)
         {
@@ -97,30 +117,236 @@ namespace Borg.Framework.Backoffice.Assets.Data
             FullPath = newPath;
         }
 
+        [Key]
         public int Id { get; protected set; }
     }
 
     public class VersionSpec : IVersionSpec
     {
-        protected VersionSpec()
+        public VersionSpec()
         {
         }
 
-        public int Version { get; protected set; }
-        public FileSpec FileSpec { get; protected set; }
+        [Key]
+        public int Id { get; set; }
+
+        public int AssetId { get; set; }
+        public virtual AssetSpec Asset { get; set; }
+        public int Version { get; set; }
+        public FileSpec FileSpec { get; set; }
         IFileSpec IVersionSpec.FileSpec => FileSpec;
     }
 
     public class AssetSpec : IAssetSpec<int>
     {
-        protected AssetSpec()
+        public AssetSpec()
         {
+            Versions = new HashSet<VersionSpec>();
         }
 
         public AssetState State { get; protected set; }
-        public VersionSpec CurrentFile { get; protected set; }
-        IVersionSpec IAssetSpec.CurrentFile => CurrentFile;
-        public string Name { get; protected set; }
-        public int Id { get; protected set; }
+
+        public virtual VersionSpec CurrentFile
+        {
+            get { return Versions.OrderByDescending(x => x.Version).First(); }
+        }
+
+ 
+
+        [MaxLength(512)]
+        public string Name { get; set; }
+
+        [Key]
+        public int Id { get; set; }
+
+        public virtual ICollection<VersionSpec> Versions { get; protected set; }
+
+        IEnumerable<IVersionSpec> IAssetSpec.Versions => Versions;
+
+
+
+
+        IVersionSpec IAssetSpec.CurrentFile
+        {
+            get { return Versions.OrderByDescending(x => x.Version).First(); }
+        }
+
+
+        public void Activate()
+        {
+            if (State == AssetState.Active) return;
+            State = AssetState.Active;
+        }
+
+        public void Deactivate()
+        {
+            if (State == AssetState.Suspended) return;
+            State = AssetState.Suspended;
+        }
+    }
+
+    public class AssetsMetadataStorage : IAssetMetadataStorage<int>,  IDisposable
+    {
+        private readonly ILogger Loger;
+        private readonly AssetsDbContext _dbContext;
+        private readonly ICRUDRespoditory<AssetSpec> _repo;
+
+        public AssetsMetadataStorage(ILoggerFactory loggerFactory, AssetsDbContext dbContext)
+        {
+            Loger = loggerFactory.CreateLogger(GetType());
+            _dbContext = dbContext;
+            _repo = new AssetsDbRepository<AssetSpec>(_dbContext);
+        }
+
+        public async Task Activate(int id)
+        {
+            var asset = await _repo.GetAsync(x => x.Id == id);
+            if (asset == null) throw new ArgumentNullException(nameof(asset));
+            asset.Activate();
+            await _repo.UpdateAsync(asset);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Add(IAssetSpec<int> spec)
+        {
+            var f = spec.CurrentFile.FileSpec;
+            var file = new FileSpec() { Name = f.Name, FullPath = f.FullPath, CreationDate = f.CreationDate, LastRead = f.LastRead, LastWrite = f.LastWrite, MimeType = f.MimeType, SizeInBytes = f.SizeInBytes };
+            var version = new VersionSpec() { FileSpec = file, Version = 1 };
+            var asset = new AssetSpec() { Name = spec.Name, Id = spec.Id };
+            if (spec.State == AssetState.Active) asset.Activate();
+            if (spec.State == AssetState.Suspended) asset.Deactivate();
+            asset.Versions.Add(version);
+
+            await _repo.CreateAsync(asset);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task AddVersion(int id, IVersionSpec spec)
+        {
+            var asset = await _repo.GetAsync(x => x.Id == id, assetSpec => assetSpec.Versions);
+            if (asset == null) throw new ArgumentNullException(nameof(asset));
+            var file = new FileSpec() { Name = spec.FileSpec.Name, FullPath = spec.FileSpec.FullPath, MimeType = spec.FileSpec.MimeType, CreationDate = spec.FileSpec.CreationDate, LastWrite = spec.FileSpec.LastWrite, LastRead = spec.FileSpec.LastRead, SizeInBytes = spec.FileSpec.SizeInBytes };
+            var version = new VersionSpec() { FileSpec = file, Version = spec.Version };
+            asset.Versions.Add(version);
+            await _repo.UpdateAsync(asset);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Deactivate(int id)
+        {
+            var asset = await _repo.GetAsync(x => x.Id == id);
+            if (asset == null) throw new ArgumentNullException(nameof(asset));
+            asset.Deactivate();
+            await _repo.UpdateAsync(asset);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IAssetSpec<int>> Get(int id)
+        {
+            var asset = await _repo.GetAsync(x => x.Id == id, assetSpec => assetSpec.Versions);
+            if (asset == null) throw new ArgumentNullException(nameof(asset));
+            return asset;
+        }
+
+        public async Task Remove(int id)
+        {
+            await _repo.DeleteAsync(x => x.Id == id);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    public class MediaService : BaseAssetService<int>, IMediaService, IDisposable
+    {
+        private readonly AssetsDbContext _dbContext;
+        private readonly ICRUDRespoditory<AssetSpec> _repo;
+        private readonly ICRUDRespoditory<FileSpec> _fileRepo;
+        public MediaService(ILoggerFactory loggerFactory, IFileStorage storage, IUniqueKeyProvider<int> keyProvider, IConflictingNamesResolver namesResolver, IAssetMetadataStorage<int> db, IFolderScopeFactory<int> folderScope, AssetsDbContext dbContext) : base(loggerFactory, storage, keyProvider, namesResolver, db, folderScope)
+        {
+            _dbContext = dbContext;
+            _repo = new AssetsDbRepository<AssetSpec>(_dbContext);
+            _fileRepo = new AssetsDbRepository<FileSpec>(_dbContext);
+        }
+
+        #region IDisposable Support
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~MediaService() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+
+        public async Task<IPagedResult<AssetSpec>> Assets(Expression<Func<AssetSpec, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<AssetSpec>> orderBy, params Expression<Func<AssetSpec, dynamic>>[] paths)
+        {
+            var data = await _repo.FindAsync(predicate, page, size, orderBy, paths);
+            var vIds = data.Records.SelectMany(r => r.Versions).Select(v => v.Id).Distinct().ToList();
+            var vers = await _fileRepo.FindAsync(x => vIds.Contains(x.VersionId), 1, 1000,
+                new[] {new OrderByInfo<FileSpec>() {Ascending = true, Property = p => p.Id}});
+            var files = vers.Records;
+            foreach (var dataRecord in data.Records)
+            {
+                foreach (var dataRecordVersion in dataRecord.Versions)
+                {
+                    var f = files.Single(x => x.VersionId == dataRecordVersion.Id);
+                    dataRecordVersion.FileSpec = f;
+                }
+            }
+            return data;
+        }
+
+        #endregion IDisposable Support
+    }
+
+    public interface IMediaService : IAssetService<int>, IDisposable
+    {
+        Task<IPagedResult<AssetSpec>> Assets(Expression<Func<AssetSpec, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<AssetSpec>> orderBy, params Expression<Func<AssetSpec, dynamic>>[] paths);
+    }
+
+    public class AssetSequence : IUniqueKeyProvider<int>
+    {
+        private readonly AssetsDbContext _dbContext;
+
+        public AssetSequence(AssetsDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<int> Pop()
+        {
+            var val = await _dbContext.AssetSequence.AsNoTracking()
+                    .FromSql(
+                        "SELECT NextId = NEXT VALUE FOR AssetsSequence ").ToListAsync();
+            return val.First().NextId;
+        }
     }
 }
