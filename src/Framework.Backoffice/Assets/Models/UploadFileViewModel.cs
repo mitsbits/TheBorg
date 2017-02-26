@@ -26,4 +26,15 @@ namespace Borg.Framework.Backoffice.Assets.Models
         public string Name { get; set; }
 
     }
+    public class NewVersionViewModel
+    {
+        [Required]
+        public int Id { get; set; }
+        [Required]
+        public IFormFile File
+        {
+            get; set;
+        }
+
+    }
 }

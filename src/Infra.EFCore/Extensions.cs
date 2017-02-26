@@ -37,31 +37,32 @@ namespace Borg
                 IOrderedQueryable<T> orderedQueryable;
                 if (orderBy == null)
                 {
-                    orderedQueryable = query.OrderBy(x=>x);
+                   // orderedQueryable = query.OrderBy(x=>x);
                 }
                 else
                 {
                     orderedQueryable = query.Apply(orderBy as OrderByInfo<T>[] ?? orderBy.ToArray());
+                    query = orderedQueryable;
                 }
 
-                if (orderedQueryable == null)
-                {
-                    result = new PagedResult<T>(new List<T>(), page, size, 0);
-                }
-                else
-                {
+                //if (orderedQueryable == null)
+                //{
+                //    result = new PagedResult<T>(new List<T>(), page, size, 0);
+                //}
+                //else
+                //{
                     if (fetchAll)
                     {
-                        var data = await orderedQueryable.ToListAsync();
+                        var data = await query.ToListAsync();
                         var count = data.Count();
                         result = new PagedResult<T>(data, 1, count, count);
                     }
                     else
                     {
-                        var data = await orderedQueryable.Skip((page - 1) * size).Take(size).ToListAsync();
+                        var data = await query.Skip((page - 1) * size).Take(size).ToListAsync();
                         result = new PagedResult<T>(data, page, size, totalRecords);
                     }
-                }
+                //}
             }
             return result;
         }

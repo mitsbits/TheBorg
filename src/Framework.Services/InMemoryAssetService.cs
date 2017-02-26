@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Borg.Framework.Services
 {
-    public class BaseAssetService<TKey> : IAssetService<TKey> where TKey : IEquatable<TKey>
+    public class InMemoryAssetService<TKey> : IAssetService<TKey> where TKey : IEquatable<TKey>
     {
         private readonly IFileStorage _storage;
         private readonly IUniqueKeyProvider<TKey> _keyProvider;
@@ -22,7 +22,7 @@ namespace Borg.Framework.Services
 
         private readonly object _lock = new object();
 
-        public BaseAssetService(IFileStorage storage, IUniqueKeyProvider<TKey> keyProvider, IConflictingNamesResolver namesResolver, ILoggerFactory loggerFactory)
+        public InMemoryAssetService(IFileStorage storage, IUniqueKeyProvider<TKey> keyProvider, IConflictingNamesResolver namesResolver, ILoggerFactory loggerFactory)
         {
             Logger = loggerFactory.CreateLogger(GetType());
             _storage = storage;

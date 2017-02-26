@@ -83,8 +83,8 @@ namespace Borg.Infra.Storage
             var versionSpec = new VersionSpec(spec.Versions.Max(x => x.Version) + 1, filespec);
 
             await _db.AddVersion(id, versionSpec);
+            return spec;
 
-            return await _db.Get(id);
         }
     }
 }

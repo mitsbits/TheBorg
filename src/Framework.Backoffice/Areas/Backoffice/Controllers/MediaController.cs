@@ -102,5 +102,21 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             }
             return RedirectToAction("index", null);
         }
+        [HttpPost]
+        public async Task< IActionResult> NewVersion( NewVersionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.File.CopyToAsync(memoryStream);
+
+                    await _mediaService.AddNewVersion(model.Id, memoryStream.ToArray(), model.File.FileName, model.File.ContentType);
+                }
+
+                
+            }
+            return RedirectToAction("Asset", new {id = model.Id});
+        }
     }
 }

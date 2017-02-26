@@ -77,6 +77,7 @@ namespace Borg.Framework.Backoffice
 
             services.Configure<IdentityOptions>(options =>
             {
+                
                 // Password settings
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 4;
@@ -89,10 +90,9 @@ namespace Borg.Framework.Backoffice
                 options.Lockout.MaxFailedAccessAttempts = 10;
 
                 // Cookie settings
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(15);
                 options.Cookies.ApplicationCookie.LoginPath = "/backoffice/account/login";
                 options.Cookies.ApplicationCookie.LogoutPath = "/backoffice/account/logoff";
-
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });

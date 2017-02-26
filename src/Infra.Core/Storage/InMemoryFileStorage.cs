@@ -67,7 +67,7 @@ namespace Borg.Infra.Storage
             byte[] contents = ReadBytes(stream);
             if (contents.Length > MaxFileSize)
                 throw new ArgumentException(
-                    $"File size {contents.Length.BytesToString()} exceeds the maximum size of {MaxFileSize.BytesToString()}.");
+                    $"File size {contents.Length.BytesDisplay()} exceeds the maximum size of {MaxFileSize.BytesDisplay()}.");
 
             lock (_lock)
             {

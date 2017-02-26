@@ -12,7 +12,7 @@ namespace Borg.Infra.Core.Tests
         [InlineData(4194304, "4 MB")]
         public void test_bytes_to_string_extension_method_default_format(long source, string target)
         {
-            source.BytesToString().ShouldBe(target);
+            source.BytesDisplay().ShouldBe(target);
         }
 
         [Theory]
