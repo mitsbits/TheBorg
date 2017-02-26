@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra.Storage
 {
@@ -42,23 +41,18 @@ namespace Borg.Infra.Storage
             await storage.SaveFileAsync(fileName, new MemoryStream(content));
             var filespec = await storage.GetFileInfoAsync(fileName);
             var versionSpec = new VersionSpec(1, filespec);
-            var spec = new AssetSpec<TKey>(id, AssetState.Active, versionSpec, fileName);
+            var spec = new AssetSpec<TKey>(id, AssetState.Active, versionSpec, name);
             await _db.Add(spec);
             return spec;
-
         }
 
         public async Task Suspend(TKey id)
         {
-
             await _db.Deactivate(id);
-
-
         }
 
         public async Task Acivate(TKey id)
         {
-
             await _db.Activate(id);
         }
 
@@ -68,11 +62,11 @@ namespace Borg.Infra.Storage
             if (hit == null) throw new AssetNotFoundException<TKey>(id);
             var versions = hit.Versions;
 
-            var storage = FolderScope(id);
+            //var storage = FolderScope(id); Do not use scoped storage, the full path is already prefixed
 
             foreach (var versionSpec in versions)
             {
-                await storage.DeleteFileAsync(versionSpec.FileSpec.FullPath);
+                await _storage.DeleteFileAsync(versionSpec.FileSpec.FullPath);
             }
             await _db.Remove(id);
         }
@@ -89,7 +83,6 @@ namespace Borg.Infra.Storage
             var versionSpec = new VersionSpec(spec.Versions.Max(x => x.Version) + 1, filespec);
 
             await _db.AddVersion(id, versionSpec);
-
 
             return await _db.Get(id);
         }

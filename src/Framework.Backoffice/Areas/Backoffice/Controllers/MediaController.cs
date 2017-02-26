@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Borg.Framework.Backoffice.Assets.Data;
+﻿using Borg.Framework.Backoffice.Assets.Data;
 using Borg.Framework.Backoffice.Assets.Models;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
@@ -11,6 +6,11 @@ using Borg.Framework.System;
 using Borg.Infra.Relational;
 using Borg.Infra.Storage;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AssetSpec = Borg.Framework.Backoffice.Assets.Data.AssetSpec;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
@@ -19,12 +19,13 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     public class MediaController : BackofficeController
     {
         private readonly IMediaService _mediaService;
+
         public MediaController(ISystemService<BorgSettings> systemService, IMediaService mediaService) : base(systemService)
         {
             _mediaService = mediaService;
         }
 
-        public async Task< IActionResult> Index(string q)
+        public async Task<IActionResult> Index(string q)
         {
             var page = new PageContent()
             {
@@ -46,7 +47,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             }
 
             var model = await _mediaService.Assets(where, Pager.Current, Pager.RowCount,
-                new[] {new OrderByInfo<AssetSpec>() {Ascending = false, Property = x => x.Id}}, spec => spec.Versions);
+                new[] { new OrderByInfo<AssetSpec>() { Ascending = false, Property = x => x.Id } }, spec => spec.Versions);
 
             PageContent(page);
             return View(model);
@@ -57,6 +58,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             PageContent(new PageContent() { Title = "New file" });
             return View(new UploadAssetViewModel());
         }
+
         [HttpPost]
         public async Task<IActionResult> NewFile(UploadAssetViewModel model)
         {
@@ -67,12 +69,38 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 {
                     await model.File.CopyToAsync(memoryStream);
 
-
                     var asset = await _mediaService.Create(model.Name, memoryStream.ToArray(), model.File.FileName, AssetState.Active, model.File.ContentType);
-                    return RedirectToAction("Index", new {q = asset.Id});
+                    return RedirectToAction("Index", new { q = asset.Id });
                 }
             }
             return (View(model));
+        }
+
+        public async Task<IActionResult> Asset(int id)
+        {
+            var model = await _mediaService.Get(id);
+            PageContent(new PageContent() { Title = model.Name, Subtitle = model.CurrentFile.FileSpec.MimeType });
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssetName(AssetNameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _mediaService.AssetChangeName(model.Id, model.Name);
+            }
+            return RedirectToAction("Asset", new { id = model.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssetDelete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                await _mediaService.Delete(id);
+            }
+            return RedirectToAction("index", null);
         }
     }
 }

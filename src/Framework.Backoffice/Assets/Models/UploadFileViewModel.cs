@@ -17,4 +17,13 @@ namespace Borg.Framework.Backoffice.Assets.Models
             get; set;
         }
     }
+
+    public class AssetNameViewModel
+    {
+        [Required]
+        public int Id { get; set; }
+        [Required][MaxLength(512)]
+        public string Name { get; set; }
+
+    }
 }

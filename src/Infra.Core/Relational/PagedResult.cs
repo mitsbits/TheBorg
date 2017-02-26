@@ -17,7 +17,6 @@ namespace Borg.Infra.Relational
         public PagedResult(IEnumerable<T> data, int pageNumber, int pageSize, int totalRecords)
             : this()
         {
-            Clear();
             AddRange(data);
             TotalRecords = totalRecords;
             PageSize = pageSize;

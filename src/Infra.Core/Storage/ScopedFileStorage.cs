@@ -30,7 +30,7 @@ namespace Borg.Infra.Storage
         public async Task<IFileSpec> GetFileInfoAsync(string path)
         {
             var file = await UnscopedStorage.GetFileInfoAsync(string.Concat(_pathPrefix, path)).AnyContext();
-            file?.ModifyPath(file.FullPath.Substring(_pathPrefix.Length));
+            //file?.ModifyPath(file.FullPath.Substring(_pathPrefix.Length));
 
             return file;
         }

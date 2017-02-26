@@ -37,7 +37,7 @@ namespace Borg
                 IOrderedQueryable<T> orderedQueryable;
                 if (orderBy == null)
                 {
-                    orderedQueryable = (IOrderedQueryable<T>)query;
+                    orderedQueryable = query.OrderBy(x=>x);
                 }
                 else
                 {
