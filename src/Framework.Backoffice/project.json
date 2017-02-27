@@ -31,7 +31,8 @@
     "Framework.MVC.BuildingBlocks": "1.0.0-*",
     "Framework.System.Domain": "1.0.0-*",
     "Infra.EFCore": "1.0.0-*",
-    "Framework.MVC.HtmlPager": "1.0.0-*"
+    "Framework.MVC.HtmlPager": "1.0.0-*",
+    "Framework.Media": "1.0.0-*"
   },
 
   "tools": {
@@ -50,13 +51,10 @@
     "preserveCompilationContext": true
   },
 
-
   "scripts": {
     "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   },
-
-
 
   "runtimeOptions": {
     "configProperties": {

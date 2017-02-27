@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Borg.Framework.Backoffice.Assets.Data.Migrations.AssetsDb
+namespace Borg.Framework.Backoffice.Data.Migrations.AssetsDb
 {
-    public partial class AssetsSequence : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,6 @@ namespace Borg.Framework.Backoffice.Assets.Data.Migrations.AssetsDb
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false, defaultValueSql: "NEXT VALUE FOR AssetsSequence"),
-                    CurrentVersionId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 512, nullable: true),
                     State = table.Column<int>(nullable: false)
                 },

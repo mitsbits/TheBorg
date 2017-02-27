@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Infra.Core": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
+    "Infra.EFCore": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
+    "Framework.System": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
+    "Framework.MVC.BuildingBlocks": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
+    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
+    "Microsoft.AspNetCore.Mvc.Core": "1.1.1"
+  },
+
+
+    "frameworks": {
+      "net46": {
+        "buildOptions": {
+          "define": [ "NET46" ]
+        }
+      }
+    }
+  }

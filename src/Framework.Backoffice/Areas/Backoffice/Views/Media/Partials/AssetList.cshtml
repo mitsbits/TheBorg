@@ -1,7 +1,8 @@
 ﻿@using Borg
+@using Borg.Framework.Media
 
 
-@using Borg.Framework.Media.Data
+
 
 @model Borg.Infra.Relational.IPagedResult<AssetSpec>
 
@@ -22,10 +23,11 @@
             @foreach (AssetSpec u in Model.Records)
             {
                 <tr>
-                    <td>
+                    <td>[
                         <a asp-controller="Media" asp-action="Asset" asp-route-id="@u.Id">
-                           @u.Id
+                            @u.Id
                         </a>
+                        ]
                     </td>
                     <td style="vertical-align:middle;">@u.Name</td>
                     <td style="vertical-align:middle;">@u.CurrentFile.FileSpec.Name</td>

@@ -1,34 +1,22 @@
 ﻿using System;
+using Borg.Framework.Media;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Borg.Framework.Backoffice.Assets.Data;
 
-namespace Borg.Framework.Backoffice.Assets.Data.Migrations.AssetsDb
+namespace Borg.Framework.Backoffice.Data.Migrations.AssetsDb
 {
     [DbContext(typeof(AssetsDbContext))]
-    [Migration("20170225174602_looseextraweight")]
-    partial class looseextraweight
+    partial class AssetsDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:Sequence:.AssetsSequence", "'AssetsSequence', '', '1', '1', '', '', 'Int32', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Borg.Framework.Backoffice.Assets.Data.AssetsDbContext+AssetSequenceValue", b =>
-                {
-                    b.Property<int>("NextId")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("NextId");
-
-                    b.ToTable("AssetSequence");
-                });
-
-            modelBuilder.Entity("Borg.Framework.Backoffice.Assets.Data.AssetSpec", b =>
+            modelBuilder.Entity("Borg.Framework.Media.Data.AssetSpec", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +32,7 @@ namespace Borg.Framework.Backoffice.Assets.Data.Migrations.AssetsDb
                     b.ToTable("Assets");
                 });
 
-            modelBuilder.Entity("Borg.Framework.Backoffice.Assets.Data.FileSpec", b =>
+            modelBuilder.Entity("Borg.Framework.Media.Data.FileSpec", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -73,7 +61,7 @@ namespace Borg.Framework.Backoffice.Assets.Data.Migrations.AssetsDb
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("Borg.Framework.Backoffice.Assets.Data.VersionSpec", b =>
+            modelBuilder.Entity("Borg.Framework.Media.Data.VersionSpec", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -89,17 +77,17 @@ namespace Borg.Framework.Backoffice.Assets.Data.Migrations.AssetsDb
                     b.ToTable("Versions");
                 });
 
-            modelBuilder.Entity("Borg.Framework.Backoffice.Assets.Data.FileSpec", b =>
+            modelBuilder.Entity("Borg.Framework.Media.Data.FileSpec", b =>
                 {
-                    b.HasOne("Borg.Framework.Backoffice.Assets.Data.VersionSpec", "Version")
+                    b.HasOne("Borg.Framework.Media.Data.VersionSpec", "Version")
                         .WithOne("FileSpec")
-                        .HasForeignKey("Borg.Framework.Backoffice.Assets.Data.FileSpec", "VersionId")
+                        .HasForeignKey("Borg.Framework.Media.Data.FileSpec", "VersionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Borg.Framework.Backoffice.Assets.Data.VersionSpec", b =>
+            modelBuilder.Entity("Borg.Framework.Media.Data.VersionSpec", b =>
                 {
-                    b.HasOne("Borg.Framework.Backoffice.Assets.Data.AssetSpec", "Asset")
+                    b.HasOne("Borg.Framework.Media.Data.AssetSpec", "Asset")
                         .WithMany("Versions")
                         .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade);

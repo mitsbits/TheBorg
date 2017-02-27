@@ -1,10 +1,10 @@
-﻿using Borg.Framework.Backoffice.Assets.Data;
+﻿
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {

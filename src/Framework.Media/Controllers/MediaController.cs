@@ -1,5 +1,4 @@
-﻿using Borg.Framework.Backoffice.Assets.Data;
-using Borg.Framework.Backoffice.Assets.Models;
+﻿using Borg.Framework.Media.Models;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
@@ -11,9 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AssetSpec = Borg.Framework.Backoffice.Assets.Data.AssetSpec;
 
-namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
+namespace Borg.Framework.Media
 {
     [Area("backoffice")]
     public class MediaController : BackofficeController
@@ -53,6 +51,13 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Asset(int id)
+        {
+            var model = await _mediaService.Get(id);
+            PageContent(new PageContent() { Title = model.Name, Subtitle = model.CurrentFile.FileSpec.MimeType });
+            return View(model);
+        }
+
         public IActionResult NewFile()
         {
             PageContent(new PageContent() { Title = "New file" });
@@ -76,13 +81,6 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             return (View(model));
         }
 
-        public async Task<IActionResult> Asset(int id)
-        {
-            var model = await _mediaService.Get(id);
-            PageContent(new PageContent() { Title = model.Name, Subtitle = model.CurrentFile.FileSpec.MimeType });
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> AssetName(AssetNameViewModel model)
         {
@@ -102,8 +100,9 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             }
             return RedirectToAction("index", null);
         }
+
         [HttpPost]
-        public async Task< IActionResult> NewVersion( NewVersionViewModel model)
+        public async Task<IActionResult> NewVersion(NewVersionViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -113,10 +112,8 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 
                     await _mediaService.AddNewVersion(model.Id, memoryStream.ToArray(), model.File.FileName, model.File.ContentType);
                 }
-
-                
             }
-            return RedirectToAction("Asset", new {id = model.Id});
+            return RedirectToAction("Asset", new { id = model.Id });
         }
     }
 }

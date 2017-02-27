@@ -25,12 +25,15 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
-using Borg.Framework.Backoffice.Assets.Data;
+
 using Borg.Framework.Backoffice.Identity.Queries;
 using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
+using Borg.Framework.Media;
+
 using Borg.Infra;
 using Borg.Infra.Storage;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
+using System.Reflection;
 
 namespace Borg.Framework.Backoffice
 {
@@ -134,8 +137,8 @@ namespace Borg.Framework.Backoffice
             services.AddScoped<ICRUDRespoditory<BorgUser>, IdentityDbTransactionRepository<BorgUser>>();
             services.AddScoped<IRepository, IdentityDbQueryRepository<BorgUser>>();
             services.AddScoped<IQueryRepository<BorgUser>, IdentityDbQueryRepository<BorgUser>>();
-            services.AddScoped<IRepository, AssetsDbRepository<Assets.Data.AssetSpec>>();
-            services.AddScoped<ICRUDRespoditory<Assets.Data.AssetSpec>, AssetsDbRepository<Assets.Data.AssetSpec>>();
+            services.AddScoped<IRepository, AssetsDbRepository<Media.AssetSpec>>();
+            services.AddScoped<ICRUDRespoditory<Media.AssetSpec>, AssetsDbRepository<Media.AssetSpec>>();
 
             services.AddSingleton<IDispatcherInstance, ServiceLocatorDispatcher>();
             services.AddSingleton<ICommandBus, ServiceLocatorDispatcher>();
@@ -161,7 +164,7 @@ namespace Borg.Framework.Backoffice
                 var storage = new FolderFileStorage(Path.Combine(Environment.WebRootPath, "media"));
 
                 return new MediaService(provider.GetService<ILoggerFactory>(), storage, provider.GetService<AssetSequence>(),
-                    new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>());
+                    new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>(), provider.GetService<IEventBus>());
             });
 
 
