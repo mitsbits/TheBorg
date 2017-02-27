@@ -3,6 +3,7 @@ using Borg.Infra.Storage;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Borg.Infra.Storage.Assets;
 using Xunit;
 
 namespace Infra.Storage.Tests

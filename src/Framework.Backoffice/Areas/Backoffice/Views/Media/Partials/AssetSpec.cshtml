@@ -1,18 +1,13 @@
-﻿@using Borg.Framework.Media.Models
-@model Borg.Framework.Media.AssetSpec
+﻿@model AssetSpec
 <div class="box box-default">
     <div class="box-header">
-
     </div>
     <div class="box-body">
-        @Html.Partial("Partials/AssetName", new AssetNameViewModel() {Id = Model.Id, Name = Model.Name})
+        @Html.Partial("Partials/AssetName", new AssetNameViewModel() { Id = Model.Id, Name = Model.Name })
 
         @Html.Partial("Partials/AssetCurrentFile", Model.CurrentFile)
     </div>
     <div class="box-footer">
         @Html.Partial("Partials/AssetDelete", Model)
     </div>
-
 </div>
-
-

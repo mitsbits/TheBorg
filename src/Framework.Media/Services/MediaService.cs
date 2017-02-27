@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media
 {
@@ -15,12 +16,11 @@ namespace Borg.Framework.Media
         private readonly AssetsDbContext _dbContext;
         private readonly ICRUDRespoditory<AssetSpec> _repo;
         private readonly ICRUDRespoditory<FileSpec> _fileRepo;
-        private readonly IEventBus _events;
+
 
         public MediaService(ILoggerFactory loggerFactory, IFileStorage storage, IUniqueKeyProvider<int> keyProvider, IConflictingNamesResolver namesResolver, IAssetMetadataStorage<int> db, IFolderScopeFactory<int> folderScope, AssetsDbContext dbContext, IEventBus events) : base(loggerFactory, storage, keyProvider, namesResolver, db, folderScope, events)
         {
             _dbContext = dbContext;
-            _events = events;
             _repo = new AssetsDbRepository<AssetSpec>(_dbContext);
             _fileRepo = new AssetsDbRepository<FileSpec>(_dbContext);
         }

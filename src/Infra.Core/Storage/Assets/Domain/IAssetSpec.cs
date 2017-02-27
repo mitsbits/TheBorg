@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public interface IAssetSpec<out TKey> : IAssetSpec where TKey : IEquatable<TKey>
     {

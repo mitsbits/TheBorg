@@ -1,11 +1,4 @@
-﻿@using Borg
-@using Borg.Framework.Media
-
-
-
-
-@model Borg.Infra.Relational.IPagedResult<AssetSpec>
-
+﻿@model IPagedResult<AssetSpec>
 
 <div class="box-body table-responsive">
     <table class="table table-hover table-condensed sever-table">
@@ -13,8 +6,8 @@
             <tr>
                 <th style="width: 36px;"></th>
                 <th>Name</th>
-            <th>File</th>
-            <th>Size</th>
+                <th>File</th>
+                <th>Size</th>
                 <th>Version</th>
                 <th>Mime</th>
                 <th>Status</th>
@@ -23,7 +16,8 @@
             @foreach (AssetSpec u in Model.Records)
             {
                 <tr>
-                    <td>[
+                    <td>
+                        [
                         <a asp-controller="Media" asp-action="Asset" asp-route-id="@u.Id">
                             @u.Id
                         </a>

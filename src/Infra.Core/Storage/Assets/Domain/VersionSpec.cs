@@ -1,6 +1,6 @@
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
-    public class VersionSpec : IVersionSpec
+    internal class VersionSpec : IVersionSpec
     {
         public VersionSpec(int version, IFileSpec fileSpec)
         {

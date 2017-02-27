@@ -1,25 +1,23 @@
-﻿@using Borg.Framework.Media.Models
-@model UploadAssetViewModel
+﻿@model UploadAssetViewModel
 @section contentheader
 {
     <section class="content-header">
-    <h1>
-        @Content.Page.Title
-        <small>@Content.Page.Subtitle</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-    </ol>
-</section>
+        <h1>
+            @Content.Page.Title
+            <small>@Content.Page.Subtitle</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
 }
-
 
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
 
         <div class="box">
-            <form asp-controller="Media" asp-action="NewFile" method="post"  enctype="multipart/form-data">
+            <form asp-controller="Media" asp-action="NewFile" method="post" enctype="multipart/form-data">
                 <div class="box-header">
                 </div>
                 <div class="box-body">
@@ -36,7 +34,6 @@
                         <input asp-for="File" type="file" />
                         <span asp-validation-for="File" class="text-danger"></span>
                     </div>
-
                 </div>
                 <div asp-validation-summary="All" class="text-danger box-footer"></div>
                 <div class="box-footer">

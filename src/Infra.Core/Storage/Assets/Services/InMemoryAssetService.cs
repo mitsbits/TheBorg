@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public class InMemoryAssetService<TKey> : IAssetService<TKey> where TKey : IEquatable<TKey>
     {

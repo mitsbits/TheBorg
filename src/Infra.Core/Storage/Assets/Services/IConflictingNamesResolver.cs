@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public interface IConflictingNamesResolver
     {

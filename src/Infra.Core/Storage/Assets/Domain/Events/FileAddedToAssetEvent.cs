@@ -1,8 +1,7 @@
-﻿using System;
-using Borg.Infra.CQRS;
-using Borg.Infra.Storage;
+﻿using Borg.Infra.CQRS;
+using System;
 
-namespace Borg.Infra.Core.Storage.Assets
+namespace Borg.Infra.Storage.Assets
 {
     public class FileAddedToAssetEvent<TKey> : IEvent where TKey : IEquatable<TKey>
     {
@@ -11,6 +10,7 @@ namespace Borg.Infra.Core.Storage.Assets
             File = file;
             Asset = asset;
         }
+
         public IFileSpec File { get; }
         public IAssetSpec<TKey> Asset { get; }
         public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;

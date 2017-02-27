@@ -1,16 +1,11 @@
-﻿
-
-@using Borg
-@using Borg.Framework.Media
-
-@model Borg.Framework.Media.AssetSpec
+﻿@model AssetSpec
 <div class="box box-default">
     <form asp-controller="Media" asp-action="NewVersion" method="post" enctype="multipart/form-data">
         <div class="box-header">
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Id" />
         </div>
         <div class="box-body">
-            <input type="file" name="File"/>
+            <input type="file" name="File" />
         </div>
         <div asp-validation-summary="All" class="text-danger box-footer"></div>
         <div class="box-footer">
@@ -30,7 +25,6 @@
                         <th>Size</th>
                         <th>Created On</th>
                         <th>Mime</th>
-
                 </thead>
                 <tbody>
                     @foreach (VersionSpec v in Model.Versions.OrderByDescending(x => x.Version))
@@ -47,6 +41,4 @@
             </table>
         </div>
     </div>
-
-
 </div>

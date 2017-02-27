@@ -1,6 +1,6 @@
 ﻿@using Borg
 @using Microsoft.AspNetCore.Hosting
-@model Borg.Framework.Media.VersionSpec
+@model VersionSpec
 @inject IHostingEnvironment _env
 <div class="form-group">
     <div class="row">
@@ -39,7 +39,7 @@
     {
         var root = _env.WebRootPath;
         var relative = path.Replace(root, string.Empty).Replace("\\", "/");
-        return Url.Content("~/"  + relative.TrimStart('/'));
+        return Url.Content("~/" + relative.TrimStart('/'));
     }
 
 }

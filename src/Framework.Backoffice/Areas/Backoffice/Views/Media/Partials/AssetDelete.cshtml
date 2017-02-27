@@ -1,10 +1,8 @@
-﻿
-@model Borg.Framework.Media.AssetSpec
+﻿@model AssetSpec
 <form asp-controller="Media" asp-action="AssetDelete" Method="post">
     <div class="form-group">
         <input type="hidden" asp-for="Id" />
-     
-        <button type="submit" class="btn btn-danger pull-right" ><i class="fa fa-fw fa-remove"></i>Delete</button>
-         
+
+        <button type="submit" class="btn btn-danger pull-right"><i class="fa fa-fw fa-remove"></i>Delete</button>
     </div>
 </form>

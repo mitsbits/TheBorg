@@ -1,5 +1,4 @@
-﻿@using Borg
-@model Borg.Infra.Relational.IPagedResult<Borg.Framework.Media.AssetSpec>
+﻿@model IPagedResult<AssetSpec>
 @section contentheader
 {
     <section class="content-header">
@@ -14,7 +13,6 @@
     </section>
 }
 
-
 <div class="box box-default">
     <div class="box-header">
         <div class="row">
@@ -25,7 +23,6 @@
     </div>
 
     @Html.Partial("Partials/AssetList", Model)
-
 
     <div class="box-footer">
         <ul class="pull-right" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@Url.PagerAnchorGenerator(Device.Device)"></ul>

@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media
 {

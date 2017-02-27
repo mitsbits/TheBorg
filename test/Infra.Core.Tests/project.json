@@ -15,10 +15,10 @@
     },
     "Moq": "4.5.30",
     "Shouldly": "2.8.2",
-    "xunit": "2.2.0-beta2-build3300",
-    "xunit.extensibility.core": "2.2.0-beta2-build3300",
-    "xunit.extensibility.execution": "2.2.0-beta2-build3300",
-    "xunit.runner.visualstudio": "2.2.0-beta2-build1149"
+    "xunit": "2.2.0",
+    "xunit.extensibility.core": "2.2.0",
+    "xunit.extensibility.execution": "2.2.0",
+    "xunit.runner.visualstudio": "2.2.0"
   },
 
   "frameworks": {

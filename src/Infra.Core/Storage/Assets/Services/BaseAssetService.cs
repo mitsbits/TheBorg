@@ -1,12 +1,30 @@
-﻿using Borg.Infra.Core.Storage.Assets;
-using Borg.Infra.CQRS;
+﻿using Borg.Infra.CQRS;
+using Borg.Infra.Storage;
+using Borg.Infra.Storage.Assets;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Storage
+namespace Borg
+{
+    internal static class AssetServiceExtensions
+    {
+        public static VersionSpec ToDto(this IVersionSpec spec)
+        {
+            var file = new FileSpec();
+            if (spec.FileSpec != null)
+            {
+                var f = spec.FileSpec;
+                file = new FileSpec(f.FullPath, f.Name, f.CreationDate, f.LastWrite, f.LastRead, f.SizeInBytes, f.MimeType);
+            }
+            return new VersionSpec(spec.Version, file);
+        }
+    }
+}
+
+namespace Borg.Infra.Storage.Assets
 {
     public abstract class BaseAssetService<TKey> : IAssetService<TKey> where TKey : IEquatable<TKey>
     {
@@ -31,11 +49,12 @@ namespace Borg.Infra.Storage
 
         protected virtual IFileStorage ScopeStorage(TKey id)
         {
-            return (FolderScope != null)
+            return FolderScope != null
                 ? new ScopedFileStorage(Storage, FolderScope.ScopeFactory.Invoke(id))
                 : Storage;
         }
 
+        #region IAssetService
         public virtual async Task<IAssetSpec<TKey>> Create(string name, byte[] content, string fileName, AssetState state, string contentType = "")
         {
             var id = await KeyProvider.Pop();
@@ -83,11 +102,28 @@ namespace Borg.Infra.Storage
             var storage = ScopeStorage(id);
             fileName = await ResoveNameIfExists(storage, fileName);
             var filespec = await StoreFile(content, fileName, storage);
-            var versionSpec = new VersionSpec(spec.Versions.Max(x => x.Version) + 1, filespec);
-            await Db.AddVersion(id, versionSpec);
-            Logger.LogDebug("Added {@version} to {@assr}", versionSpec, spec);
-            await Events.Publish(new FileAddedToAssetEvent<TKey>(filespec, spec)).AnyContext();
-            return spec;
+            var dto = await AddVersionAndReturnDto(id, spec, filespec);
+
+            Logger.LogDebug("Added {@version} to {@asset}", dto.CurrentFile, dto);
+            await Events.Publish(new FileAddedToAssetEvent<TKey>(filespec, dto)).AnyContext();
+            return dto;
+        } 
+        #endregion
+
+        protected virtual async Task<IAssetSpec<TKey>> AddVersionAndReturnDto( TKey id, IAssetSpec<TKey> spec, IFileSpec filespec)
+        {
+           var versionSpec = new VersionSpec(spec.Versions.Max(x => x.Version) + 1, filespec);
+            await Db.AddVersion(id, versionSpec).AnyContext();
+
+            var versions = spec.Versions.Where(x => x.Version != versionSpec.Version)
+                .Select(x => x.ToDto()).Union(new[] {versionSpec}).ToList();
+            var dto = new AssetSpec<TKey>(spec.Id, spec.State, versionSpec, spec.Name);
+            dto.Versions.Clear();
+            foreach (var version in versions)
+            {
+                dto.Versions.Add(version);
+            }
+            return dto;
         }
 
         protected virtual async Task<string> ResoveNameIfExists(IFileStorage storage, string fileName)

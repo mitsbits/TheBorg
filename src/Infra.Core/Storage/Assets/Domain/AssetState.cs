@@ -1,4 +1,4 @@
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public enum AssetState
     {

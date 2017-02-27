@@ -1,5 +1,6 @@
 using Borg.Infra.Storage;
 using System.ComponentModel.DataAnnotations;
+using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media
 {

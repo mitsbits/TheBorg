@@ -1,6 +1,6 @@
 using System;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public interface IFolderScopeFactory<in TKey> where TKey : IEquatable<TKey>
     {
@@ -15,6 +15,7 @@ namespace Borg.Infra.Storage
                 ? ScopeFactory = (i) => (i.RoundOff(100) + 100).ToString()
                 : scopeFactory;
         }
+
         public Func<int, string> ScopeFactory { get; }
     }
 }

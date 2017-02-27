@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
-    public class AssetSpec<TKey> : AssetSpec, IAssetSpec<TKey> where TKey : IEquatable<TKey>
+    internal class AssetSpec<TKey> : AssetSpec, IAssetSpec<TKey> where TKey : IEquatable<TKey>
     {
         public AssetSpec(TKey id, IAssetSpec fileSpec) : this(id, fileSpec.State, fileSpec.CurrentFile, fileSpec.Name)
         {
@@ -17,7 +17,7 @@ namespace Borg.Infra.Storage
         public TKey Id { get; }
     }
 
-    public class AssetSpec : IAssetSpec
+    internal class AssetSpec : IAssetSpec
     {
         public AssetSpec(AssetState state, IVersionSpec currentFile, string name)
         {
@@ -40,6 +40,7 @@ namespace Borg.Infra.Storage
             if (State == AssetState.Suspended) return; State = AssetState.Suspended;
         }
 
-        public IEnumerable<IVersionSpec> Versions { get; set; } = new HashSet<IVersionSpec>(); 
+        public ICollection<IVersionSpec> Versions { get; set; } = new HashSet<IVersionSpec>();
+        IEnumerable<IVersionSpec> IAssetSpec.Versions => Versions;
     }
 }

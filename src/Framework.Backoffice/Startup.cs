@@ -34,6 +34,8 @@ using Borg.Infra;
 using Borg.Infra.Storage;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
 using System.Reflection;
+using Borg.Framework.Media.EventHandlers;
+using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Backoffice
 {
@@ -43,9 +45,10 @@ namespace Borg.Framework.Backoffice
         {
             Environment = env;
             var apppath = env.ContentRootPath;
-            var rootpath = apppath.Substring(0, apppath.LastIndexOf('\\'));
+            var srcPath = apppath.Substring(0, apppath.LastIndexOf('\\'));
+            SharedPath = srcPath.Substring(0, srcPath.LastIndexOf('\\'));
             var builder = new ConfigurationBuilder()
-                .SetBasePath(rootpath)
+                .SetBasePath(srcPath)
                 .AddJsonFile("global.appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -54,6 +57,9 @@ namespace Borg.Framework.Backoffice
                 .Enrich.FromLogContext()
                 .ReadFrom.Configuration(Configuration.GetSection("global:backoffice")).CreateLogger();
         }
+
+        //TODO: move to configuration
+        private string SharedPath { get; }
 
         public IHostingEnvironment Environment { get; }
         public IConfigurationRoot Configuration { get; }
@@ -161,12 +167,13 @@ namespace Borg.Framework.Backoffice
 
             services.AddScoped<IMediaService, MediaService>(provider =>
             {
-                var storage = new FolderFileStorage(Path.Combine(Environment.WebRootPath, "media"));
+                var storage = new FolderFileStorage(Path.Combine(SharedPath, "media"));
 
                 return new MediaService(provider.GetService<ILoggerFactory>(), storage, provider.GetService<AssetSequence>(),
                     new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>(), provider.GetService<IEventBus>());
             });
 
+            services.AddScoped<IHandlesEvent<FileAddedToAssetEvent<int>>, CacheNewImage>();
 
 
             services.AddMvc();
@@ -197,22 +204,29 @@ namespace Borg.Framework.Backoffice
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), @"Areas")),
+                Path.Combine(Directory.GetCurrentDirectory(), @"Areas")),
                 RequestPath = new PathString("/Areas")
             });
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(SharedPath, "media")),
+                RequestPath = new PathString("/media")
+            });
+  
 
             app.UseIdentity();
             //app.UseIdentityServer();
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(name: "areaRoute",
-                    template: "{area:exists}/{controller}/{action}/{id?}",
-                    defaults: new { controller = "Home", action = "Index" });
-
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "areaRoute",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                //routes.MapRoute(
+                //    name: "defaultRoute",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
             });
 
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);

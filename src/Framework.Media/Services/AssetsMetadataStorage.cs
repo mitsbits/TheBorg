@@ -1,11 +1,9 @@
-
 using Borg.Infra.Relational;
-using Borg.Infra.Storage;
+using Borg.Infra.Storage.Assets;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 
 namespace Borg.Framework.Media
 {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public class DefaultConflictingNamesResolver : IConflictingNamesResolver
     {

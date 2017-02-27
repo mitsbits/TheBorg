@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Borg.Infra.Storage
+namespace Borg.Infra.Storage.Assets
 {
     public interface IAssetService<TKey> where TKey : IEquatable<TKey>
     {

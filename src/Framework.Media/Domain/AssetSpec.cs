@@ -2,6 +2,7 @@ using Borg.Infra.Storage;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media
 {
