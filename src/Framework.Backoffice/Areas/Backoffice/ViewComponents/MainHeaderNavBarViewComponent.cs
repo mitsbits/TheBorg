@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Borg.Framework.Backoffice.Identity.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,9 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
             var claims = User.Identity as ClaimsIdentity;
             var a = claims.FindFirst(x => x.Type == BorgClaims.Profile.Avatar).Value;
             var n = claims.Name;
-            var user = new SidebarUserInfoViewModel() {Nickname = n, Avatar = a};
-            return View(new MainHeaderNavBarViewModel() { UserInfo = user}) ;
+            var roles = claims.Claims.Where(c => c.Type == claims.RoleClaimType).Select(x => x.Value);
+            var user = new SidebarUserInfoViewModel() {Nickname = n, Avatar = a, Roles = roles?.ToArray()};
+            return View(new MainHeaderNavBarViewModel() { UserInfo = user, }) ;
         }
     }
 

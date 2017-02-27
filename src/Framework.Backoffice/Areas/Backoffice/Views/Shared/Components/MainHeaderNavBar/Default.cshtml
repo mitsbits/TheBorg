@@ -217,7 +217,8 @@
                         <img src="@Model.UserInfo.Avatar" class="img-circle" alt="User Image">
                         <p>
                             @Model.UserInfo.Nickname
-                            <small>Member since Nov. 2012</small>
+                            
+                            <small><concat-text data="@Model.UserInfo.Roles"></concat-text></small>
                         </p>
                     </li>
                     <!-- Menu Body -->

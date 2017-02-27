@@ -6,8 +6,11 @@
 @using Borg.Framework.System
 @using Borg.Framework.Media
 @using Borg
-@inject IPageContentAccessor<IPageContent> Content;
-@inject IDeviceAccessor<IDevice> Device;
+
+@inject IPageContentAccessor<IPageContent> Content
+@inject IDeviceAccessor<IDevice> Device
+@inject BorgSettings Settings
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper "*, Framework.MVC.HtmlPager"
+@addTagHelper "*, Framework.MVC.BuildingBlocks"

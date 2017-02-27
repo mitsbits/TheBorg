@@ -6,7 +6,7 @@
 @inject BorgSettings _settings;
 @inject RoleManager<IdentityRole> _roleManager;
 @{
-    var roles = await _roleManager.Roles.ToDictionaryAsync(r=>r.Id, r=>r.Name);
+    var roles = await _roleManager.Roles.ToDictionaryAsync(r => r.Id, r => r.Name);
 }
 <div class="box-body table-responsive">
     <table class="table table-hover table-condensed sever-table">
@@ -39,7 +39,7 @@
                     <td style="vertical-align:middle;">
                         @if (u.Roles.Any())
                         {
-                            @string.Join(", ", roles.Where(r => u.Roles.Select(ur => ur.RoleId).Contains(r.Key)).Select(r => r.Value).ToArray())
+                            <concat-text data="@roles.Where(r => u.Roles.Select(ur => ur.RoleId).Contains(r.Key)).Select(r => r.Value)"></concat-text>
                         }
                     </td>
                     <td style="vertical-align:middle;">@u.LockoutEnabled</td>

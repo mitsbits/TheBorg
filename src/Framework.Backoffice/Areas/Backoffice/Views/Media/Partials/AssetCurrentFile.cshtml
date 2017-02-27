@@ -1,7 +1,6 @@
-﻿@using Borg
-@using Microsoft.AspNetCore.Hosting
+﻿
 @model VersionSpec
-@inject IHostingEnvironment _env
+
 <div class="form-group">
     <div class="row">
         <label asp-for="Version" class="col-md-2"></label>
@@ -37,7 +36,7 @@
 
     string PreviewUrl(string path)
     {
-        var root = _env.WebRootPath;
+        var root = Settings.Backoffice.Application.Storage.SharedFolder;
         var relative = path.Replace(root, string.Empty).Replace("\\", "/");
         return Url.Content("~/" + relative.TrimStart('/'));
     }

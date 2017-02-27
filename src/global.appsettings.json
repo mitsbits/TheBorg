@@ -25,7 +25,11 @@
               }
             ]
           }
-        }
+        },
+        "storage": {
+          "sharedFolder": "K:\\Users\\Mitsbits\\Source\\Repos\\Borg",
+          "mediaFolder": "media" 
+        } 
       },
       "pager": {
         "defaultRowCount": 20,

@@ -39,9 +39,14 @@ namespace Borg.Framework.System
         public string Title { get; set; }
         public string Logo { get; set; }
         public DataSettings Data { get; set; }
+        public StorageSettings Storage { get; set; }
     }
 
-
+    public class StorageSettings
+    {
+        public string SharedFolder { get; set; }
+        public string MediaFolder { get; set; } = "media";
+    }
     public class DataSettings
     {
         public RelationalSettings Relational { get; set; }

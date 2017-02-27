@@ -45,8 +45,7 @@ namespace Borg.Framework.Backoffice
         {
             Environment = env;
             var apppath = env.ContentRootPath;
-            var srcPath = apppath.Substring(0, apppath.LastIndexOf('\\'));
-            SharedPath = srcPath.Substring(0, srcPath.LastIndexOf('\\'));
+            var srcPath = apppath.Substring(0, apppath.LastIndexOf('\\'));  
             var builder = new ConfigurationBuilder()
                 .SetBasePath(srcPath)
                 .AddJsonFile("global.appsettings.json", optional: true, reloadOnChange: true)
@@ -59,26 +58,29 @@ namespace Borg.Framework.Backoffice
         }
 
         //TODO: move to configuration
-        private string SharedPath { get; }
+    
 
         public IHostingEnvironment Environment { get; }
         public IConfigurationRoot Configuration { get; }
 
+        private BorgSettings Settings { get; set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var settings = new BorgSettings();
-            services.ConfigurePOCO(Configuration.GetSection("global"), () => settings);
+            Settings = new BorgSettings();
+            services.ConfigurePOCO(Configuration.GetSection("global"), () => Settings);
+        
             var scanner = new CurrentContextAssemblyProvider();
 
             services.AddDbContext<PagesDbContext>(options =>
-                options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
+                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
 
             services.AddDbContext<AssetsDbContext>(options =>
-                options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
+                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
 
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["identity"]));
+                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["identity"]));
 
             services.AddIdentity<BorgUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
@@ -167,7 +169,7 @@ namespace Borg.Framework.Backoffice
 
             services.AddScoped<IMediaService, MediaService>(provider =>
             {
-                var storage = new FolderFileStorage(Path.Combine(SharedPath, "media"));
+                var storage = new FolderFileStorage(Path.Combine(Settings.Backoffice.Application.Storage.SharedFolder, Settings.Backoffice.Application.Storage.MediaFolder));
 
                 return new MediaService(provider.GetService<ILoggerFactory>(), storage, provider.GetService<AssetSequence>(),
                     new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>(), provider.GetService<IEventBus>());
@@ -210,8 +212,8 @@ namespace Borg.Framework.Backoffice
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-                Path.Combine(SharedPath, "media")),
-                RequestPath = new PathString("/media")
+                Path.Combine(Settings.Backoffice.Application.Storage.SharedFolder, Settings.Backoffice.Application.Storage.MediaFolder)),
+                RequestPath = new PathString($"/{Settings.Backoffice.Application.Storage.MediaFolder}")
             });
   
 
