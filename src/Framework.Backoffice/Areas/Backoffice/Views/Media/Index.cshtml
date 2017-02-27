@@ -1,0 +1,33 @@
+﻿@using Borg
+@model Borg.Infra.Relational.IPagedResult<Borg.Framework.Media.Data.AssetSpec>
+@section contentheader
+{
+    <section class="content-header">
+        <h1>
+            @Content.Page.Title
+            <small>@Content.Page.Subtitle</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+}
+
+
+<div class="box box-default">
+    <div class="box-header">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.Partial("Partials/AssetSearch")
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("Partials/AssetList", Model)
+
+
+    <div class="box-footer">
+        <ul class="pull-right" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@Url.PagerAnchorGenerator(Device.Device)"></ul>
+    </div>
+</div>

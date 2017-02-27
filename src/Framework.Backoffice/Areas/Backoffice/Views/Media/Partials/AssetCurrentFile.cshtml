@@ -1,0 +1,45 @@
+﻿@using Borg
+@using Microsoft.AspNetCore.Hosting
+@model Borg.Framework.Media.Data.VersionSpec
+@inject IHostingEnvironment _env
+<div class="form-group">
+    <div class="row">
+        <label asp-for="Version" class="col-md-2"></label>
+        <span class="col-md-10">@Model.Version</span>
+    </div>
+    <div class="row">
+        <label asp-for="FileSpec.Name" class="col-md-2"></label>
+        <span class="col-md-10">@Model.FileSpec.Name</span>
+    </div>
+    <div class="row">
+        <label asp-for="FileSpec.CreationDate" class="col-md-2"></label>
+        <span class="col-md-10">@Model.FileSpec.CreationDate</span>
+    </div>
+    <div class="row">
+        <label asp-for="FileSpec.FullPath" class="col-md-2"></label>
+        <a href="@PreviewUrl(Model.FileSpec.FullPath)" target="_blank">
+            <span class="col-md-10">
+                @Model.FileSpec.FullPath
+            </span>
+        </a>
+    </div>
+    <div class="row">
+        <label asp-for="FileSpec.SizeInBytes" class="col-md-2"></label>
+        <span class="col-md-10">@Model.FileSpec.SizeInBytes.BytesDisplay()</span>
+    </div>
+    <div class="row">
+        <label asp-for="FileSpec.MimeType" class="col-md-2"></label>
+        <span class="col-md-10">@Model.FileSpec.MimeType</span>
+    </div>
+</div>
+@functions
+{
+
+    string PreviewUrl(string path)
+    {
+        var root = _env.WebRootPath;
+        var relative = path.Replace(root, string.Empty).Replace("\\", "/");
+        return Url.Content("~/"  + relative.TrimStart('/'));
+    }
+
+}

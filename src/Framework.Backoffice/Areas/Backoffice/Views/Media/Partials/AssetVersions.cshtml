@@ -1,0 +1,51 @@
+﻿
+
+@using Borg
+@using Borg.Framework.Media.Data
+@model AssetSpec
+<div class="box box-default">
+    <form asp-controller="Media" asp-action="NewVersion" method="post" enctype="multipart/form-data">
+        <div class="box-header">
+            <input type="hidden" asp-for="Id"/>
+        </div>
+        <div class="box-body">
+            <input type="file" name="File"/>
+        </div>
+        <div asp-validation-summary="All" class="text-danger box-footer"></div>
+        <div class="box-footer">
+            <button type="submit" class="btn btn-default pull-right">Create</button>
+        </div>
+    </form>
+</div>
+<div class="box box-default">
+
+    <div class="box-body">
+        <div class="box-body table-responsive">
+            <table class="table table-hover table-condensed sever-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10px;"></th>
+                        <th>File</th>
+                        <th>Size</th>
+                        <th>Created On</th>
+                        <th>Mime</th>
+
+                </thead>
+                <tbody>
+                    @foreach (VersionSpec v in Model.Versions.OrderByDescending(x => x.Version))
+                    {
+                        <tr>
+                            <td> @v.Version </td>
+                            <td>@v.FileSpec.Name</td>
+                            <td>@v.FileSpec.SizeInBytes.BytesDisplay()</td>
+                            <td>@v.FileSpec.CreationDate.ToLocalTime().ToString("d/M/yy HH:mm")</td>
+                            <td>@v.FileSpec.MimeType</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

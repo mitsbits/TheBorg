@@ -1,0 +1,40 @@
+﻿@using Borg
+
+
+@using Borg.Framework.Media.Data
+
+@model Borg.Infra.Relational.IPagedResult<AssetSpec>
+
+
+<div class="box-body table-responsive">
+    <table class="table table-hover table-condensed sever-table">
+        <thead>
+            <tr>
+                <th style="width: 36px;"></th>
+                <th>Name</th>
+            <th>File</th>
+            <th>Size</th>
+                <th>Version</th>
+                <th>Mime</th>
+                <th>Status</th>
+        </thead>
+        <tbody>
+            @foreach (AssetSpec u in Model.Records)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Media" asp-action="Asset" asp-route-id="@u.Id">
+                           @u.Id
+                        </a>
+                    </td>
+                    <td style="vertical-align:middle;">@u.Name</td>
+                    <td style="vertical-align:middle;">@u.CurrentFile.FileSpec.Name</td>
+                    <td style="vertical-align:middle;">@u.CurrentFile.FileSpec.SizeInBytes.BytesDisplay()</td>
+                    <td style="vertical-align:middle;">@u.CurrentFile.Version</td>
+                    <td style="vertical-align:middle;">@u.CurrentFile.FileSpec.MimeType</td>
+                    <td style="vertical-align:middle;">@u.State</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
