@@ -1,8 +1,11 @@
-﻿namespace Borg.Framework.System
+﻿
+using Borg.Infra.Messaging;
+
+namespace Borg.Framework.System
 {
     public interface IServerResponse
     {
-        ServerResponseStatus Status { get; set; }
+        ResponseStatus Status { get; set; }
 
         string Title { get; set; }
 

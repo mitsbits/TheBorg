@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using Borg.Infra;
+using Borg.Infra.Core.Messaging;
+using Borg.Infra.Messaging;
 
 namespace Borg.Framework.System
 {
@@ -30,9 +32,9 @@ namespace Borg.Framework.System
         {
             if (context.TempData == null) return Empty();
             if (!context.TempData.ContainsKey(key)) return Empty();
-            var bucket = context.TempData[key] as IEnumerable<string>;
+            var bucket = AsyncHelpers.RunSync(()=> serializer.DeserializeAsync<List<ServerResponse>>( context.TempData[key].ToString()));
             if (bucket == null || !bucket.Any()) return Empty();
-            return new TempDataResponseProvider(bucket.Select(x => serializer.DeserializeAsync<ServerResponse>(x).Result));
+            return new TempDataResponseProvider(bucket);
         }
 
         private static TempDataResponseProvider Empty()
@@ -45,17 +47,17 @@ namespace Borg.Framework.System
     {
         public static void AddRedirectMessages(this Controller controller, ISerializer serializer, params ServerResponse[] messages)
         {
-            
-            var source = controller.TempData[TempDataResponseProvider.Key] as IEnumerable<IServerResponse>;
-            var bucket = source == null ? new List<string>() : new List<string>(source.Select(x => serializer.SerializeToStringAsync(x).Result));
-            bucket.AddRange(messages.Select(x => serializer.SerializeToStringAsync(x).Result));
-            controller.TempData[TempDataResponseProvider.Key] = bucket;
+            var txt = controller.TempData[TempDataResponseProvider.Key]?.ToString() ?? string.Empty;
+            var source = AsyncHelpers.RunSync(()=> serializer.DeserializeAsync<List<ServerResponse>>(txt));
+            var bucket = source == null ? new List<ServerResponse>() : new List<ServerResponse>(source.Select(x => x));
+            bucket.AddRange(messages);
+            controller.TempData[TempDataResponseProvider.Key] = AsyncHelpers.RunSync(() => serializer.SerializeToStringAsync(bucket));
         }
     }
 
     public class ServerResponse : IServerResponse
     {
-        public ServerResponseStatus Status { get; set; }
+        public ResponseStatus Status { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
 
@@ -63,7 +65,7 @@ namespace Borg.Framework.System
         {
         }
 
-        public ServerResponse(ServerResponseStatus status, string title, string message)
+        public ServerResponse(ResponseStatus status, string title, string message)
         {
             Status = status;
             Title = title;
@@ -74,13 +76,13 @@ namespace Borg.Framework.System
         {
             if (exc is ApplicationException)
             {
-                Status = ServerResponseStatus.Warning;
+                Status = ResponseStatus.Warning;
                 Title = "Application Error";
                 Message = exc.Message;
             }
             else
             {
-                Status = ServerResponseStatus.Error;
+                Status = ResponseStatus.Error;
                 Title = exc.GetType().ToString();
                 Message = exc.Message;
             }

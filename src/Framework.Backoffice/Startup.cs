@@ -74,7 +74,7 @@ namespace Borg.Framework.Backoffice
 
             services.AddDistributedMemoryCache();
 
-            services.AddSession();
+            services.AddSession(options => options.CookieSecure = CookieSecurePolicy.SameAsRequest);
 
 
             services.AddDbContext<PagesDbContext>(options =>
@@ -240,7 +240,7 @@ namespace Borg.Framework.Backoffice
 
             app.UseIdentity();
             //app.UseIdentityServer();
-            app.UseSession();
+            app.UseSession(new SessionOptions() {CookieSecure = CookieSecurePolicy.SameAsRequest});
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

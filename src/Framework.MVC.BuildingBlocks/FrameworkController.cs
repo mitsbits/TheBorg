@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Borg.Infra.Core.Messaging;
 
 namespace Borg.Framework.MVC
 {
@@ -91,7 +92,7 @@ namespace Borg.Framework.MVC
 
         #region Redirect Messages
 
-        protected void AddRedirectMessage(ServerResponseStatus status, string title, string message = "")
+        protected void AddRedirectMessage(ResponseStatus status, string title, string message = "")
         {
             this.AddRedirectMessages(System,new[] { new ServerResponse(status, title, message) } );
         }
@@ -108,8 +109,7 @@ namespace Borg.Framework.MVC
             {
                 this.AddRedirectMessages(System,
                     stm.Value.Errors.Select(
-                        e => new ServerResponse(ServerResponseStatus.Error, e.ErrorMessage, e.Exception?.Message ?? string.Empty))
-                        .ToArray());
+                        e => new ServerResponse(ResponseStatus.Error, e.ErrorMessage, e.Exception?.Message ?? string.Empty)).ToArray());
             }
         }
 

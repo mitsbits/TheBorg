@@ -1,7 +1,9 @@
 ﻿
+using System;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
+using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,11 +20,11 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 
         public HomeController(ISystemService<BorgSettings> systemService) : base(systemService)
         {
-            AddRedirectMessage(ServerResponseStatus.Info, "Hey there", "A message");
+        
         }
 
         public IActionResult Index()
-        {
+        {     
             PageContent(new PageContent()
             {
                 Title = System.Settings.Backoffice.Application.Title,
