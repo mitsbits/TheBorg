@@ -95,20 +95,38 @@ namespace Borg.Framework.Backoffice.Identity.Data
     public class IdentityDbContextFactory : IDbContextFactory<IdentityDbContext>
     {
         private readonly BorgSettings _settings;
+        private readonly string _cs = string.Empty;
 
         public IdentityDbContextFactory(BorgSettings settings)
         {
             _settings = settings;
         }
 
+        public IdentityDbContextFactory()
+        {
+            //_cs = "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
+            _cs = "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
+        }
+
         public IdentityDbContext Create(DbContextFactoryOptions options)
         {
             var builder = new DbContextOptionsBuilder<IdentityDbContext>();
-            var ops =
-                builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["identity"])
-                    .Options;
-            var context = new IdentityDbContext(ops);
-            return context;
+            if (_settings != null)
+            {
+                var ops =
+                    builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
+                        .Options;
+                var context = new IdentityDbContext(ops);
+                return context;
+            }
+            else
+            {
+                var ops =
+                    builder.UseSqlServer(_cs, optionsBuilder => optionsBuilder.MigrationsAssembly("Framework.Backoffice"))
+                        .Options;
+                var context = new IdentityDbContext(ops);
+                return context;
+            }
         }
     }
 }

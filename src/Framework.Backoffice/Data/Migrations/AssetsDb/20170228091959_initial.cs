@@ -12,6 +12,18 @@ namespace Borg.Framework.Backoffice.Data.Migrations.AssetsDb
                 name: "AssetsSequence");
 
             migrationBuilder.CreateTable(
+                name: "AssetSequence",
+                columns: table => new
+                {
+                    NextId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssetSequence", x => x.NextId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Assets",
                 columns: table => new
                 {
@@ -84,6 +96,9 @@ namespace Borg.Framework.Backoffice.Data.Migrations.AssetsDb
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AssetSequence");
+
             migrationBuilder.DropTable(
                 name: "Files");
 

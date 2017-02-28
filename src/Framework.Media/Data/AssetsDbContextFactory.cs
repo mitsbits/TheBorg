@@ -14,10 +14,11 @@ namespace Borg.Framework.Media
             _settings = settings;
         }
 
-        //public AssetsDbContextFactory()
-        //{
-        //    _cs = "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
-        //}
+        public AssetsDbContextFactory()
+        {
+            //_cs = "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
+            _cs = "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
+        }
 
         public AssetsDbContext Create(DbContextFactoryOptions options)
         {

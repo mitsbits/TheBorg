@@ -31,8 +31,9 @@
     "Framework.Media": "1.0.0-*",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.2",
     "IdentityServer4": "1.2.0",
-    "Microsoft.AspNetCore.Mvc": "1.1.1",
-    "Microsoft.Extensions.Logging.Debug": "1.1.0"
+    "Microsoft.Extensions.Logging.Debug": "1.1.0",
+    "Microsoft.EntityFrameworkCore": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.1"
   },
 
   "tools": {

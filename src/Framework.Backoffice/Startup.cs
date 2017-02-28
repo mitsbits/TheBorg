@@ -209,6 +209,7 @@ namespace Borg.Framework.Backoffice
                 Path.Combine(Directory.GetCurrentDirectory(), @"Areas")),
                 RequestPath = new PathString("/Areas")
             });
+
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
