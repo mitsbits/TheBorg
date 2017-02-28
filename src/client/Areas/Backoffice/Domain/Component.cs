@@ -1,6 +1,7 @@
 ﻿using Borg.Infra.CQRS;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Borg.Infra.Infrastructure;
 
 namespace Framework.System.Domain
 {
@@ -27,16 +28,16 @@ namespace Framework.System.Domain
         public string CQRSKey { get; protected set; }
         [NotMapped]
         string IEntity<string>.Id => CQRSKey;
-        public ActivationStatus ActivationStatus { get; protected set; }
+        public BitSwitch ActivationStatus { get; protected set; }
 
         public virtual void SwitchOn()
         {
-            if (ActivationStatus == ActivationStatus.Off) ActivationStatus = ActivationStatus.On;
+            if (ActivationStatus == BitSwitch.Off) ActivationStatus = BitSwitch.On;
         }
 
         public virtual void SwitchOff()
         {
-            if (ActivationStatus == ActivationStatus.On) ActivationStatus = ActivationStatus.Off;
+            if (ActivationStatus == BitSwitch.On) ActivationStatus = BitSwitch.Off;
         }
     }
 
@@ -65,15 +66,10 @@ namespace Framework.System.Domain
 
 
     }
-    public enum ActivationStatus
-    {
-        Off = -1,
-        On = 1
-    }
 
     public interface IActivatable
     {
-        ActivationStatus ActivationStatus { get; }
+        BitSwitch ActivationStatus { get; }
 
         void SwitchOn();
 
