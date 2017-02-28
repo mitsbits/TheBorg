@@ -38,6 +38,8 @@ namespace Borg.Framework.System
     {
         public string Title { get; set; }
         public string Logo { get; set; }
+
+        public string BaseUrl { get; set; }
         public DataSettings Data { get; set; }
         public StorageSettings Storage { get; set; }
     }

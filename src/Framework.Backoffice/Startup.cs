@@ -1,17 +1,24 @@
 ﻿using Borg.Framework.Backoffice.Identity;
 using Borg.Framework.Backoffice.Identity.Data;
-using Borg.Framework.Backoffice.Identity.Data.Seeds;
 using Borg.Framework.Backoffice.Identity.Models;
+using Borg.Framework.Backoffice.Identity.Queries;
+using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
 using Borg.Framework.Backoffice.Identity.Services;
 using Borg.Framework.Backoffice.Pages.Commands;
 using Borg.Framework.Backoffice.Pages.Data;
+using Borg.Framework.Media;
+using Borg.Framework.Media.EventHandlers;
+using Borg.Framework.Media.Services;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
+using Borg.Infra;
 using Borg.Infra.CQRS;
 using Borg.Infra.EFCore;
 using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
+using Borg.Infra.Storage;
+using Borg.Infra.Storage.Assets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,17 +32,8 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
-
-using Borg.Framework.Backoffice.Identity.Queries;
-using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
-using Borg.Framework.Media;
-
-using Borg.Infra;
-using Borg.Infra.Storage;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
-using System.Reflection;
-using Borg.Framework.Media.EventHandlers;
-using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Backoffice
 {
@@ -45,7 +43,7 @@ namespace Borg.Framework.Backoffice
         {
             Environment = env;
             var apppath = env.ContentRootPath;
-            var srcPath = apppath.Substring(0, apppath.LastIndexOf('\\'));  
+            var srcPath = apppath.Substring(0, apppath.LastIndexOf('\\'));
             var builder = new ConfigurationBuilder()
                 .SetBasePath(srcPath)
                 .AddJsonFile("global.appsettings.json", optional: true, reloadOnChange: true)
@@ -58,7 +56,6 @@ namespace Borg.Framework.Backoffice
         }
 
         //TODO: move to configuration
-    
 
         public IHostingEnvironment Environment { get; }
         public IConfigurationRoot Configuration { get; }
@@ -70,8 +67,15 @@ namespace Borg.Framework.Backoffice
         {
             Settings = new BorgSettings();
             services.ConfigurePOCO(Configuration.GetSection("global"), () => Settings);
-        
+
             var scanner = new CurrentContextAssemblyProvider();
+
+
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession();
+
 
             services.AddDbContext<PagesDbContext>(options =>
                 options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
@@ -88,7 +92,6 @@ namespace Borg.Framework.Backoffice
 
             services.Configure<IdentityOptions>(options =>
             {
-                
                 // Password settings
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 4;
@@ -175,18 +178,35 @@ namespace Borg.Framework.Backoffice
                     new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>(), provider.GetService<IEventBus>());
             });
 
+            services.AddSingleton<IAssetUrlResolver, AssetUrlResolver>();
+
             services.AddScoped<IHandlesEvent<FileAddedToAssetEvent<int>>, CacheNewImage>();
 
 
+
+            services.AddScoped<IServerResponseProvider, TempDataResponseProvider>();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.CookieHttpOnly = true;
+            });
+
+
+            services.AddScoped<ISerializer, JsonNetSerializer>();
+
             services.AddMvc();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             //IdentityDbSeed.InitialiseIdentity(app);
-
-
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -202,6 +222,7 @@ namespace Borg.Framework.Backoffice
                 app.UseExceptionHandler("/error");
             }
 
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -216,11 +237,10 @@ namespace Borg.Framework.Backoffice
                 Path.Combine(Settings.Backoffice.Application.Storage.SharedFolder, Settings.Backoffice.Application.Storage.MediaFolder)),
                 RequestPath = new PathString($"/{Settings.Backoffice.Application.Storage.MediaFolder}")
             });
-  
 
             app.UseIdentity();
             //app.UseIdentityServer();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

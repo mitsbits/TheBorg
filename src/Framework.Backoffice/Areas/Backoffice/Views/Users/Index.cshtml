@@ -1,5 +1,5 @@
-﻿@using Borg
-@model Borg.Infra.Relational.IPagedResult<Borg.Framework.Backoffice.Identity.Models.BorgUser>
+﻿
+@model IPagedResult<Borg.Framework.Backoffice.Identity.Models.BorgUser>
 
 @section contentheader
 {
@@ -33,3 +33,4 @@
         <ul class="pull-right" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@Url.PagerAnchorGenerator(Device.Device)"></ul>
     </div>
 </div>
+

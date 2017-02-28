@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Borg.Framework.Identity
 {
@@ -95,6 +96,7 @@ namespace Borg.Framework.Identity
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddMvc();
+  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

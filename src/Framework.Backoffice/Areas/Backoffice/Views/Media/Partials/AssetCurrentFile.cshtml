@@ -1,4 +1,4 @@
-﻿
+﻿@using Borg.Framework.Media.Services
 @model VersionSpec
 
 <div class="form-group">
@@ -16,7 +16,7 @@
     </div>
     <div class="row">
         <label asp-for="FileSpec.FullPath" class="col-md-2"></label>
-        <a href="@PreviewUrl(Model.FileSpec.FullPath)" target="_blank">
+        <a href="@AssetUrlResolver.ResolveSourceUrlFromFullPath(Model.FileSpec.FullPath)" target="_blank">
             <span class="col-md-10">
                 @Model.FileSpec.FullPath
             </span>
@@ -31,14 +31,3 @@
         <span class="col-md-10">@Model.FileSpec.MimeType</span>
     </div>
 </div>
-@functions
-{
-
-    string PreviewUrl(string path)
-    {
-        var root = Settings.Backoffice.Application.Storage.SharedFolder;
-        var relative = path.Replace(root, string.Empty).Replace("\\", "/");
-        return Url.Content("~/" + relative.TrimStart('/'));
-    }
-
-}

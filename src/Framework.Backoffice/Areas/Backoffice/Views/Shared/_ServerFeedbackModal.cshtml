@@ -1,0 +1,82 @@
+﻿
+@{
+
+    Func<IServerResponse, string> _containerClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg.Status)
+        {
+
+            case ServerResponseStatus.Info:
+                result = "alert alert-info";
+                break;
+            case ServerResponseStatus.Warning:
+                result = "alert alert-warning";
+                break;
+            case ServerResponseStatus.Error:
+                result = "alert alert-danger";
+                break;
+            case ServerResponseStatus.Success:
+                result = "alert alert-success";
+                break;
+
+        }
+        return result;
+    };
+
+    Func<IServerResponse, string> _iconClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg.Status)
+        {
+
+            case ServerResponseStatus.Info:
+                result = "fa fa-info";
+                break;
+            case ServerResponseStatus.Warning:
+                result = "fa fa-warning";
+                break;
+            case ServerResponseStatus.Error:
+                result = "fa fa-ban";
+                break;
+            case ServerResponseStatus.Success:
+                result = "fa fa-check";
+                break;
+
+        }
+        return result;
+    };
+
+
+    IServerResponseProvider feedback = TempDataResponseProvider.Create(ViewContext, Serializer);
+
+}
+
+@if (feedback.Messages.Any())
+{
+    <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @foreach (var message in feedback.Messages)
+                    {
+                        <div class="@_containerClass(message)">
+                            <i class="@_iconClass(message)"></i>
+
+                            <b>@message.Title</b> @message.Message
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $('#feedbackModal').modal({
+            show: true
+        });
+    </script>
+}

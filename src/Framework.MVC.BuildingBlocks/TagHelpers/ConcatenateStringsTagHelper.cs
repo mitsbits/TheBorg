@@ -19,5 +19,7 @@ namespace Borg.Framework.MVC
             output.TagName = string.Empty;
             var tagHelperContent = output.Content.SetHtmlContent(new HtmlString(text));
         }
+
+
     }
 }

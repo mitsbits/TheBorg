@@ -19,7 +19,7 @@ namespace Borg
 
         public static Task<T> DeserializeAsync<T>(this ISerializer serializer, string data)
         {
-            return DeserializeAsync<T>(serializer, Encoding.UTF8.GetBytes(data ?? String.Empty));
+            return DeserializeAsync<T>(serializer, Encoding.UTF8.GetBytes(data ?? string.Empty));
         }
 
         public static async Task<string> SerializeToStringAsync(this ISerializer serializer, object value)

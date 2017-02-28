@@ -9,25 +9,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
 
-    
+
     [Area("backoffice")]
     //[SecurityHeaders]
     [Authorize]
     public class HomeController : BackofficeController
     {
-     
+
         public HomeController(ISystemService<BorgSettings> systemService) : base(systemService)
         {
-         
+            AddRedirectMessage(ServerResponseStatus.Info, "Hey there", "A message");
         }
 
         public IActionResult Index()
         {
-             PageContent(new PageContent()
-             {
-                 Title = System.Settings.Backoffice.Application.Title,
-                 Subtitle = "Dashbord"
-             });
+            PageContent(new PageContent()
+            {
+                Title = System.Settings.Backoffice.Application.Title,
+                Subtitle = "Dashbord"
+            });
             return View();
         }
 

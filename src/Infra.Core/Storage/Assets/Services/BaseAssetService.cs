@@ -55,6 +55,7 @@ namespace Borg.Infra.Storage.Assets
         }
 
         #region IAssetService
+
         public virtual async Task<IAssetSpec<TKey>> Create(string name, byte[] content, string fileName, AssetState state, string contentType = "")
         {
             var id = await KeyProvider.Pop();
@@ -107,16 +108,17 @@ namespace Borg.Infra.Storage.Assets
             Logger.LogDebug("Added {@version} to {@asset}", dto.CurrentFile, dto);
             await Events.Publish(new FileAddedToAssetEvent<TKey>(filespec, dto)).AnyContext();
             return dto;
-        } 
-        #endregion
+        }
 
-        protected virtual async Task<IAssetSpec<TKey>> AddVersionAndReturnDto( TKey id, IAssetSpec<TKey> spec, IFileSpec filespec)
+        #endregion IAssetService
+
+        protected virtual async Task<IAssetSpec<TKey>> AddVersionAndReturnDto(TKey id, IAssetSpec<TKey> spec, IFileSpec filespec)
         {
-           var versionSpec = new VersionSpec(spec.Versions.Max(x => x.Version) + 1, filespec);
+            var versionSpec = new VersionSpec(spec.Versions.Max(x => x.Version) + 1, filespec);
             await Db.AddVersion(id, versionSpec).AnyContext();
 
             var versions = spec.Versions.Where(x => x.Version != versionSpec.Version)
-                .Select(x => x.ToDto()).Union(new[] {versionSpec}).ToList();
+                .Select(x => x.ToDto()).Union(new[] { versionSpec }).ToList();
             var dto = new AssetSpec<TKey>(spec.Id, spec.State, versionSpec, spec.Name);
             dto.Versions.Clear();
             foreach (var version in versions)

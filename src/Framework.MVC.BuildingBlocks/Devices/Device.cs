@@ -1,4 +1,5 @@
 ﻿using System;
+using Borg.Framework.System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Borg.Framework.MVC.BuildingBlocks.Devices
@@ -16,11 +17,13 @@ namespace Borg.Framework.MVC.BuildingBlocks.Devices
         public string Action { get; protected set; }
 
 
+
         protected internal void Populate(ViewContext context)
         {
             Controller = (context.ActionDescriptor.RouteValues.ContainsKey(ControllerKey)) ? context.ActionDescriptor.RouteValues[ControllerKey] : string.Empty;
             Area = (context.ActionDescriptor.RouteValues.ContainsKey(AreaKey)) ? context.ActionDescriptor.RouteValues[AreaKey] : string.Empty;
             Action = (context.ActionDescriptor.RouteValues.ContainsKey(ActionKey)) ? context.ActionDescriptor.RouteValues[ActionKey] : string.Empty;
+
         }
     }
 

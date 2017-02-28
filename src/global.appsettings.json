@@ -10,6 +10,7 @@
       "application": {
         "title": "Borg Backoffice",
         "logo": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",
+        "baseUrl": "https://localhost:44321/",
         "data": {
           "relational": {
             "connectionStrings": [
@@ -29,7 +30,7 @@
         "storage": {
           "sharedFolder": "K:\\Users\\dbitsanis.FUTURA\\Source\\Repos\\Borg", //"K:\\Users\\Mitsbits\\Source\\Repos\\Borg",
           "mediaFolder": "media"
-        } 
+        }
       },
       "pager": {
         "defaultRowCount": 20,
