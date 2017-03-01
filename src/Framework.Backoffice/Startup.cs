@@ -11,6 +11,7 @@ using Borg.Framework.Media.EventHandlers;
 using Borg.Framework.Media.Services;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
+using Borg.Framework.Services.Notifications;
 using Borg.Framework.System;
 using Borg.Infra;
 using Borg.Infra.CQRS;
@@ -23,6 +24,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +34,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
 
 namespace Borg.Framework.Backoffice
@@ -70,12 +71,9 @@ namespace Borg.Framework.Backoffice
 
             var scanner = new CurrentContextAssemblyProvider();
 
-
-
             services.AddDistributedMemoryCache();
 
             services.AddSession(options => options.CookieSecure = CookieSecurePolicy.SameAsRequest);
-
 
             services.AddDbContext<PagesDbContext>(options =>
                 options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
@@ -182,8 +180,6 @@ namespace Borg.Framework.Backoffice
 
             services.AddScoped<IHandlesEvent<FileAddedToAssetEvent<int>>, CacheNewImage>();
 
-
-
             services.AddScoped<IServerResponseProvider, TempDataResponseProvider>();
 
             services.AddDistributedMemoryCache();
@@ -195,12 +191,12 @@ namespace Borg.Framework.Backoffice
                 options.CookieHttpOnly = true;
             });
 
+            services.AddSingleton<INotificationService, InMemoryNotificationService>();
 
             services.AddScoped<ISerializer, JsonNetSerializer>();
 
             services.AddMvc();
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -222,7 +218,6 @@ namespace Borg.Framework.Backoffice
                 app.UseExceptionHandler("/error");
             }
 
-
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -240,7 +235,7 @@ namespace Borg.Framework.Backoffice
 
             app.UseIdentity();
             //app.UseIdentityServer();
-            app.UseSession(new SessionOptions() {CookieSecure = CookieSecurePolicy.SameAsRequest});
+            app.UseSession(new SessionOptions() { CookieSecure = CookieSecurePolicy.SameAsRequest });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

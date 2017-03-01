@@ -1,4 +1,5 @@
 ﻿using Borg.Infra.Relational;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,23 +50,77 @@ namespace Borg.Framework.Services.Notifications
 
         public Task Acknowledge(string notificationIdentifier)
         {
-            throw new System.NotImplementedException();
+            string recipient;
+            if (!_index.TryGetValue(notificationIdentifier, out recipient)) return null;
+            List<Notification> list;
+            if (!_db.TryGetValue(recipient, out list))
+            {
+                var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.InvariantCultureIgnoreCase));
+                hit.Acknowledged = true;
+                return Task.CompletedTask;
+            }
+            return null;
         }
 
         public Task Dismiss(string notificationIdentifier)
         {
-            throw new System.NotImplementedException();
+            string recipient;
+            if (!_index.TryGetValue(notificationIdentifier, out recipient)) return null;
+            List<Notification> list;
+            if (!_db.TryGetValue(recipient, out list))
+            {
+                var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.InvariantCultureIgnoreCase));
+                list.Remove(hit);
+                _index.TryRemove(notificationIdentifier, out recipient);
+                if (!list.Any())
+                {
+                    _db.TryRemove(recipient, out list);
+                }
+                else
+                {
+                    _db[recipient] = list;
+                }
+                return Task.CompletedTask;
+            }
+            return null;
         }
 
         public Task Add(INotification notification)
         {
             var dto = notification.ToDto();
-            List<Notification> list = new List<Notification>();
-            _db.GetOrAdd(notification.RecipientIdentifier, list);
+            List<Notification> list;
+            if (!_db.TryGetValue(notification.RecipientIdentifier, out list))
+            {
+                list = new List<Notification>();
+                _db.TryAdd(notification.RecipientIdentifier, list);
+            }
             _index.TryAdd(notification.NotificationIdentifier, notification.RecipientIdentifier);
             list.Add(dto);
-            _db[dto.RecipientIdentifier] = list;
+            //_db[dto.RecipientIdentifier] = list;
             return Task.CompletedTask;
+        }
+
+        public Task<IPagedResult<INotification>> Pending(string recipientIdentifier, int page, int rows)
+        {
+            if (_db.ContainsKey(recipientIdentifier))
+            {
+                List<Notification> list;
+                if (_db.TryGetValue(recipientIdentifier, out list))
+                {
+                    var count = list.Count(x => !x.Acknowledged);
+                    if (count > (page * rows)) page = (count / rows) + 1;
+                    var data =
+                        list.Where(x => !x.Acknowledged)
+                            .OrderByDescending(x => x.Timestamp)
+                            .Skip(page - 1)
+                            .Take(rows)
+                            .Cast<INotification>()
+                            .ToArray();
+                    var result = new PagedResult<INotification>(data, page, rows, count);
+                    return Task.FromResult((IPagedResult<INotification>)result);
+                }
+            }
+            return Task.FromResult(new PagedResult<INotification>(new List<INotification>(), 1, rows, 0) as IPagedResult<INotification>);
         }
     }
 

@@ -1,21 +1,31 @@
-﻿using System.Linq;
+﻿using Borg.Framework.Backoffice.Identity.Models;
+using Borg.Framework.Services.Notifications;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Borg.Framework.Backoffice.Identity.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 {
     public class MainHeaderNavBarViewComponent : ViewComponent
     {
+        private readonly INotificationService _notifications;
+
+        public MainHeaderNavBarViewComponent(INotificationService notifications)
+        {
+            _notifications = notifications;
+        }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var claims = User.Identity as ClaimsIdentity;
             var a = claims.FindFirst(x => x.Type == BorgClaims.Profile.Avatar).Value;
             var n = claims.Name;
             var roles = claims.Claims.Where(c => c.Type == claims.RoleClaimType).Select(x => x.Value);
-            var user = new SidebarUserInfoViewModel() {Nickname = n, Avatar = a, Roles = roles?.ToArray()};
-            return View(new MainHeaderNavBarViewModel() { UserInfo = user, }) ;
+            var user = new SidebarUserInfoViewModel() { Nickname = n, Avatar = a, Roles = roles?.ToArray() };
+            var pending = await _notifications.Pending(n, 1, 10);
+            user.Notifications = pending?.ToArray();
+            return View(new MainHeaderNavBarViewModel() { UserInfo = user, });
         }
     }
 

@@ -1,0 +1,54 @@
+﻿@using Borg.Infra.Messaging
+@model Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents.MainHeaderNavBarViewModel
+@{
+
+    Func<ResponseStatus, string> _iconClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg)
+        {
+
+            case ResponseStatus.Info:
+                result = "fa fa-info";
+                break;
+            case ResponseStatus.Warning:
+                result = "fa fa-warning";
+                break;
+            case ResponseStatus.Error:
+                result = "fa fa-ban";
+                break;
+            case ResponseStatus.Success:
+                result = "fa fa-check";
+                break;
+
+        }
+        return result;
+    };
+
+}
+<li class="dropdown notifications-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-bell-o"></i>
+        <span class="label label-warning">@Model.UserInfo.Notifications.Length</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">You have @Model.UserInfo.Notifications.Length notifications</li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+            <ul class="menu">
+                @foreach (var notification in Model.UserInfo.Notifications)
+                {
+                    <li>
+                        <p>
+                            <a href="#" data-id="@notification.NotificationIdentifier">
+                                <i class="@_iconClass(notification.ResponseStatus) text-aqua"></i> @notification.Title
+                            </a>
+                            @notification.Message
+                        </p>
+                    </li>
+                }
+            </ul>
+        </li>
+        <li class="footer"><a href="#" data-id="@Model.UserInfo.Nickname">View all</a></li>
+    </ul>
+</li>

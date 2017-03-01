@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Borg.Framework.System;
-using Microsoft.AspNetCore.Identity;
+﻿using Borg.Framework.System;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 {
@@ -23,9 +22,6 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
         }
     }
 
-
-
-
     public class SidebarSearchFormViewComponent : ViewComponent
     {
         public Task<IViewComponentResult> InvokeAsync()
@@ -34,7 +30,6 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
             return Task.FromResult(result);
         }
     }
-
 
     public class MainHeaderViewComponent : ViewComponent
     {
@@ -45,14 +40,15 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
         }
     }
 
-
     public class MainHeaderLogoViewComponent : ViewComponent
     {
-        private readonly BorgSettings _borg; 
+        private readonly BorgSettings _borg;
+
         public MainHeaderLogoViewComponent(BorgSettings borg)
         {
             _borg = borg;
         }
+
         public Task<IViewComponentResult> InvokeAsync()
         {
             var result = View(new MainHeaderLogoViewModel(_borg.Backoffice.Application)) as IViewComponentResult;
@@ -60,20 +56,17 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
         }
     }
 
-
     public class MainHeaderLogoViewModel
     {
         public MainHeaderLogoViewModel(ApplicationSettings settings)
         {
-            Title= settings.Title;
+            Title = settings.Title;
             Logo = settings.Logo;
-
         }
+
         public string Logo { get; }
         public string Title { get; }
     }
-
-
 
     public class MainFooterViewComponent : ViewComponent
     {
@@ -92,5 +85,4 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
             return Task.FromResult(result);
         }
     }
-
 }

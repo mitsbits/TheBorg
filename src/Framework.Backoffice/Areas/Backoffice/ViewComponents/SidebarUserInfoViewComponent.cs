@@ -1,24 +1,28 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using Borg.Framework.Backoffice.Identity.Models;
+﻿using Borg.Framework.Backoffice.Identity.Models;
+using Borg.Framework.Services.Notifications;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 {
     public class SidebarUserInfoViewComponent : ViewComponent
     {
-       
-        public SidebarUserInfoViewComponent()
+        //private readonly INotificationService _notifications;
+        public SidebarUserInfoViewComponent(/*INotificationService notifications*/)
         {
-         
+            //_notifications = notifications;
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var claims = User.Identity as ClaimsIdentity;
             var a = claims.FindFirst(x => x.Type == BorgClaims.Profile.Avatar).Value;
             var n = claims.Name;
-            return  View(new SidebarUserInfoViewModel() { Avatar =  a, Nickname = n}) ;
-   
+            var model = new SidebarUserInfoViewModel() { Avatar = a, Nickname = n };
+            // var pending = await _notifications.Pending(User.Identity.Name, 1, 10);
+            // model.Notifications = pending?.ToArray();
+            return View(model);
         }
     }
 
@@ -26,7 +30,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
     {
         public string Avatar { get; set; }
         public string Nickname { get; set; }
-
         public string[] Roles { get; set; } = new string[0];
+        public INotification[] Notifications { get; set; } = new INotification[0];
     }
 }

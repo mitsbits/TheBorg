@@ -1,5 +1,4 @@
-﻿using System;
-using Borg.Framework.MVC;
+﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
 using Borg.Infra.CQRS;
@@ -7,8 +6,8 @@ using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
-using Borg.Infra.Core.Messaging;
 
 namespace Borg.Framework.MVC
 {
@@ -89,12 +88,11 @@ namespace Borg.Framework.MVC
 
         #endregion Pager
 
-
         #region Redirect Messages
 
         protected void AddRedirectMessage(ResponseStatus status, string title, string message = "")
         {
-            this.AddRedirectMessages(System,new[] { new ServerResponse(status, title, message) } );
+            this.AddRedirectMessages(System, new[] { new ServerResponse(status, title, message) });
         }
 
         protected void AddRedirectMessage(Exception exception)

@@ -1,6 +1,7 @@
 ﻿@using Borg.Infra.Messaging
 
 @{
+    IServerResponseProvider feedback = TempDataResponseProvider.Create(ViewContext, Serializer);
 
     Func<IServerResponse, string> _containerClass = (msg) =>
     {
@@ -24,7 +25,6 @@
         }
         return result;
     };
-
 
     Func<IServerResponse, string> _calloutClass = (msg) =>
     {
@@ -72,9 +72,6 @@
         return result;
     };
 
-
-    IServerResponseProvider feedback = TempDataResponseProvider.Create(ViewContext, Serializer);
-
 }
 
 @if (feedback.Messages.Any())
@@ -114,12 +111,11 @@
                         <h4 class="modal-title"><i class="@_iconClass(message)"></i> &nbsp; <span> @message.Title</span></h4>
                     </div>
                     <div class="modal-body">
-                    
-                            <p>
-                                <span></span>
-                                @message.Message
-                            </p>
-                      
+
+                        <p>
+                            <span></span>
+                            @message.Message
+                        </p>
                     </div>
                 </div>
             </div>
