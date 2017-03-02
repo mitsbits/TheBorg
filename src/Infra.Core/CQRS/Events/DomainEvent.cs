@@ -25,7 +25,7 @@ namespace Borg.Infra.CQRS
         public void SetVersionAndResetTimestamp(int version)
         {
             Version = version;
-            TimeStamp = DateTimeOffset.UtcNow;
+            Timestamp = DateTimeOffset.UtcNow;
         }
     }
 }

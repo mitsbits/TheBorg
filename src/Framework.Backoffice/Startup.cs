@@ -191,7 +191,7 @@ namespace Borg.Framework.Backoffice
                 options.CookieHttpOnly = true;
             });
 
-            services.AddSingleton<INotificationService, InMemoryNotificationService>();
+            services.AddSingleton<IUserNotificationService, InMemoryUserNotificationService>();
 
             services.AddScoped<ISerializer, JsonNetSerializer>();
 

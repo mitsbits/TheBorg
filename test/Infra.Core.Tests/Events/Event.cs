@@ -18,9 +18,9 @@ namespace Infra.CQRS.Tests.Events
             var clock = DateTimeOffset.UtcNow;
             _event = new DummyEvent();
             var clock2 = DateTimeOffset.UtcNow;
-            _event.TimeStamp.ShouldNotBeNull();
-            clock.ShouldBeLessThanOrEqualTo(_event.TimeStamp);
-            clock2.ShouldBeGreaterThanOrEqualTo(_event.TimeStamp);
+            _event.Timestamp.ShouldNotBeNull();
+            clock.ShouldBeLessThanOrEqualTo(_event.Timestamp);
+            clock2.ShouldBeGreaterThanOrEqualTo(_event.Timestamp);
         }
 
         internal class DummyEvent : Event

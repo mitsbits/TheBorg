@@ -1,4 +1,6 @@
-﻿using Borg.Infra.Relational;
+﻿using Borg.Infra.CQRS;
+using Borg.Infra.Messaging;
+using Borg.Infra.Relational;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7,16 +9,22 @@ using System.Threading.Tasks;
 
 namespace Borg.Framework.Services.Notifications
 {
-    public class InMemoryNotificationService : INotificationService
+    public class InMemoryUserNotificationService : IUserNotificationService
     {
-        private static ConcurrentDictionary<string, List<Notification>> _db = new ConcurrentDictionary<string, List<Notification>>();
+        private readonly IEventBus _events;
+        private static ConcurrentDictionary<string, List<UserNotification>> _db = new ConcurrentDictionary<string, List<UserNotification>>();
         private static ConcurrentDictionary<string, string> _index = new ConcurrentDictionary<string, string>();
 
-        public Task<IPagedResult<INotification>> Find(string recipientIdentifier, int page, int rows)
+        public InMemoryUserNotificationService(IEventBus events)
+        {
+            _events = events;
+        }
+
+        public Task<IPagedResult<IUserNotification>> Find(string recipientIdentifier, int page, int rows)
         {
             if (_db.ContainsKey(recipientIdentifier))
             {
-                List<Notification> list;
+                List<UserNotification> list;
                 if (_db.TryGetValue(recipientIdentifier, out list))
                 {
                     var count = list.Count;
@@ -25,20 +33,21 @@ namespace Borg.Framework.Services.Notifications
                         list.OrderByDescending(x => x.Timestamp)
                             .Skip(page - 1)
                             .Take(rows)
-                            .Cast<INotification>()
+                            .Cast<IUserNotification>()
                             .ToArray();
-                    var result = new PagedResult<INotification>(data, page, rows, count);
-                    return Task.FromResult((IPagedResult<INotification>)result);
+                    var result = new PagedResult<IUserNotification>(data, page, rows, count);
+
+                    return Task.FromResult((IPagedResult<IUserNotification>)result);
                 }
             }
-            return Task.FromResult(new PagedResult<INotification>(new List<INotification>(), 1, rows, 0) as IPagedResult<INotification>);
+            return Task.FromResult(new PagedResult<IUserNotification>(new List<IUserNotification>(), 1, rows, 0) as IPagedResult<IUserNotification>);
         }
 
-        public async Task<INotification> Get(string notificationIdentifier)
+        public async Task<IUserNotification> Get(string notificationIdentifier)
         {
             string recipient;
             if (!_index.TryGetValue(notificationIdentifier, out recipient)) return null;
-            List<Notification> list;
+            List<UserNotification> list;
             if (!_db.TryGetValue(recipient, out list))
             {
                 _index.TryRemove(notificationIdentifier, out recipient);
@@ -52,7 +61,7 @@ namespace Borg.Framework.Services.Notifications
         {
             string recipient;
             if (!_index.TryGetValue(notificationIdentifier, out recipient)) return null;
-            List<Notification> list;
+            List<UserNotification> list;
             if (!_db.TryGetValue(recipient, out list))
             {
                 var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.InvariantCultureIgnoreCase));
@@ -66,7 +75,7 @@ namespace Borg.Framework.Services.Notifications
         {
             string recipient;
             if (!_index.TryGetValue(notificationIdentifier, out recipient)) return null;
-            List<Notification> list;
+            List<UserNotification> list;
             if (!_db.TryGetValue(recipient, out list))
             {
                 var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.InvariantCultureIgnoreCase));
@@ -85,26 +94,11 @@ namespace Borg.Framework.Services.Notifications
             return null;
         }
 
-        public Task Add(INotification notification)
-        {
-            var dto = notification.ToDto();
-            List<Notification> list;
-            if (!_db.TryGetValue(notification.RecipientIdentifier, out list))
-            {
-                list = new List<Notification>();
-                _db.TryAdd(notification.RecipientIdentifier, list);
-            }
-            _index.TryAdd(notification.NotificationIdentifier, notification.RecipientIdentifier);
-            list.Add(dto);
-            //_db[dto.RecipientIdentifier] = list;
-            return Task.CompletedTask;
-        }
-
-        public Task<IPagedResult<INotification>> Pending(string recipientIdentifier, int page, int rows)
+        public Task<IPagedResult<IUserNotification>> Pending(string recipientIdentifier, int page, int rows)
         {
             if (_db.ContainsKey(recipientIdentifier))
             {
-                List<Notification> list;
+                List<UserNotification> list;
                 if (_db.TryGetValue(recipientIdentifier, out list))
                 {
                     var count = list.Count(x => !x.Acknowledged);
@@ -114,21 +108,36 @@ namespace Borg.Framework.Services.Notifications
                             .OrderByDescending(x => x.Timestamp)
                             .Skip(page - 1)
                             .Take(rows)
-                            .Cast<INotification>()
+                            .Cast<IUserNotification>()
                             .ToArray();
-                    var result = new PagedResult<INotification>(data, page, rows, count);
-                    return Task.FromResult((IPagedResult<INotification>)result);
+                    var result = new PagedResult<IUserNotification>(data, page, rows, count);
+                    return Task.FromResult((IPagedResult<IUserNotification>)result);
                 }
             }
-            return Task.FromResult(new PagedResult<INotification>(new List<INotification>(), 1, rows, 0) as IPagedResult<INotification>);
+            return Task.FromResult(new PagedResult<IUserNotification>(new List<IUserNotification>(), 1, rows, 0) as IPagedResult<IUserNotification>);
+        }
+
+        public Task Add(string recipientIdentifier, ResponseStatus responseStatus, string title, string message)
+        {
+            var dto = new UserNotification() { Title = title, Message = message, RecipientIdentifier = recipientIdentifier, ResponseStatus = responseStatus };
+            List<UserNotification> list;
+            if (!_db.TryGetValue(dto.RecipientIdentifier, out list))
+            {
+                list = new List<UserNotification>();
+                _db.TryAdd(dto.RecipientIdentifier, list);
+            }
+            _index.TryAdd(dto.NotificationIdentifier, dto.RecipientIdentifier);
+            list.Add(dto);
+            var task = _events.Publish(new NotificationCreatedEvent(dto));
+            return task;
         }
     }
 
     internal static class InMemoryNotificationServiceExtensions
     {
-        public static Notification ToDto(this INotification source)
+        public static UserNotification ToDto(this IUserNotification source)
         {
-            return new Notification() { Title = source.Title, Message = source.Message, RecipientIdentifier = source.RecipientIdentifier, ResponseStatus = source.ResponseStatus };
+            return new UserNotification() { Title = source.Title, Message = source.Message, RecipientIdentifier = source.RecipientIdentifier, ResponseStatus = source.ResponseStatus };
         }
     }
 }

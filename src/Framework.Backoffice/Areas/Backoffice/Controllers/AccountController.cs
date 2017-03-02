@@ -18,6 +18,8 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Borg.Framework.Services.Notifications;
+using Borg.Infra.CQRS;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -34,6 +36,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly AccountService _account;
+        private readonly ICommandBus _commandBus;
 
         public AccountController(
             ISystemService<BorgSettings> system,
@@ -43,7 +46,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             ISmsSender smsSender,
             IIdentityServerInteractionService interaction,
             IHttpContextAccessor httpContext,
-            IClientStore clientStore) : base(system)
+            IClientStore clientStore, ICommandBus commandBus) : base(system)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -52,6 +55,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             _logger = System.CreateLogger<AccountController>();
             _interaction = interaction;
             _clientStore = clientStore;
+            _commandBus = commandBus;
 
             _account = new AccountService(interaction, httpContext, clientStore);
         }

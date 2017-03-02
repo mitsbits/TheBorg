@@ -20,9 +20,9 @@ namespace Infra.CQRS.Tests.Events
             var clock = DateTimeOffset.UtcNow;
             _event = new DummyDomainEvent();
             var clock2 = DateTimeOffset.UtcNow;
-            _event.TimeStamp.ShouldNotBeNull();
-            clock.ShouldBeLessThanOrEqualTo(_event.TimeStamp);
-            clock2.ShouldBeGreaterThanOrEqualTo(_event.TimeStamp);
+            _event.Timestamp.ShouldNotBeNull();
+            clock.ShouldBeLessThanOrEqualTo(_event.Timestamp);
+            clock2.ShouldBeGreaterThanOrEqualTo(_event.Timestamp);
         }
 
         [Fact]
@@ -30,10 +30,10 @@ namespace Infra.CQRS.Tests.Events
         {
             _event = new DummyDomainEvent(_eventKey, 1);
             _event.Version.ShouldBe(1);
-            var oldTimestamp = _event.TimeStamp;
+            var oldTimestamp = _event.Timestamp;
             _event.SetVersionAndResetTimestamp(3);
             _event.Version.ShouldBe(3);
-            _event.TimeStamp.ShouldBeGreaterThanOrEqualTo(oldTimestamp);
+            _event.Timestamp.ShouldBeGreaterThanOrEqualTo(oldTimestamp);
         }
 
         internal class DummyDomainEvent : DomainEvent<string>

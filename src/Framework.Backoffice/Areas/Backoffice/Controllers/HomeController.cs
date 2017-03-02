@@ -5,6 +5,7 @@ using Borg.Framework.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -13,11 +14,11 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     public class HomeController : BackofficeController
     {
-        private readonly INotificationService _notifications;
+        private readonly IUserNotificationService _userNotifications;
 
-        public HomeController(ISystemService<BorgSettings> systemService, INotificationService notifications) : base(systemService)
+        public HomeController(ISystemService<BorgSettings> systemService, IUserNotificationService userNotifications) : base(systemService)
         {
-            _notifications = notifications;
+            _userNotifications = userNotifications;
         }
 
         public async Task<IActionResult> Index()
@@ -27,12 +28,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 Title = System.Settings.Backoffice.Application.Title,
                 Subtitle = "Dashbord"
             });
-            await _notifications.Info(User.Identity.Name, PageContent<PageContent>().Title,
-                PageContent<PageContent>().Subtitle);
-            await _notifications.Error(User.Identity.Name, PageContent<PageContent>().Title,
-                PageContent<PageContent>().Subtitle);
-            await _notifications.Success(User.Identity.Name, PageContent<PageContent>().Title,
-                PageContent<PageContent>().Subtitle);
+           await _userNotifications.Info(User.GetSubjectId(), "hey", "bro");
             return View();
         }
 

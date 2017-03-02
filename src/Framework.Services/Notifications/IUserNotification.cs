@@ -3,7 +3,7 @@ using System;
 
 namespace Borg.Framework.Services.Notifications
 {
-    public interface INotification
+    public interface IUserNotification
     {
         string NotificationIdentifier { get; }
         string RecipientIdentifier { get; }

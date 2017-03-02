@@ -13,6 +13,6 @@ namespace Borg.Infra.Storage.Assets
 
         public IFileSpec File { get; }
         public IAssetSpec<TKey> Asset { get; }
-        public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset Timestamp { get; } = DateTimeOffset.UtcNow;
     }
 }

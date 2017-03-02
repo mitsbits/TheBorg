@@ -28,9 +28,10 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 
     public class SidebarUserInfoViewModel
     {
+        public string Id { get; set; }
         public string Avatar { get; set; }
         public string Nickname { get; set; }
         public string[] Roles { get; set; } = new string[0];
-        public INotification[] Notifications { get; set; } = new INotification[0];
+        public IUserNotification[] UserNotifications { get; set; } = new IUserNotification[0];
     }
 }

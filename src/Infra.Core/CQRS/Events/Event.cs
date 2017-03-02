@@ -4,6 +4,6 @@ namespace Borg.Infra.CQRS
 {
     public abstract class Event : IEvent
     {
-        public DateTimeOffset TimeStamp { get; protected set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset Timestamp { get; protected set; } = DateTimeOffset.UtcNow;
     }
 }

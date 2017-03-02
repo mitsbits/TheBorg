@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using Borg.Infra;
 using Borg.Infra.Core.Messaging;
-using Borg.Infra.Messaging;
 
 namespace Borg.Framework.System
 {
@@ -52,41 +50,6 @@ namespace Borg.Framework.System
             var bucket = source == null ? new List<ServerResponse>() : new List<ServerResponse>(source.Select(x => x));
             bucket.AddRange(messages);
             controller.TempData[TempDataResponseProvider.Key] = AsyncHelpers.RunSync(() => serializer.SerializeToStringAsync(bucket));
-        }
-    }
-
-    public class ServerResponse : IServerResponse
-    {
-        public ResponseStatus Status { get; set; }
-        public string Title { get; set; }
-        public string Message { get; set; }
-
-        protected ServerResponse()
-        {
-        }
-
-        public ServerResponse(ResponseStatus status, string title, string message)
-        {
-            Status = status;
-            Title = title;
-            Message = message;
-        }
-
-        public ServerResponse(Exception exc)
-        {
-            if (exc is ApplicationException)
-            {
-                Status = ResponseStatus.Warning;
-                Title = "Application Error";
-                Message = exc.Message;
-            }
-            else
-            {
-                Status = ResponseStatus.Error;
-                Title = exc.GetType().ToString();
-                Message = exc.Message;
-            }
-
         }
     }
 }
