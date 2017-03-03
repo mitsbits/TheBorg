@@ -26,9 +26,9 @@ namespace Borg.Framework.Services.Notifications
 
     public class NotifyUserCommandHandler : IHandlesCommand<NotifyUserCommand>
     {
-        private readonly IUserNotificationService _service;
+        private readonly IUserNotificationsStore _service;
 
-        public NotifyUserCommandHandler(IUserNotificationService service)
+        public NotifyUserCommandHandler(IUserNotificationsStore service)
         {
             _service = service;
         }

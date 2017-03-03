@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,23 @@ using System.Threading.Tasks;
 
 namespace Borg.Infra.Messaging
 {
+    public class DefaultBroadcaster : BroadcasterBase
+    {
+        public DefaultBroadcaster(ILoggerFactory loggerFactory, IEnumerable<IMessagePublisher> publishers) : base(loggerFactory, publishers)
+        {
+        }
+    }
     public abstract class BroadcasterBase : IBroadcaster
     {
         protected readonly IEnumerable<IMessagePublisher> _publishers;
+        protected ILogger Logger { get; }
 
-        protected BroadcasterBase(IEnumerable<IMessagePublisher> publishers)
+        protected IEnumerable<IMessagePublisher> Publishers => _publishers;
+
+        protected BroadcasterBase(ILoggerFactory loggerFactory, IEnumerable<IMessagePublisher> publishers)
         {
             if (publishers == null) throw new ArgumentNullException(nameof(publishers));
+            Logger = loggerFactory.CreateLogger(GetType());
             _publishers = publishers;
         }
 
@@ -24,6 +35,8 @@ namespace Borg.Infra.Messaging
             var broadcastTopics = sanitized.Any();
 
             List<Task> tasks = null;
+
+            Logger.LogDebug("Broadcasting {@message} to {topics} with {delay} on {publishers}", message, topics, delay, _publishers);
 
             if (broadcastTopics)
             {

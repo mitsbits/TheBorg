@@ -16,7 +16,7 @@ namespace Infra.CQRS.Tests.Domain
 
         public AggregateRepositoryTests()
         {
-            _inMemoryPublisher = new InMemoryPublisher();
+            _inMemoryPublisher = new InMemoryMessagePublisher();
             _inMemoryEventStore = new InMemoryEventStore<string>(_inMemoryPublisher);
             _inMemoryProcessor = new InMemoryProcessor();
             _repository = new AggregateRepository<string>(_inMemoryEventStore, _inMemoryPublisher);
@@ -24,8 +24,8 @@ namespace Infra.CQRS.Tests.Domain
             DummyAggregateCommandHandler commandHandler = new DummyAggregateCommandHandler(_repository);
             ((InMemoryProcessor)_inMemoryProcessor).RegisterHandler<CreateDummyAggregateCommand>((c) => AsyncHelpers.RunSync(() => commandHandler.Execute(c)));
             ((InMemoryProcessor)_inMemoryProcessor).RegisterHandler<ChangeDummyAggregateNameCommand>((c) => AsyncHelpers.RunSync(() => commandHandler.Execute(c)));
-            ((InMemoryPublisher)_inMemoryPublisher).RegisterHandler<DummyAggregateCreatedEvent>((e) => (new DummyAggregateCreatedEventHandler()).Handle(e));
-            ((InMemoryPublisher)_inMemoryPublisher).RegisterHandler<DummyAggregateNameChangedEvent>((e) => (new DummyAggregateNameChangedEventHandler()).Handle(e));
+            ((InMemoryMessagePublisher)_inMemoryPublisher).RegisterHandler<DummyAggregateCreatedEvent>((e) => (new DummyAggregateCreatedEventHandler()).Handle(e));
+            ((InMemoryMessagePublisher)_inMemoryPublisher).RegisterHandler<DummyAggregateNameChangedEvent>((e) => (new DummyAggregateNameChangedEventHandler()).Handle(e));
         }
 
         [Fact]

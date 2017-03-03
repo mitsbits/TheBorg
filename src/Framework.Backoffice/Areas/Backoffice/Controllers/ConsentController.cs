@@ -22,7 +22,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly ConsentService _consent;
 
         public ConsentController(
-            ISystemService<BorgSettings> system,
+            IBackofficeService<BorgSettings> system,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IResourceStore resourceStore) :base(system)

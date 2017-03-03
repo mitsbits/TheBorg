@@ -24,7 +24,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         protected IDbContextScopeFactory ScopeFactory { get; }
         protected ICRUDRespoditory<TComponent> Repository { get; }
 
-        public ComponentController(ISystemService<BorgSettings> systemService, IDbContextScopeFactory scopeFactory) : base(systemService)
+        public ComponentController(IBackofficeService<BorgSettings> systemService, IDbContextScopeFactory scopeFactory) : base(systemService)
         {
             ScopeFactory = scopeFactory;
             Repository = ScopeFactory.CreateRepo<ICRUDRespoditory<TComponent>>();

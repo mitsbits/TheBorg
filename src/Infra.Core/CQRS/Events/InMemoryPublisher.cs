@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Borg.Infra.CQRS
 {
-    public class InMemoryPublisher : IEventBus
+    public class InMemoryMessagePublisher : IEventBus
     {
         private readonly Dictionary<Type, List<Action<IEvent>>> _routes = new Dictionary<Type, List<Action<IEvent>>>();
 

@@ -26,7 +26,7 @@ namespace Borg.Framework.Media
             if (_settings != null)
             {
                 var ops =
-                    builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
+                    builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["borg"])
                         .Options;
                 var context = new AssetsDbContext(ops);
                 return context;

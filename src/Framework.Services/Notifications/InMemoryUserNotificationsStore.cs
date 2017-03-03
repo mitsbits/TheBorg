@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Borg.Framework.Services.Notifications
 {
-    public class InMemoryUserNotificationService : IUserNotificationService
+    public class InMemoryUserNotificationsStore : IUserNotificationsStore
     {
         private readonly IEventBus _events;
         private static ConcurrentDictionary<string, List<UserNotification>> _db = new ConcurrentDictionary<string, List<UserNotification>>();
         private static ConcurrentDictionary<string, string> _index = new ConcurrentDictionary<string, string>();
 
-        public InMemoryUserNotificationService(IEventBus events)
+        public InMemoryUserNotificationsStore(IEventBus events)
         {
             _events = events;
         }
@@ -28,7 +28,9 @@ namespace Borg.Framework.Services.Notifications
                 if (_db.TryGetValue(recipientIdentifier, out list))
                 {
                     var count = list.Count;
-                    if (count > (page * rows)) page = (count / rows) + 1;
+                    var totalPages = (int)Math.Ceiling((double)count / rows);
+                    if (page > totalPages) page = totalPages;
+
                     var data =
                         list.OrderByDescending(x => x.Timestamp)
                             .Skip(page - 1)

@@ -39,7 +39,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly ICommandBus _commandBus;
 
         public AccountController(
-            ISystemService<BorgSettings> system,
+            IBackofficeService<BorgSettings> system,
             UserManager<BorgUser> userManager,
             SignInManager<BorgUser> signInManager,
             IEmailSender emailSender,

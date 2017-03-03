@@ -10,9 +10,9 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 {
     public class MainHeaderNavBarViewComponent : ViewComponent
     {
-        private readonly IUserNotificationService _userNotifications;
+        private readonly IUserNotificationsStore _userNotifications;
 
-        public MainHeaderNavBarViewComponent(IUserNotificationService userNotifications)
+        public MainHeaderNavBarViewComponent(IUserNotificationsStore userNotifications)
         {
             _userNotifications = userNotifications;
         }

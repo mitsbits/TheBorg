@@ -24,7 +24,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
         private readonly ILogger _logger;
 
         public UserProfileController(
-        ISystemService<BorgSettings> system,
+        IBackofficeService<BorgSettings> system,
         UserManager<BorgUser> userManager,
         SignInManager<BorgUser> signInManager,
         IEmailSender emailSender,

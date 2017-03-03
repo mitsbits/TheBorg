@@ -22,15 +22,13 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Area("backoffice")]
     public class UsersController : BackofficeController
     {
-        private readonly ICommandBus _bus;
-        private readonly IQueryBus _queries;
+
         private readonly UserManager<BorgUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(ISystemService<BorgSettings> systemService, ICommandBus bus, IQueryBus queries, UserManager<BorgUser> userManager, RoleManager<IdentityRole> roleManager) : base(systemService)
+        public UsersController(IBackofficeService<BorgSettings> systemService,  UserManager<BorgUser> userManager, RoleManager<IdentityRole> roleManager) : base(systemService)
         {
-            _bus = bus;
-            _queries = queries;
+ 
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -52,7 +50,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
             var query = new UsersQueryRequest(where, Pager.Current, Pager.RowCount,
                 new[] { new OrderByInfo<BorgUser>() { Ascending = true, Property = u => u.Email } },
                 u => u.Claims, u => u.Logins, u => u.Roles);
-            var result = await _queries.Fetch(query);
+            var result = await Backoffice.Fetch(query);
 
             PageContent(page);
             return View(result);

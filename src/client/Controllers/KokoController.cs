@@ -19,7 +19,7 @@ namespace Borg.Client.Controllers
             content.Title = "this came from controller";
             PageContent(content);
 
-            await Broadcaster.BroadcastMessage(new message() { Message = "hallo" });
+           // await Broadcaster.BroadcastMessage(new message() { Message = "hallo" });
 
             return View();
         }

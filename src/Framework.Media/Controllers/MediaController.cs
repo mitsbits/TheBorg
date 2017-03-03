@@ -18,7 +18,7 @@ namespace Borg.Framework.Media
     {
         private readonly IMediaService _mediaService;
 
-        public MediaController(ISystemService<BorgSettings> systemService, IMediaService mediaService) : base(systemService)
+        public MediaController(IBackofficeService<BorgSettings> systemService, IMediaService mediaService) : base(systemService)
         {
             _mediaService = mediaService;
         }

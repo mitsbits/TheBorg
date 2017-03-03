@@ -9,7 +9,7 @@ namespace Infra.CQRS.Tests.Events
 {
     public class EventBusTests
     {
-        private InMemoryPublisher _inMemoryPublisher;
+        private InMemoryMessagePublisher _inMemoryPublisher;
 
         private EventTests.DummyEvent _eventA;
         private EventTests.DummyEvent _eventB;
@@ -41,7 +41,7 @@ namespace Infra.CQRS.Tests.Events
         {
             Should.NotThrow(() =>
             {
-                _inMemoryPublisher = new InMemoryPublisher();
+                _inMemoryPublisher = new InMemoryMessagePublisher();
                 Action<EventTests.DummyEvent> e1 = @event => _eventHandler.Object.Handle(@event);
                 Action<DomainEventTests.DummyDomainEvent> e2 = @event => _domainEventHandler.Object.Handle(@event);
                 _inMemoryPublisher.RegisterHandler(e1);
@@ -52,7 +52,7 @@ namespace Infra.CQRS.Tests.Events
         [Fact]
         public void check_that_a_publisher_dispatches_events()
         {
-            _inMemoryPublisher = new InMemoryPublisher();
+            _inMemoryPublisher = new InMemoryMessagePublisher();
             Action<EventTests.DummyEvent> e1 = @event => _eventHandler.Object.Handle(@event).ConfigureAwait(false);
             Action<DomainEventTests.DummyDomainEvent> e2 = @event => _domainEventHandler.Object.Handle(@event).ConfigureAwait(false);
             _inMemoryPublisher.RegisterHandler(e1);

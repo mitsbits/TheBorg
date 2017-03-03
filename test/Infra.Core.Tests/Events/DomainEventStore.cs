@@ -15,7 +15,7 @@ namespace Infra.CQRS.Tests.Events
 
         public DomainEventStoreTests()
         {
-            _inMemoryEventStore = new InMemoryEventStore<string>(new InMemoryPublisher());
+            _inMemoryEventStore = new InMemoryEventStore<string>(new InMemoryMessagePublisher());
         }
 
         [Fact]

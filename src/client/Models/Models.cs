@@ -1,5 +1,6 @@
 ﻿using Borg.Infra.Messaging;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Borg.Client.Models
 {
@@ -44,7 +45,7 @@ namespace Borg.Client.Models
 
     public class AppBroadcaster : BroadcasterBase
     {
-        public AppBroadcaster(IEnumerable<IMessagePublisher> publishers) : base(publishers)
+        public AppBroadcaster(ILoggerFactory loggerFactory, IEnumerable<IMessagePublisher> publishers) : base(loggerFactory,publishers)
         {
         }
     }

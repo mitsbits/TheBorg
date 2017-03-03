@@ -11,7 +11,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize][Area("backoffice")]
     public class SimplePagesController : ComponentController<SimplePage>
     {
-        public SimplePagesController(ISystemService<BorgSettings> systemService, IDbContextScopeFactory scopeFactory) : base(systemService, scopeFactory)
+        public SimplePagesController(IBackofficeService<BorgSettings> systemService, IDbContextScopeFactory scopeFactory) : base(systemService, scopeFactory)
         {
         }
 

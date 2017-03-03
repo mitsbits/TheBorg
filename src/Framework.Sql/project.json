@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Framework.Services": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
+    "Framework.System": "1.0.0-*",
+    "Infra.EFCore": "1.0.0-*",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.2"
+  },
+
+  "frameworks": {
+    "net46": {
+      "buildOptions": {
+        "define": [ "NET46" ]
+      }
+    }
+  }
+}

@@ -75,14 +75,15 @@ namespace Borg.Framework.Backoffice
 
             services.AddSession(options => options.CookieSecure = CookieSecurePolicy.SameAsRequest);
 
+          
             services.AddDbContext<PagesDbContext>(options =>
-                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
+                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["borg"]));
 
             services.AddDbContext<AssetsDbContext>(options =>
-                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"]));
+                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["borg"]));
 
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["identity"]));
+                options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["identity"]));
 
             services.AddIdentity<BorgUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
@@ -131,6 +132,9 @@ namespace Borg.Framework.Backoffice
             services.AddScoped<IDeviceAccessor<IDevice>, DefaultDeviceAccessor>();
 
             services.AddSingleton<ISystemService<BorgSettings>, SystemService>();
+            services.AddSingleton<IBackofficeService<BorgSettings>, BackofficeService>();
+            services.AddSingleton<IBroadcaster, DefaultBroadcaster>();
+            services.AddSingleton<IMessagePublisher, InMemoryMessageBus>();
 
             services.AddSingleton<IDbContextFactory, FactoryDbContextFactory>();
             services.AddSingleton<IDbContextScopeFactory, ServiceLocatorDbContextScopeFactory>();
@@ -182,7 +186,7 @@ namespace Borg.Framework.Backoffice
 
             services.AddScoped<IServerResponseProvider, TempDataResponseProvider>();
 
-            services.AddDistributedMemoryCache();
+   
 
             services.AddSession(options =>
             {
@@ -191,7 +195,8 @@ namespace Borg.Framework.Backoffice
                 options.CookieHttpOnly = true;
             });
 
-            services.AddSingleton<IUserNotificationService, InMemoryUserNotificationService>();
+            //services.AddSingleton<IUserNotificationsStore, InMemoryUserNotificationsStore>();
+            services.AddSqlUserNotifications(Settings);
 
             services.AddScoped<ISerializer, JsonNetSerializer>();
 

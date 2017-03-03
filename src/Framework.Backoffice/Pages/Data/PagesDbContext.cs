@@ -70,7 +70,7 @@ namespace Borg.Framework.Backoffice.Pages.Data
         {
             var builder = new DbContextOptionsBuilder<PagesDbContext>();
             var ops =
-                builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
+                builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["borg"])
                     .Options;
             var context = new PagesDbContext(ops);
             return context;

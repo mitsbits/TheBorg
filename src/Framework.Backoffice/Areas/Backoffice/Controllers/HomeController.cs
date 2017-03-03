@@ -14,9 +14,9 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     public class HomeController : BackofficeController
     {
-        private readonly IUserNotificationService _userNotifications;
+        private readonly IUserNotificationsStore _userNotifications;
 
-        public HomeController(ISystemService<BorgSettings> systemService, IUserNotificationService userNotifications) : base(systemService)
+        public HomeController(IBackofficeService<BorgSettings> systemService, IUserNotificationsStore userNotifications) : base(systemService)
         {
             _userNotifications = userNotifications;
         }

@@ -114,7 +114,7 @@ namespace Borg.Framework.Backoffice.Identity.Data
             if (_settings != null)
             {
                 var ops =
-                    builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConsectionStringIndex["borg"])
+                    builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["identity"])
                         .Options;
                 var context = new IdentityDbContext(ops);
                 return context;

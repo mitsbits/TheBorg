@@ -58,7 +58,7 @@ namespace Borg.Framework.System
     {
         public ConnectionStringSettings[] ConnectionStrings { get; set; }
 
-        public IReadOnlyDictionary<string, string> ConsectionStringIndex => ConnectionStrings.ToDictionary(x => x.Key, x => x.Value);
+        public IReadOnlyDictionary<string, string> ConnectionStringIndex => ConnectionStrings.ToDictionary(x => x.Key, x => x.Value);
     }
 
     public class ConnectionStringSettings

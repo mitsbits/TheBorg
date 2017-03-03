@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 
 namespace Borg.Framework.MVC
@@ -17,9 +16,7 @@ namespace Borg.Framework.MVC
         {
             var text = string.Join(Seperator, Data);
             output.TagName = string.Empty;
-            var tagHelperContent = output.Content.SetHtmlContent(new HtmlString(text));
+            var tagHelperContent = output.Content.SetContent(text);
         }
-
-
     }
 }
