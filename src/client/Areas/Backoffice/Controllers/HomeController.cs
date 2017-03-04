@@ -21,7 +21,7 @@ namespace Borg.Client.Areas.Backoffice.Controllers
         private readonly IDbContextScopeFactory _uow;
         private readonly ICRUDRespoditory<Page> _repo;
         private readonly IBackgroundJobClient _jobClient;
-        public HomeController(ISystemService<BorgSettings> systemService, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo, IBackgroundJobClient jobClient) : base(systemService)
+        public HomeController(IBackofficeService<BorgSettings> systemService, IDbContextScopeFactory uow, ICRUDRespoditory<Page> repo, IBackgroundJobClient jobClient) : base(systemService)
         {
             _uow = uow;
             _repo = repo;

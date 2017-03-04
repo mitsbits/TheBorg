@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 
 namespace Borg.Framework.System
 {
-
-
-
     public class BorgSettings
     {
         public SystemSettings System { get; set; }
@@ -19,13 +15,14 @@ namespace Borg.Framework.System
         public string Version { get; set; }
     }
 
-    public class BackofficeSettings: IBorgSystemSettings
+    public class BackofficeSettings : IBorgSystemSettings
     {
         public string Framework { get; set; }
         public string Version { get; set; }
         public ApplicationSettings Application { get; set; }
         public PagerSettings Pager { get; set; } = new PagerSettings();
     }
+
     public class PagerSettings
     {
         public int DefaultRowCount { get; set; } = 10;
@@ -49,6 +46,7 @@ namespace Borg.Framework.System
         public string SharedFolder { get; set; }
         public string MediaFolder { get; set; } = "media";
     }
+
     public class DataSettings
     {
         public RelationalSettings Relational { get; set; }
@@ -72,8 +70,4 @@ namespace Borg.Framework.System
         string Framework { get; }
         string Version { get; }
     }
-
-
-
 }
-

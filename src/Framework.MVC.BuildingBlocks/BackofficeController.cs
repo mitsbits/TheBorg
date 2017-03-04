@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Borg.Framework.MVC.BuildingBlocks.Interactions;
 using Borg.Framework.System;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;

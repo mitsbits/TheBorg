@@ -1,7 +1,7 @@
 using System;
 using Borg.Infra.Messaging;
 
-namespace Borg.Framework.System
+namespace Borg.Framework.MVC.BuildingBlocks.Interactions
 {
     public class ServerResponse : IServerResponse
     {

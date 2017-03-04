@@ -34,6 +34,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
+using Borg.Framework.MVC.BuildingBlocks.Interactions;
 using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
 
 namespace Borg.Framework.Backoffice

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Borg.Infra;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
-using Borg.Infra;
-using Borg.Infra.Core.Messaging;
 
-namespace Borg.Framework.System
+namespace Borg.Framework.MVC.BuildingBlocks.Interactions
 {
     public class TempDataResponseProvider : IServerResponseProvider
     {
@@ -30,7 +31,7 @@ namespace Borg.Framework.System
         {
             if (context.TempData == null) return Empty();
             if (!context.TempData.ContainsKey(key)) return Empty();
-            var bucket = AsyncHelpers.RunSync(()=> serializer.DeserializeAsync<List<ServerResponse>>( context.TempData[key].ToString()));
+            var bucket = AsyncHelpers.RunSync( ()=> serializer.DeserializeAsync<List<ServerResponse>>( context.TempData[key].ToString()));
             if (bucket == null || !bucket.Any()) return Empty();
             return new TempDataResponseProvider(bucket);
         }
@@ -46,7 +47,7 @@ namespace Borg.Framework.System
         public static void AddRedirectMessages(this Controller controller, ISerializer serializer, params ServerResponse[] messages)
         {
             var txt = controller.TempData[TempDataResponseProvider.Key]?.ToString() ?? string.Empty;
-            var source = AsyncHelpers.RunSync(()=> serializer.DeserializeAsync<List<ServerResponse>>(txt));
+            var source = AsyncHelpers.RunSync( ()=> serializer.DeserializeAsync<List<ServerResponse>>(txt));
             var bucket = source == null ? new List<ServerResponse>() : new List<ServerResponse>(source.Select(x => x));
             bucket.AddRange(messages);
             controller.TempData[TempDataResponseProvider.Key] = AsyncHelpers.RunSync(() => serializer.SerializeToStringAsync(bucket));
