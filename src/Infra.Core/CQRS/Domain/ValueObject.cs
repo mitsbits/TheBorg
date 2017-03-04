@@ -96,7 +96,7 @@ namespace Borg.Infra.CQRS
             {
                 fields.AddRange(t.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public));
 
-                t = t.BaseType;
+                t = t.GetTypeInfo().BaseType;
             }
 
             return fields;

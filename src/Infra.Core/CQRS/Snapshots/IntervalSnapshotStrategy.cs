@@ -21,7 +21,7 @@ namespace Borg.Infra.CQRS
             }
             var memberInfo = aggregateType.GetTypeInfo().BaseType;
             if (memberInfo != null && memberInfo.GetTypeInfo().IsGenericType
-                && memberInfo.GetGenericTypeDefinition().GetInterfaces().Any(x => x.IsGenericType
+                && memberInfo.GetGenericTypeDefinition().GetInterfaces().Any(x => x.GetTypeInfo().IsGenericType
                 && x.GetGenericTypeDefinition() == typeof(ISnapshotAggregateRoot<,>)))
             {
                 return true;

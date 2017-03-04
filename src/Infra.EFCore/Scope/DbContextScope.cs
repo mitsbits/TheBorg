@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -166,7 +167,7 @@ namespace Borg.Infra.EFCore
                         var pk = stateInCurrentScope.EntityType.FindPrimaryKey().Properties.Single();
                         var pkValue = stateInCurrentScope
                             .Entity
-                            .GetType()
+                            .GetType().GetTypeInfo()
                             .GetProperty(pk.Name)
                             .GetValue(stateInCurrentScope.Entity);
                         var stateInParentScope = correspondingParentContext
@@ -174,7 +175,7 @@ namespace Borg.Infra.EFCore
                             .GetInfrastructure()
                             .Entries
                             .SingleOrDefault(e => e.Entity.GetType() == stateInCurrentScope.Entity.GetType()
-                            && e.Entity.GetType().GetProperty(pk.Name).GetValue(e.Entity).Equals(pkValue));
+                            && e.Entity.GetType().GetTypeInfo().GetProperty(pk.Name).GetValue(e.Entity).Equals(pkValue));
                         // Now we can see if that entity exists in the parent DbContext instance and refresh it.
 
                         if (stateInParentScope != null)
@@ -223,7 +224,7 @@ namespace Borg.Infra.EFCore
                         var pk = stateInCurrentScope.EntityType.FindPrimaryKey().Properties.Single();
                         var pkValue = stateInCurrentScope
                             .Entity
-                            .GetType()
+                            .GetType().GetTypeInfo()
                             .GetProperty(pk.Name)
                             .GetValue(stateInCurrentScope.Entity);
                         var stateInParentScope = correspondingParentContext
@@ -231,7 +232,7 @@ namespace Borg.Infra.EFCore
                             .GetInfrastructure()
                             .Entries
                             .SingleOrDefault(e => e.Entity.GetType() == stateInCurrentScope.Entity.GetType()
-                                && e.Entity.GetType().GetProperty(pk.Name).GetValue(e.Entity).Equals(pkValue));
+                                && e.Entity.GetType().GetTypeInfo().GetProperty(pk.Name).GetValue(e.Entity).Equals(pkValue));
                         if (stateInParentScope != null)
                         {
                             if (stateInParentScope.EntityState == EntityState.Unchanged)

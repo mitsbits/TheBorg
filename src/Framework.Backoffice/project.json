@@ -1,14 +1,14 @@
 {
   "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.1.0",
+      "type": "platform"
+    },
     "Framework.System": "1.0.0-*",
     "IdentityServer4.AspNetIdentity": "1.0.0",
     "IdentityServer4.EntityFramework": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
-    "Microsoft.AspNetCore.Razor.Tools": {
-      "version": "1.0.0-preview2-final",
-      "type": "build"
-    },
     "Microsoft.EntityFrameworkCore.Tools": {
       "type": "build",
       "version": "1.0.0-preview2-final"
@@ -22,8 +22,6 @@
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Serilog.Extensions.Logging.File": "1.0.0",
-    "Serilog.Settings.Configuration": "2.2.0",
     "Framework.MVC.BuildingBlocks": "1.0.0-*",
     "Framework.System.Domain": "1.0.0-*",
     "Infra.EFCore": "1.0.0-*",
@@ -35,18 +33,30 @@
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.1",
     "Microsoft.AspNetCore.Session": "1.1.0",
-    "Framework.Sql": "1.0.0-*"
+    "Framework.Sql": "1.0.0-*",
+    "Microsoft.AspNetCore.Razor.Tools": {
+      "version": "1.1.0-preview4-final",
+      "type": "build"
+    },
+    "Serilog": "2.4.0",
+    "Serilog.Settings.Configuration": "2.3.0-dev-00042",
+    "Serilog.Extensions.Logging": "1.4.1-dev-10147"
   },
 
   "tools": {
     "Microsoft.EntityFrameworkCore.Tools": "1.0.0-preview2-final",
-    "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
-    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
-    "BundlerMinifier.Core": "2.3.327"
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
+    "BundlerMinifier.Core": "2.4.337"
   },
 
   "frameworks": {
-    "net46": {}
+    "netcoreapp1.0": {
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
   },
 
   "buildOptions": {
@@ -57,6 +67,7 @@
   "scripts": {
     "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    //"postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   },
 
   "runtimeOptions": {

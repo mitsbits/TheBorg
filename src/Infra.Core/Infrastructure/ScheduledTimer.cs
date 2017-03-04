@@ -1,8 +1,8 @@
-﻿using Nito.AsyncEx;
+﻿using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace Borg.Infra
 {
@@ -16,7 +16,6 @@ namespace Borg.Infra
         private readonly AsyncLock _lock = new AsyncLock();
         private bool _isRunning = false;
         private bool _shouldRunAgainImmediately = false;
-
 
         private readonly ILogger _logger;
 
@@ -45,7 +44,7 @@ namespace Borg.Infra
 
             if (utcDate == DateTime.MaxValue)
             {
-                  _logger.LogDebug("Ignoring MaxValue");
+                _logger.LogDebug("Ignoring MaxValue");
                 return;
             }
 
@@ -54,14 +53,14 @@ namespace Borg.Infra
                 // already have an earlier scheduled time
                 if (_next > utcNow && utcDate > _next)
                 {
-                       _logger.LogDebug($"Ignoring because already scheduled for earlier time {utcDate.Value.Ticks} {_next.Ticks}");
+                    _logger.LogDebug($"Ignoring because already scheduled for earlier time {utcDate.Value.Ticks} {_next.Ticks}");
                     return;
                 }
 
                 // ignore duplicate times
                 if (_next == utcDate)
                 {
-                      _logger.LogDebug("Ignoring because already scheduled for same time");
+                    _logger.LogDebug("Ignoring because already scheduled for same time");
                     return;
                 }
 
@@ -91,7 +90,7 @@ namespace Borg.Infra
             {
                 if (_isRunning)
                 {
-                          _logger.LogDebug("Exiting run callback because its already running, will run again immediately.");
+                    _logger.LogDebug("Exiting run callback because its already running, will run again immediately.");
                     _shouldRunAgainImmediately = true;
                     return;
                 }
@@ -110,7 +109,7 @@ namespace Borg.Infra
                 }
                 catch (Exception ex)
                 {
-                     _logger.LogError("Error running scheduled timer callback: {Message} \n{@Exception}", ex.Message, ex);
+                    _logger.LogError("Error running scheduled timer callback: {Message} \n{@Exception}", ex.Message, ex);
                     _shouldRunAgainImmediately = true;
                 }
 
@@ -129,7 +128,7 @@ namespace Borg.Infra
             }
             catch (Exception ex)
             {
-               _logger.LogError( "Error running schedule next callback: {Message} \n {@Exception}", ex.Message, ex);
+                _logger.LogError("Error running schedule next callback: {Message} \n {@Exception}", ex.Message, ex);
             }
             finally
             {

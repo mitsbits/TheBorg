@@ -66,7 +66,7 @@ namespace Borg.Framework.Services.Notifications
             List<UserNotification> list;
             if (!_db.TryGetValue(recipient, out list))
             {
-                var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.InvariantCultureIgnoreCase));
+                var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.OrdinalIgnoreCase));
                 hit.Acknowledged = true;
                 return Task.CompletedTask;
             }
@@ -80,7 +80,7 @@ namespace Borg.Framework.Services.Notifications
             List<UserNotification> list;
             if (!_db.TryGetValue(recipient, out list))
             {
-                var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.InvariantCultureIgnoreCase));
+                var hit = list.Single(x => x.NotificationIdentifier.Equals(notificationIdentifier, StringComparison.OrdinalIgnoreCase));
                 list.Remove(hit);
                 _index.TryRemove(notificationIdentifier, out recipient);
                 if (!list.Any())

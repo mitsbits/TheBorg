@@ -20,7 +20,7 @@ namespace Borg
         public static Task BroadcastTopics<T>(this IBroadcaster broadcaster, string[] topics, T message, TimeSpan? delay = null) where T : class
         {
             if (topics == null || !topics.Distinct().Any()) throw new ArgumentNullException(nameof(topics));
-            if (topics.Length == 1 && topics[0].Equals(ALL, StringComparison.InvariantCultureIgnoreCase)) throw new ArgumentException(nameof(topics));
+            if (topics.Length == 1 && topics[0].Equals(ALL, StringComparison.OrdinalIgnoreCase)) throw new ArgumentException(nameof(topics));
             return broadcaster.Broadcast(topics, typeof(T), message, delay);
         }
 

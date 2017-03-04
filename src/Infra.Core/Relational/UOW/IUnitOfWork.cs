@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace Borg.Infra.Relational
 {
     public interface IUnitOfWork : IDisposable
@@ -9,12 +8,11 @@ namespace Borg.Infra.Relational
         /// Strongly typed repository resolution method using the IoC container
         /// </summary>
         /// <typeparam name="TRepository">
-        /// Concrete repository type. 
+        /// Concrete repository type.
         /// Should normally be an strong interface like ICustomerRepository.
         /// </typeparam>
         /// <returns>Requested repository resolved from IoC container.</returns>
         TRepository GetRepository<TRepository>() where TRepository : class, IUowRepository;
-
 
         /// <summary>
         /// Indicated that unit of work finished, either by calling Commit or Dispose.
@@ -32,6 +30,7 @@ namespace Borg.Infra.Relational
     public interface IScopeManager
     {
         void Complete(IUnitOfWork unitOfWork);
+
         void Remove(IUnitOfWork unitOfWork);
     }
 }

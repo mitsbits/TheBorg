@@ -22,18 +22,18 @@ namespace Borg.Framework.MVC.BuildingBlocks.Interactions
 
         public ServerResponse(Exception exc)
         {
-            if (exc is ApplicationException)
-            {
-                Status = ResponseStatus.Warning;
-                Title = "Application Error";
-                Message = exc.Message;
-            }
-            else
-            {
+            //if (exc is ApplicationException)
+            //{
+            //    Status = ResponseStatus.Warning;
+            //    Title = "Application Error";
+            //    Message = exc.Message;
+            //}
+            //else
+            //{
                 Status = ResponseStatus.Error;
                 Title = exc.GetType().ToString();
                 Message = exc.Message;
-            }
+            //}
 
         }
     }

@@ -10,7 +10,7 @@ namespace Borg.Infra.Relational
         /// <summary>
         /// This little thing here with ThreadStatic ensure that contexts are thred-safe since
         /// they will never be shared. Due to this being on generic type, it also ensures
-        /// that each context type gets its own variable, making multiple stack for different 
+        /// that each context type gets its own variable, making multiple stack for different
         /// context types possible on single thread.
         /// </summary>
         [ThreadStatic]
@@ -45,6 +45,7 @@ namespace Borg.Infra.Relational
         }
 
         protected abstract IUnitOfWork CreateUnitOfWork(/*ScopeType scopeType*/);
+
         //protected abstract ITransactionWrapper CreateAndStartTransaction();
 
         public void Complete(IUnitOfWork unitOfWork)
@@ -123,7 +124,7 @@ namespace Borg.Infra.Relational
             if (ScopeStack == null)
             {
                 //ScopedUnitOfWorkConfiguration.LoggingAction("[ScopeManager] creating new stack since none exists");
-                ScopeStack = new UoWScopeStack<TContext>(ServiceLocator.GetService(typeof( TContext)) as TContext);
+                ScopeStack = new UoWScopeStack<TContext>(ServiceLocator.GetService(typeof(TContext)) as TContext);
             }
         }
 

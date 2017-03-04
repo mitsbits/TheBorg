@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace Borg.Infra.Relational
 {
@@ -8,7 +8,7 @@ namespace Borg.Infra.Relational
         protected readonly TContext Context;
         private readonly IServiceProvider _serviceLocator;
         private readonly IScopeManager _scopeManager;
-        private  ILogger Logger { get; }
+        private ILogger Logger { get; }
         private readonly IUniqueKeyProvider<Guid> _keys = new GuidKeyProvider();
 
         protected UnitOfWork(TContext context, IScopeManager scopeManager, IServiceProvider serviceLocator)

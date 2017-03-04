@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Borg.Infra.Relational
 {
-    [Serializable]
+    //[Serializable]
     public class ConcurrentModificationException : Exception
     {
         public ConcurrentModificationException()
@@ -20,9 +19,9 @@ namespace Borg.Infra.Relational
         {
         }
 
-        protected ConcurrentModificationException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        //protected ConcurrentModificationException(SerializationInfo info, StreamingContext context)
+        //    : base(info, context)
+        //{
+        //}
     }
 }

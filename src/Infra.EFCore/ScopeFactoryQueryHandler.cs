@@ -4,6 +4,7 @@ using Borg.Infra.CQRS;
 using Borg.Infra.Relational;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Borg.Infra.EFCore
@@ -79,7 +80,7 @@ namespace Borg.Infra.EFCore
             var cacheKey = (request as ICanProduceCacheKey)?.CacheKey;
             if (string.IsNullOrWhiteSpace(cacheKey)) return;
             await CacheClient.SetAsync(cacheKey, result, (request as ICanProduceCacheExpiresIn)?.ExpiresIn);
-            if (typeof(TEntity).GetInterface(nameof(IHavePartitionedKey)) != null)
+            if (typeof(TEntity).GetTypeInfo().GetInterface(nameof(IHavePartitionedKey)) != null)
                 await CacheClient.Add<TEntity>(cacheKey, result.Records.Cast<IHavePartitionedKey>().Select(x => x.Key).ToArray());
         }
 

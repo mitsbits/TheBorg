@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Borg.Infra.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,7 @@ namespace Borg.Infra
         public Lazy<List<Assembly>> _asmbls = new Lazy<List<Assembly>>(() =>
 
         {
-            var refs = Assembly.GetExecutingAssembly().GetReferencedAssemblies().ToArray();
+            var refs = Assembly.GetEntryAssembly().GetReferencedAssemblies().ToArray();
             foreach (var name in refs)
             {
                 if (AppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != name.FullName))

@@ -3,6 +3,7 @@
 
   "dependencies": {
     "Infra.Core": {
+      "NETStandard.Library": "1.6.1",
       "version": "1.0.0-*",
       "target": "project"
     },
@@ -23,11 +24,9 @@
   },
 
 
-    "frameworks": {
-      "net46": {
-        "buildOptions": {
-          "define": [ "NET46" ]
-        }
-      }
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
     }
   }
+}

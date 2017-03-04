@@ -12,12 +12,12 @@ namespace Borg.Infra
         private static readonly MethodInfo _arrayCloneMethodInfo = typeof(Array).GetMethod("Clone");
         private static readonly MethodInfo _arrayGetLengthMethodInfo = typeof(Array).GetMethod("GetLength");
         private static readonly MethodInfo _dictionaryAddMethodInfo = typeof(Dictionary<object, object>).GetMethod("Add");
-#if NETSTANDARD
+//#if NETSTANDARD
         static readonly MethodInfo _getUninitializedObjectMethodInfo = TypeHelper.StringType.GetTypeInfo().Assembly.GetType("System.Runtime.Serialization.FormatterServices")
             .GetMethod("GetUninitializedObject", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-#else
-        private static readonly MethodInfo _getUninitializedObjectMethodInfo = typeof(FormatterServices).GetMethod("GetUninitializedObject", BindingFlags.Static | BindingFlags.Public);
-#endif
+//#else
+//        private static readonly MethodInfo _getUninitializedObjectMethodInfo = typeof(FormatterServices).GetMethod("GetUninitializedObject", BindingFlags.Static | BindingFlags.Public);
+//#endif
 
         private readonly List<Expression> _expressions = new List<Expression>();
         private readonly ParameterExpression _objectDictionary = Expression.Parameter(typeof(Dictionary<object, object>), "objectDictionary");

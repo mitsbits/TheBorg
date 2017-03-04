@@ -7,7 +7,8 @@ namespace Borg.Infra.Relational
     public class UoWScopeStack<TContext> : IDisposable where TContext : IDisposable
     {
         private bool _isRolledBack;
-        private  readonly IUniqueKeyProvider<Guid> _keys = new GuidKeyProvider();
+        private readonly IUniqueKeyProvider<Guid> _keys = new GuidKeyProvider();
+
         public UoWScopeStack(TContext context)
         {
             Context = context;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Borg.Infra.Core.Infrastructure;
 
 namespace Borg.Infra.Storage
 {
@@ -221,11 +222,12 @@ namespace Borg.Infra.Storage
         {
             try
             {
-                string dataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory") as string;
-                if (String.IsNullOrEmpty(dataDirectory))
-                    dataDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                //string dataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory") as string;
+                //if (String.IsNullOrEmpty(dataDirectory))
+                //    dataDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-                return Path.GetFullPath(dataDirectory);
+                //return Path.GetFullPath(dataDirectory);
+                return null;
             }
             catch (Exception)
             {

@@ -1,7 +1,6 @@
 ﻿using Borg.Infra.CQRS;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Borg.Infra.BuildingBlocks
@@ -20,12 +19,12 @@ namespace Borg.Infra.BuildingBlocks
         {
             if (uri.HostNameType != UriHostNameType.Dns) throw new ArgumentOutOfRangeException(nameof(uri));
             _uri = uri;
-            _source = _uri.ToString().ToLower(CultureInfo.InvariantCulture);
+            _source = _uri.ToString().ToLower();
             if (!string.IsNullOrWhiteSpace(domain))
             {
-                domain = domain.TrimStart('.', '/', '\\').TrimEnd('.', '/', '\\').ToLower(CultureInfo.InvariantCulture);
+                domain = domain.TrimStart('.', '/', '\\').TrimEnd('.', '/', '\\').ToLower();
                 if (!domain.Contains('.')) throw new ArgumentOutOfRangeException(nameof(domain));
-                if (!_uri.Authority.EndsWith(domain, StringComparison.InvariantCultureIgnoreCase)) throw new ArgumentOutOfRangeException(nameof(domain));
+                if (!_uri.Authority.EndsWith(domain, StringComparison.OrdinalIgnoreCase)) throw new ArgumentOutOfRangeException(nameof(domain));
                 _domain = domain;
             }
         }
@@ -38,12 +37,12 @@ namespace Borg.Infra.BuildingBlocks
         {
             get
             {
-                return _uri.ToString().ToLower(CultureInfo.InvariantCulture);
+                return _uri.ToString().ToLower();
             }
             protected set
             {
                 _uri = new Uri(value);
-                _source = _uri.ToString().ToLower(CultureInfo.InvariantCulture);
+                _source = _uri.ToString().ToLower();
             }
         }
 
@@ -52,7 +51,7 @@ namespace Borg.Infra.BuildingBlocks
             get
             {
                 if (!string.IsNullOrWhiteSpace(_domain)) return _domain.ToLower();
-                var authority = _uri.Authority.ToLower(CultureInfo.InvariantCulture);
+                var authority = _uri.Authority.ToLower();
                 var split = authority.Split('.');
                 if (split.Length > 2)
                     return split[split.Length - 2] + "." + split[split.Length - 1];
@@ -61,7 +60,7 @@ namespace Borg.Infra.BuildingBlocks
             }
         }
 
-        public string SubDomain => _uri.HostNameType != UriHostNameType.Dns ? string.Empty : _uri.DnsSafeHost.GetSubdomain(Domain).ToLower(CultureInfo.InvariantCulture);
+        public string SubDomain => _uri.HostNameType != UriHostNameType.Dns ? string.Empty : _uri.DnsSafeHost.GetSubdomain(Domain).ToLower();
 
         public string[] Segments
         {

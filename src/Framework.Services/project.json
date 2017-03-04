@@ -2,19 +2,18 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Hangfire": "1.6.8",
+    "NETStandard.Library": "1.6.1",
     "Infra.Core": {
       "version": "1.0.0-*",
       "target": "project"
     },
-    "Microsoft.Extensions.Logging": "1.1.0"
+    "Microsoft.Extensions.Logging": "1.1.0",
+    "Hangfire": "1.6.9"
   },
 
   "frameworks": {
-    "net46": {
-      "buildOptions": {
-        "define": [ "NET46" ]
-      }
+    "netstandard1.6": {
+      "imports": "dnxcore50"
     }
   }
 }

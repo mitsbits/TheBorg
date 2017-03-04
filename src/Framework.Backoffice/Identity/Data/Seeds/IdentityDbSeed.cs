@@ -25,7 +25,7 @@ namespace Borg.Framework.Backoffice.Identity.Data.Seeds
 
                 var adminrole =
                      rmanager.Roles.FirstOrDefault(
-                        x => x.NormalizedName.Equals("admin", StringComparison.InvariantCultureIgnoreCase));
+                        x => x.NormalizedName.Equals("admin", StringComparison.OrdinalIgnoreCase));
 
                 if (adminrole == null)
                 {
@@ -44,7 +44,7 @@ namespace Borg.Framework.Backoffice.Identity.Data.Seeds
 
                 var borgrole =
                      rmanager.Roles.FirstOrDefault(
-                        x => x.NormalizedName.Equals("borg", StringComparison.InvariantCultureIgnoreCase));
+                        x => x.NormalizedName.Equals("borg", StringComparison.OrdinalIgnoreCase));
 
                 if (borgrole == null)
                 {

@@ -71,7 +71,7 @@ namespace Borg.Infra.Storage
 
             lock (_lock)
             {
-                _storage[path] = Tuple.Create(new FileSpec(path, Path.GetFileName(path), DateTime.UtcNow, DateTime.UtcNow, default(DateTime?), contents.LongLength) as IFileSpec, contents);
+                _storage[path] = Tuple.Create(new FileSpec(path, Path.GetFileName(path), DateTime.UtcNow, DateTime.UtcNow, default(DateTime?), contents.Length) as IFileSpec, contents);
 
                 if (_storage.Count > MaxFiles)
                     _storage.Remove(_storage.OrderByDescending(kvp => kvp.Value.Item1.CreationDate).First().Key);
