@@ -16,13 +16,13 @@ namespace Borg.Infra
             var refs = Assembly.GetEntryAssembly().GetReferencedAssemblies().ToArray();
             foreach (var name in refs)
             {
-                if (AppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != name.FullName))
+                if (LegacyAppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != name.FullName))
                 {
                     if (name.Name.StartsWith("Ubik"))
                         LoadReferencedAssembly(Assembly.Load(name));
                 }
             }
-            return new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
+            return new List<Assembly>(LegacyAppDomain.CurrentDomain.GetAssemblies());
         });
 
         public CurrentContextAssemblyProvider(Func<Assembly, bool> predicate = null)
@@ -35,7 +35,7 @@ namespace Borg.Infra
             var refs = assembly.GetReferencedAssemblies().ToArray();
             foreach (AssemblyName name in refs)
             {
-                if (AppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != name.FullName))
+                if (LegacyAppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != name.FullName))
                 {
                     LoadReferencedAssembly(Assembly.Load(name));
                 }

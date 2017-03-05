@@ -1,5 +1,4 @@
-﻿@using Borg.Framework.Media.Services
-@model VersionSpec
+﻿@model VersionSpec
 
 <div class="form-group">
     <div class="row">
@@ -14,6 +13,14 @@
         <label asp-for="FileSpec.CreationDate" class="col-md-2"></label>
         <span class="col-md-10">@Model.FileSpec.CreationDate</span>
     </div>
+    @if (Model.FileSpec.IsImage())
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <img src="@AssetUrlResolver.ResolveSourceUrlFromFullPath(Model.FileSpec.FullPath)" class="img img-responsive img-bordered" alt="@Model.FileSpec.Name" />
+            </div>
+        </div>
+    }
     <div class="row">
         <label asp-for="FileSpec.FullPath" class="col-md-2"></label>
         <a href="@AssetUrlResolver.ResolveSourceUrlFromFullPath(Model.FileSpec.FullPath)" target="_blank">

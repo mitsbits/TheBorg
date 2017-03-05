@@ -18,7 +18,7 @@ namespace Borg.Infra
             var directory = new DirectoryInfo(path);
             if (!directory.Exists) throw new ArgumentOutOfRangeException(nameof(path));
             var files = Directory.GetFiles(directory.FullName, "*.dll", SearchOption.AllDirectories);
-            _asmbls.AddRange(files.Select(x=> Assembly.Load(new AssemblyName(x))));
+            _asmbls.AddRange(files.Select(x => Assembly.Load(new AssemblyName(x))));
             _predicate = predicate;
         }
 

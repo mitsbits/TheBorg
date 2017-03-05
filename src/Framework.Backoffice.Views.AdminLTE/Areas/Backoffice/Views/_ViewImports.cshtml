@@ -1,0 +1,20 @@
+﻿
+@using System.Threading.Tasks
+@using Borg.Framework.MVC.BuildingBlocks.Devices
+@using Borg.Infra.Relational
+@using Borg.Framework.Media.Models
+@using Borg.Framework.System
+@using Borg.Framework.Media
+@using Borg
+@using Borg.Infra
+@using Borg.Infra.Storage.Assets
+
+@inject IPageContentAccessor<IPageContent> Content
+@inject IDeviceAccessor<IDevice> Device
+@inject BorgSettings Settings
+@inject IAssetUrlResolver AssetUrlResolver
+@inject ISerializer Serializer 
+
+    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+    @addTagHelper "*, Framework.MVC.HtmlPager"
+    @addTagHelper "*, Framework.MVC.BuildingBlocks"

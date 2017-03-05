@@ -15,11 +15,11 @@ namespace Borg.Infra.CQRS
 
         public bool IsSnapshotable(Type aggregateType)
         {
-            if (aggregateType.GetTypeInfo().BaseType == null)
+            if (aggregateType.BaseType() == null)
             {
                 return false;
             }
-            var memberInfo = aggregateType.GetTypeInfo().BaseType;
+            var memberInfo = aggregateType.BaseType();
             if (memberInfo != null && memberInfo.GetTypeInfo().IsGenericType
                 && memberInfo.GetGenericTypeDefinition().GetInterfaces().Any(x => x.GetTypeInfo().IsGenericType
                 && x.GetGenericTypeDefinition() == typeof(ISnapshotAggregateRoot<,>)))

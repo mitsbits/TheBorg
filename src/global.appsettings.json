@@ -10,7 +10,7 @@
       "application": {
         "title": "Borg Backoffice",
         "logo": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",
-        "baseUrl": "https://localhost:44321/",
+        "baseUrl": "https://localhost:44381/",
         "data": {
           "relational": {
             "connectionStrings": [

@@ -8,15 +8,18 @@
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Extensions.Logging.Abstractions": "1.1.0",
     "Nito.AsyncEx.Core": "1.0.0-rc2-001",
-    "System.ComponentModel": "4.3.0",
-    "System.Linq.Queryable": "4.3.0",
-    "System.Reflection.TypeExtensions": "4.3.0",
     "Microsoft.Extensions.DependencyModel": "1.1.0"
   },
 
   "frameworks": {
+    "net46": {},
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "System.ComponentModel": "4.3.0",
+        "System.Linq.Queryable": "4.3.0",
+        "System.Reflection.TypeExtensions": "4.3.0"
+      }
     }
   },
 
@@ -27,7 +30,7 @@
   },
   "packOptions": {
     "summary": "Infrastrucre classes for the Borg framework",
-    "tags": [ ".net 46", "borg", "infrastructure" ],
+    "tags": [ "net core", "net 46", "borg", "infrastructure" ],
     "owners": [ "mitsbits@gmail.com" ],
     "releaseNotes": "",
     "iconUrl": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",

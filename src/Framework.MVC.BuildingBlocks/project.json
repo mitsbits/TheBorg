@@ -3,8 +3,14 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "Framework.Services": "1.0.0-*",
-    "Framework.System": "1.0.0-*",
+    "Framework.Services": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
+    "Framework.System": {
+      "version": "1.0.0-*",
+      "target": "project"
+    },
     "Infra.Core": {
       "version": "1.0.0-*",
       "target": "project"
@@ -15,6 +21,7 @@
   },
 
   "frameworks": {
+    "net46": {},
     "netstandard1.6": {
       "imports": "dnxcore50"
     }

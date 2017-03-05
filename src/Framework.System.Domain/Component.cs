@@ -1,6 +1,6 @@
 ﻿using Borg.Infra.CQRS;
 using System;
-using Borg.Infra.Infrastructure;
+
 
 namespace Framework.System.Domain
 {
@@ -25,16 +25,16 @@ namespace Framework.System.Domain
 
         public string CQRSKey { get; protected set; }
         string IEntity<string>.Id => CQRSKey;
-        public BitSwitch ActivationStatus { get; protected set; }
+        public bool Activated { get; protected set; }
 
         public virtual void SwitchOn()
         {
-            if (ActivationStatus == BitSwitch.Off) ActivationStatus = BitSwitch.On;
+            if (!Activated ) Activated = true;
         }
 
         public virtual void SwitchOff()
         {
-            if (ActivationStatus == BitSwitch.On) ActivationStatus = BitSwitch.Off;
+            if (Activated) Activated = false;
         }
     }
 
@@ -66,7 +66,7 @@ namespace Framework.System.Domain
 
     public interface IActivatable
     {
-        BitSwitch ActivationStatus { get; }
+        bool Activated { get; }
 
         void SwitchOn();
 

@@ -49,11 +49,11 @@ namespace Borg.Infra.CQRS
                 {
                     return member.Invoke(target, args);
                 }
-                if (type.GetTypeInfo().BaseType == null)
+                if (type.BaseType() == null)
                 {
                     return null;
                 }
-                type = type.GetTypeInfo().BaseType;
+                type = type.BaseType();
             }
         }
     }

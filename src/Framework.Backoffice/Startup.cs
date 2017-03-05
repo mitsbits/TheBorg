@@ -1,9 +1,4 @@
-﻿using Borg.Framework.Backoffice.Identity;
-using Borg.Framework.Backoffice.Identity.Data;
-using Borg.Framework.Backoffice.Identity.Models;
-using Borg.Framework.Backoffice.Identity.Queries;
-using Borg.Framework.Backoffice.Identity.Queries.Borg.Framework.Backoffice.Identity.Queries;
-using Borg.Framework.Backoffice.Identity.Services;
+﻿
 using Borg.Framework.Backoffice.Pages.Commands;
 using Borg.Framework.Backoffice.Pages.Data;
 using Borg.Framework.Media;
@@ -34,8 +29,16 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
+using Borg.Framework.GateKeeping;
+using Borg.Framework.GateKeeping.Data;
+using Borg.Framework.GateKeeping.Models;
+using Borg.Framework.GateKeeping.Queries;
+using Borg.Framework.GateKeeping.Queries.Borg.Framework.Backoffice.Identity.Queries;
+using Borg.Framework.GateKeeping.Services;
 using Borg.Framework.MVC.BuildingBlocks.Interactions;
-using IdentityDbContext = Borg.Framework.Backoffice.Identity.Data.IdentityDbContext;
+using IdentityDbContext = Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext;
+using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.Models;
 
 namespace Borg.Framework.Backoffice
 {
@@ -83,11 +86,11 @@ namespace Borg.Framework.Backoffice
             services.AddDbContext<AssetsDbContext>(options =>
                 options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["borg"]));
 
-            services.AddDbContext<IdentityDbContext>(options =>
+            services.AddDbContext<Borg.Framework.GateKeeping.Data.IdentityDbContext>(options =>
                 options.UseSqlServer(Settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["identity"]));
 
             services.AddIdentity<BorgUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<Borg.Framework.GateKeeping.Data.IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
@@ -113,8 +116,8 @@ namespace Borg.Framework.Backoffice
 
             services.AddIdentityServer()
                 .AddInMemoryClients(Clients.Get())
-                .AddInMemoryIdentityResources(Resources.GetIdentityResources())
-                .AddInMemoryApiResources(Resources.GetApiResources())
+                .AddInMemoryIdentityResources(GateKeeping.Resources.GetIdentityResources())
+                .AddInMemoryApiResources(GateKeeping.Resources.GetApiResources())
                 //.AddTestUsers(Users.Get())
                 //.AddInMemoryPersistedGrants()
                 //.AddConfigurationStore(builder =>
@@ -167,7 +170,7 @@ namespace Borg.Framework.Backoffice
             });
 
             services.AddSingleton<IDbContextFactory<PagesDbContext>, PagesDbContextFactory>();
-            services.AddSingleton<IDbContextFactory<IdentityDbContext>, IdentityDbContextFactory>();
+            services.AddSingleton<IDbContextFactory<Borg.Framework.GateKeeping.Data.IdentityDbContext>, IdentityDbContextFactory>();
             services.AddSingleton<IDbContextFactory<AssetsDbContext>, AssetsDbContextFactory>();
 
             services.AddScoped<IAssetMetadataStorage<int>, AssetsMetadataStorage>();
@@ -201,7 +204,7 @@ namespace Borg.Framework.Backoffice
 
             services.AddScoped<ISerializer, JsonNetSerializer>();
 
-            services.AddMvc();
+            services.AddMvc().AddRazorOptions(options => options.AddEmbeddedAdminLteViewsForBackOffice());
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
@@ -225,12 +228,7 @@ namespace Borg.Framework.Backoffice
             }
 
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), @"Areas")),
-                RequestPath = new PathString("/Areas")
-            });
+            app.UseEmbeddedAdminLteStaticFilesForBackOffice();
 
             app.UseStaticFiles(new StaticFileOptions()
             {

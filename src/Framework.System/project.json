@@ -16,6 +16,7 @@
   },
 
   "frameworks": {
+    "net46": {},
     "netstandard1.6": {
       "imports": "dnxcore50"
     }
@@ -28,7 +29,7 @@
   },
   "packOptions": {
     "summary": "Infrastrucre classes for the Borg framework system",
-    "tags": [ ".net 46", "borg", "infrastructure", "system" ],
+    "tags": [ "net core", "net 46", "borg", "infrastructure", "system" ],
     "owners": [ "mitsbits@gmail.com" ],
     "releaseNotes": "",
     "iconUrl": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",
