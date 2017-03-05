@@ -18,7 +18,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var claims = User.Identity as ClaimsIdentity;
-            var a = claims.FindFirst(x => x.Type == BorgClaims.Profile.Avatar).Value;
+            var a = claims.FindFirst(x => x.Type == BorgSpecificClaims.Profile.Avatar).Value;
             var n = claims.Name;
             var model = new SidebarUserInfoViewModel() { Avatar = a, Nickname = n };
             // var pending = await _notifications.Pending(User.Identity.Name, 1, 10);

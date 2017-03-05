@@ -7,12 +7,4 @@ namespace Borg.Framework.GateKeeping.Models
     {
 
     }
-
-    public class BorgClaims
-    {
-        public class Profile
-        {
-            public const string Avatar = "Profile.Avatar";
-        }
-    }
 }

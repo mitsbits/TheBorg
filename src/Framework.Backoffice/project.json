@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "Framework.Backoffice.Views.AdminLTE": "1.0.0-*",
     "Framework.GateKeeping": "1.0.0-*",
     "Framework.Media": "1.0.0-*",
     "Framework.MVC.BuildingBlocks": "1.0.0-*",

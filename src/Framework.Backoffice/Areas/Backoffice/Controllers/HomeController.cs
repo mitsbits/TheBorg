@@ -1,4 +1,5 @@
-﻿using Borg.Framework.MVC;
+﻿using System.Collections.Generic;
+using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.Services.Notifications;
 using Borg.Framework.System;
@@ -15,10 +16,11 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     public class HomeController : BackofficeController
     {
         private readonly IUserNotificationsStore _userNotifications;
-
-        public HomeController(IBackofficeService<BorgSettings> systemService, IUserNotificationsStore userNotifications) : base(systemService)
+        private readonly IEnumerable<IBorgPlugin> _borgPlugins;
+        public HomeController(IBackofficeService<BorgSettings> systemService, IUserNotificationsStore userNotifications, IEnumerable<IBorgPlugin> borgPlugins) : base(systemService)
         {
             _userNotifications = userNotifications;
+            _borgPlugins = borgPlugins;
         }
 
         public async Task<IActionResult> Index()

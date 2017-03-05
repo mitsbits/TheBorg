@@ -29,6 +29,8 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Borg.Framework.GateKeeping;
 using Borg.Framework.GateKeeping.Data;
 using Borg.Framework.GateKeeping.Models;
@@ -39,6 +41,7 @@ using Borg.Framework.MVC.BuildingBlocks.Interactions;
 using IdentityDbContext = Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext;
 using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Models;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Borg.Framework.Backoffice
 {
@@ -74,6 +77,8 @@ namespace Borg.Framework.Backoffice
             services.ConfigurePOCO(Configuration.GetSection("global"), () => Settings);
 
             var scanner = new CurrentContextAssemblyProvider();
+
+            services.AddSingleton<IBorgPlugin, BorgSystemPlugIn>();
 
             services.AddDistributedMemoryCache();
 
@@ -204,7 +209,7 @@ namespace Borg.Framework.Backoffice
 
             services.AddScoped<ISerializer, JsonNetSerializer>();
 
-            services.AddMvc().AddRazorOptions(options => options.AddEmbeddedAdminLteViewsForBackOffice());
+            services.AddMvc()/*.AddRazorOptions(options => options.AddEmbeddedAdminLteViewsForBackOffice())*/;
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
@@ -228,8 +233,13 @@ namespace Borg.Framework.Backoffice
             }
 
             app.UseStaticFiles();
-            app.UseEmbeddedAdminLteStaticFilesForBackOffice();
-
+            //app.UseEmbeddedAdminLteStaticFilesForBackOffice();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), @"Areas")),
+                RequestPath = new PathString("/Areas")
+            });
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(

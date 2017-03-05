@@ -21,7 +21,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var claims = User.Identity as ClaimsIdentity;
-            var a = claims.FindFirst(x => x.Type == BorgClaims.Profile.Avatar).Value;
+            var a = claims.FindFirst(x => x.Type == BorgSpecificClaims.Profile.Avatar).Value;
             var n = claims.Name;
             var roles = claims.Claims.Where(c => c.Type == claims.RoleClaimType).Select(x => x.Value);
             var user = new SidebarUserInfoViewModel() { Nickname = n, Avatar = a, Roles = roles?.ToArray(), Id = claims.GetSubjectId() };

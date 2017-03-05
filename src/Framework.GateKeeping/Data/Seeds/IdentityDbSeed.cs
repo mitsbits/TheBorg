@@ -69,7 +69,7 @@ namespace Borg.Framework.GateKeeping.Data.Seeds
 
                     var re = umanager.CreateAsync(user, "123456").Result;
                     re = umanager.SetLockoutEnabledAsync(user, false).Result;
-                    re = umanager.AddClaimAsync(user, new Claim(BorgClaims.Profile.Avatar, "https://pbs.twimg.com/profile_images/586144633526300673/Xla8gpkH.jpg")).Result;
+                    re = umanager.AddClaimAsync(user, new Claim(BorgSpecificClaims.Profile.Avatar, "https://pbs.twimg.com/profile_images/586144633526300673/Xla8gpkH.jpg")).Result;
 
                     umanager.AddToRolesAsync(user, new[] { "admin", "borg" });
                 }

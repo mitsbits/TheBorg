@@ -18,7 +18,7 @@ namespace Borg.Infra
             {
                 if (LegacyAppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != name.FullName))
                 {
-                    if (name.Name.StartsWith("Ubik"))
+                
                         LoadReferencedAssembly(Assembly.Load(name));
                 }
             }
