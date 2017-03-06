@@ -25,9 +25,9 @@ namespace Borg.Framework.GateKeeping
         private readonly UserManager<BorgUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(IBackofficeService<BorgSettings> systemService,  UserManager<BorgUser> userManager, RoleManager<IdentityRole> roleManager) : base(systemService)
+        public UsersController(IBackofficeService<BorgSettings> systemService, UserManager<BorgUser> userManager, RoleManager<IdentityRole> roleManager) : base(systemService)
         {
- 
+
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -81,8 +81,9 @@ namespace Borg.Framework.GateKeeping
             });
             var model = new CreateUserViewModel
             {
-                Roles = (await _roleManager.Roles.ToArrayAsync()).Select(
-                    x => new CreateUserViewModel.RoleOption() { Name = x.Name, Selected = false }).ToArray()
+                //Roles = (await _roleManager.Roles.ToArrayAsync()).Select(
+                //    x => new CreateUserViewModel.RoleOption() { Name = x.Name, Selected = false }).ToArray()
+                Roles = System.BorgHost.IdentityDescriptor().RoleNames.Select(x => new CreateUserViewModel.RoleOption() { Name = x, Selected = false }).ToArray()
             };
             return View(model);
         }
@@ -98,18 +99,19 @@ namespace Borg.Framework.GateKeeping
             {
                 var user = new BorgUser { UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
+                    var selectedRoles = await EnsureRolesExistInDb(model);
                     if (model.EnableOnCreate)
                     {
                         result = await _userManager.SetLockoutEnabledAsync(user, false);
                         if (result.Succeeded)
                         {
-                            result = await _userManager.AddToRolesAsync(user,
-                                model.Roles.Where(x => x.Selected).Select(x => x.Name));
+                            result = await _userManager.AddToRolesAsync(user, selectedRoles);
                             if (result.Succeeded)
                             {
-                                Logger.LogInformation(3, "User created a new account with password.");
+                                Logger.LogInformation(3, "{@User} created a new account with password.", user);
                                 return RedirectToAction("Index", new { q = user.Email });
                             }
                             AddErrors(result);
@@ -118,11 +120,10 @@ namespace Borg.Framework.GateKeeping
                     }
                     else
                     {
-                        result = await _userManager.AddToRolesAsync(user,
-                                model.Roles.Where(x => x.Selected).Select(x => x.Name));
+                        result = await _userManager.AddToRolesAsync(user, selectedRoles);
                         if (result.Succeeded)
                         {
-                            Logger.LogInformation(3, "User created a new account with password.");
+                            Logger.LogInformation(3, "{@User} created a new account with password.", user);
                             return RedirectToAction("Index", new { q = user.Email });
                         }
                         AddErrors(result);
@@ -133,6 +134,25 @@ namespace Borg.Framework.GateKeeping
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private async Task<string[]> EnsureRolesExistInDb(CreateUserViewModel model)
+        {
+            var selectedRoles = model.Roles.Where(x => x.Selected).Select(x => x.Name).ToArray();
+            foreach (var role in selectedRoles)
+            {
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    var systemClaims = System.BorgHost.IdentityDescriptor().Claims(role);
+                    var dbRole = new IdentityRole(role);
+                    foreach (var systemClaim in systemClaims)
+                    {
+                        dbRole.Claims.Add(new IdentityRoleClaim<string>() {ClaimType = systemClaim.Type, ClaimValue = systemClaim.Value});
+                    }
+                    await _roleManager.CreateAsync(dbRole);
+                }
+            }
+            return selectedRoles;
         }
 
         private void AddErrors(IdentityResult result)

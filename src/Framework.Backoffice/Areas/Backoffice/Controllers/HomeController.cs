@@ -16,11 +16,11 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     public class HomeController : BackofficeController
     {
         private readonly IUserNotificationsStore _userNotifications;
-        private readonly IEnumerable<IBorgPlugin> _borgPlugins;
-        public HomeController(IBackofficeService<BorgSettings> systemService, IUserNotificationsStore userNotifications, IEnumerable<IBorgPlugin> borgPlugins) : base(systemService)
+    
+        public HomeController(IBackofficeService<BorgSettings> systemService, IUserNotificationsStore userNotifications) : base(systemService)
         {
             _userNotifications = userNotifications;
-            _borgPlugins = borgPlugins;
+            var descriptor = System.BorgHost.IdentityDescriptor();
         }
 
         public async Task<IActionResult> Index()

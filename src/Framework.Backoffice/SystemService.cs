@@ -11,12 +11,14 @@ namespace Borg.Framework.Backoffice
         private readonly ILoggerFactory _loggerFactory;
         private readonly ISerializer _serializer;
         public BorgSettings Settings { get; }
+        public IBorgHost BorgHost { get; }
 
-        public SystemService(ILoggerFactory loggerFactory, BorgSettings settings, ISerializer serializer)
+        public SystemService(IBorgHost borgHost, ILoggerFactory loggerFactory, BorgSettings settings, ISerializer serializer)
         {
             Settings = settings;
             _loggerFactory = loggerFactory;
             _serializer = serializer;
+            BorgHost = borgHost;
         }
 
         public ILogger CreateLogger(string categoryName)

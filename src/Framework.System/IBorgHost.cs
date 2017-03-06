@@ -6,18 +6,18 @@ namespace Borg.Framework.System
 {
     public interface IBorgHost
     {
-        IBorgPluginIdentityDescriptor[] IdentityDescriptors { get; }
         IBorgPlugin[] RegisteredPlugins { get; }
     }
 
     public interface IBorgPlugin
     {
-        IBorgPluginIdentityDescriptor IdentityDescriptor { get; }
+        IBorgIdentityDescriptor IdentityDescriptor { get; }
     }
 
-    public interface IBorgPluginIdentityDescriptor
+    public interface IBorgIdentityDescriptor
     {
         string[] RoleNames { get; }
+
         IEnumerable<Claim> Claims(string role);
     }
 
@@ -28,12 +28,14 @@ namespace Borg.Framework.System
 
     public class BorgHost : IBorgHost
     {
-        public BorgHost(IBorgPlugin[] registeredPlugins)
+        public BorgHost(IEnumerable<IBorgPlugin> registeredPlugins)
         {
-            RegisteredPlugins = registeredPlugins;
-         
+            RegisteredPlugins = registeredPlugins?.ToArray();
         }
         public IBorgPlugin[] RegisteredPlugins { get; }
-        public IBorgPluginIdentityDescriptor[] IdentityDescriptors => RegisteredPlugins.Select(x => x.IdentityDescriptor).ToArray();
+ 
     }
+
+
 }
+

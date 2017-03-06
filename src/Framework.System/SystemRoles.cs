@@ -6,15 +6,16 @@ namespace Borg.Framework.System
 {
     internal class SystemRoles : IEnumerable<Claim>
     {
-        public const string RoleClaimType = ClaimTypes.Role;
-        public const string SysAdmin      = "SysAdmin";
-        public const string AppAdmin      = "AppAdmin";
-        public const string Manager       = "Manager";
-        public const string Editor        = "Editor";
-        public const string Author        = "Author";
-        public const string Backoffice    = "Backoffice";
-        public const string Guest         = "Guest";
-        public const string ReadOnly      = "ReadOnly";
+        public const string BorgClaimTypePrexix = "X-BORG:";
+        public const string RoleClaimType       = ClaimTypes.Role;
+        public const string SysAdmin            = "SysAdmin";
+        public const string AppAdmin            = "AppAdmin";
+        public const string Manager             = "Manager";
+        public const string Editor              = "Editor";
+        public const string Author              = "Author";
+        public const string Backoffice          = "Backoffice";
+        public const string Guest               = "Guest";
+        public const string ReadOnly            = "ReadOnly";
 
         private static readonly IEnumerable<Claim> _roles;
 
@@ -43,4 +44,6 @@ namespace Borg.Framework.System
             return GetEnumerator();
         }
     }
+
+
 }

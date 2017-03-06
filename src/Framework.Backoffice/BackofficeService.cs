@@ -11,8 +11,8 @@ namespace Borg.Framework.Backoffice
 {
     public class BackofficeService : SystemService, IBackofficeService<BorgSettings>
     {
-        public BackofficeService(ILoggerFactory loggerFactory, BorgSettings settings, ISerializer serializer, ICommandBus commands, IEventBus events, IQueryBus queries, IBroadcaster broadcaster) 
-            : base(loggerFactory, settings, serializer)
+        public BackofficeService( IBorgHost  borgHost, ILoggerFactory loggerFactory, BorgSettings settings, ISerializer serializer, ICommandBus commands, IEventBus events, IQueryBus queries, IBroadcaster broadcaster) 
+            : base(borgHost, loggerFactory,  settings,  serializer)
         {
             Commands = commands;
             Events = events;

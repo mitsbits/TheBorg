@@ -79,6 +79,7 @@ namespace Borg.Framework.Backoffice
             var scanner = new CurrentContextAssemblyProvider();
 
             services.AddSingleton<IBorgPlugin, BorgSystemPlugIn>();
+            services.AddSingleton<IBorgHost, BorgHost>();
 
             services.AddDistributedMemoryCache();
 
