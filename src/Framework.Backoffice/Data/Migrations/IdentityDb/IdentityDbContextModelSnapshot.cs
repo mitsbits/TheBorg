@@ -5,7 +5,7 @@ using System;
 
 namespace Borg.Framework.GateKeeping.Data.Migrations.IdentityDb
 {
-    [DbContext(typeof(IdentityDbContext))]
+    [DbContext(typeof(GateKeepingDbContext))]
     partial class IdentityDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

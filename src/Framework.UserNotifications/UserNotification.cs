@@ -1,9 +1,9 @@
-﻿using Borg.Infra.Messaging;
-using System;
+﻿using System;
+using Borg.Infra.Messaging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Borg.Framework.Services.Notifications
+namespace Borg.Framework.UserNotifications
 {
     internal class UserNotification : IUserNotification
     {

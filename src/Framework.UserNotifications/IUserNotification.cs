@@ -1,7 +1,7 @@
-﻿using Borg.Infra.Messaging;
-using System;
+﻿using System;
+using Borg.Infra.Messaging;
 
-namespace Borg.Framework.Services.Notifications
+namespace Borg.Framework.UserNotifications
 {
     public interface IUserNotification
     {

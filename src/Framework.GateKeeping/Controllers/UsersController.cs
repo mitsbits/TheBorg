@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Borg.Framework.GateKeeping.Models;
+﻿using Borg.Framework.GateKeeping.Models;
 using Borg.Framework.GateKeeping.Models.AccountViewModels;
 using Borg.Framework.GateKeeping.Queries;
 using Borg.Framework.MVC;
@@ -13,21 +8,23 @@ using Borg.Infra.Relational;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Borg.Framework.GateKeeping
 {
     [Area("backoffice")]
     public class UsersController : BackofficeController
     {
-
         private readonly UserManager<BorgUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public UsersController(IBackofficeService<BorgSettings> systemService, UserManager<BorgUser> userManager, RoleManager<IdentityRole> roleManager) : base(systemService)
         {
-
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -147,7 +144,7 @@ namespace Borg.Framework.GateKeeping
                     var dbRole = new IdentityRole(role);
                     foreach (var systemClaim in systemClaims)
                     {
-                        dbRole.Claims.Add(new IdentityRoleClaim<string>() {ClaimType = systemClaim.Type, ClaimValue = systemClaim.Value});
+                        dbRole.Claims.Add(new IdentityRoleClaim<string>() { ClaimType = systemClaim.Type, ClaimValue = systemClaim.Value });
                     }
                     await _roleManager.CreateAsync(dbRole);
                 }

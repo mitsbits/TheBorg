@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using Borg.Framework.GateKeeping.Models;
+﻿using Borg.Framework.GateKeeping.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityDbContext = Borg.Framework.GateKeeping.Data.IdentityDbContext;
+using System;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Borg.Framework.GateKeeping.Data.Seeds
 {
@@ -18,7 +17,7 @@ namespace Borg.Framework.GateKeeping.Data.Seeds
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var ctx = serviceScope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+                var ctx = serviceScope.ServiceProvider.GetRequiredService<GateKeepingDbContext>();
                 ctx.Database.Migrate();
                 var umanager = serviceScope.ServiceProvider.GetRequiredService<UserManager<BorgUser>>();
                 var rmanager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -29,18 +28,10 @@ namespace Borg.Framework.GateKeeping.Data.Seeds
 
                 if (adminrole == null)
                 {
-
                     adminrole = new IdentityRole("admin");
                     var r = rmanager.CreateAsync(adminrole).Result;
                     r = rmanager.AddClaimAsync(adminrole, new Claim(JwtClaimTypes.NickName, "adminaras")).Result;
-
-
-
-
-
                 }
-
-
 
                 var borgrole =
                      rmanager.Roles.FirstOrDefault(
@@ -48,13 +39,9 @@ namespace Borg.Framework.GateKeeping.Data.Seeds
 
                 if (borgrole == null)
                 {
-                   
-                         borgrole = new IdentityRole("borg");
-                    var r =     rmanager.CreateAsync(borgrole).Result;
-                     r =     rmanager.AddClaimAsync(borgrole, new Claim(JwtClaimTypes.NickName, "borgaras")).Result;
-                    
-
-
+                    borgrole = new IdentityRole("borg");
+                    var r = rmanager.CreateAsync(borgrole).Result;
+                    r = rmanager.AddClaimAsync(borgrole, new Claim(JwtClaimTypes.NickName, "borgaras")).Result;
                 }
 
                 var user = umanager.FindByNameAsync("mitsbits").Result;
@@ -73,8 +60,6 @@ namespace Borg.Framework.GateKeeping.Data.Seeds
 
                     umanager.AddToRolesAsync(user, new[] { "admin", "borg" });
                 }
-
-
             }
         }
     }

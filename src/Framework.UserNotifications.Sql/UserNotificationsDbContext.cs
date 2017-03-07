@@ -1,10 +1,9 @@
-﻿using Borg.Framework.Services.Notifications;
-using Borg.Infra.Messaging;
+﻿using Borg.Infra.Messaging;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Borg.Framework.Sql.UserNotifications
+namespace Borg.Framework.UserNotifications.Sql
 {
     public class UserNotificationsDbContext : DbContext
     {
@@ -37,15 +36,14 @@ namespace Borg.Framework.Sql.UserNotifications
         public string NotificationIdentifier { get; protected set; } = Guid.NewGuid().ToString();
 
         [MaxLength(256)]
-        public string RecipientIdentifier { get;  set; }
+        public string RecipientIdentifier { get; set; }
 
         [MaxLength(1024)]
-        public string Title { get;  set; }
+        public string Title { get; set; }
 
-        public string Message { get;  set; }
-        public ResponseStatus ResponseStatus { get;  set; }
+        public string Message { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
         public DateTimeOffset Timestamp { get; protected set; } = DateTimeOffset.UtcNow;
         public bool Acknowledged { get; set; } = false;
     }
 }
-

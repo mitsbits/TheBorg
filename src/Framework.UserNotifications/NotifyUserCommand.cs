@@ -1,9 +1,9 @@
-﻿using Borg.Infra.CQRS;
-using Borg.Infra.Messaging;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Borg.Infra.CQRS;
+using Borg.Infra.Messaging;
 
-namespace Borg.Framework.Services.Notifications
+namespace Borg.Framework.UserNotifications
 {
     public class NotifyUserCommand : ICommand
     {

@@ -9,9 +9,9 @@ using System;
 
 namespace Borg.Framework.GateKeeping.Data
 {
-    public class IdentityDbContext : IdentityDbContext<BorgUser>
+    public class GateKeepingDbContext : IdentityDbContext<BorgUser>
     {
-        public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
+        public GateKeepingDbContext(DbContextOptions<GateKeepingDbContext> options)
             : base(options)
         {
         }
@@ -25,19 +25,19 @@ namespace Borg.Framework.GateKeeping.Data
         }
     }
 
-    public class IdentityDbTransactionRepository<T> : BaseReadWriteRepository<T, IdentityDbContext>, ICRUDRespoditory<T> where T : class
+    public class IdentityDbTransactionRepository<T> : BaseReadWriteRepository<T, GateKeepingDbContext>, ICRUDRespoditory<T> where T : class
     {
         private readonly IAmbientDbContextLocator _ambientDbContextLocator;
 
-        public override IdentityDbContext DbContext
+        public override GateKeepingDbContext DbContext
         {
             get
             {
-                var dbContext = _ambientDbContextLocator.Get<IdentityDbContext>();
+                var dbContext = _ambientDbContextLocator.Get<GateKeepingDbContext>();
 
                 if (dbContext == null)
                     throw new InvalidOperationException(
-                        $@"No ambient DbContext of type {typeof(IdentityDbContext).Name} found.
+                        $@"No ambient DbContext of type {typeof(GateKeepingDbContext).Name} found.
                                         This means that this repository method has been called outside of the scope of a DbContextScope.
                                         A repository must only be accessed within the scope of a DbContextScope,
                                         which takes care of creating the DbContext instances that the repositories need and making them available as ambient contexts.
@@ -58,19 +58,19 @@ namespace Borg.Framework.GateKeeping.Data
         }
     }
 
-    public class IdentityDbQueryRepository<T> : BaseQueryRespository<T, IdentityDbContext> where T : class
+    public class IdentityDbQueryRepository<T> : BaseQueryRespository<T, GateKeepingDbContext> where T : class
     {
         private readonly IAmbientDbContextLocator _ambientDbContextLocator;
 
-        public override IdentityDbContext DbContext
+        public override GateKeepingDbContext DbContext
         {
             get
             {
-                var dbContext = _ambientDbContextLocator.Get<IdentityDbContext>();
+                var dbContext = _ambientDbContextLocator.Get<GateKeepingDbContext>();
 
                 if (dbContext == null)
                     throw new InvalidOperationException(
-                        $@"No ambient DbContext of type {typeof(IdentityDbContext).Name} found.
+                        $@"No ambient DbContext of type {typeof(GateKeepingDbContext).Name} found.
                                         This means that this repository method has been called outside of the scope of a DbContextScope.
                                         A repository must only be accessed within the scope of a DbContextScope,
                                         which takes care of creating the DbContext instances that the repositories need and making them available as ambient contexts.
@@ -91,7 +91,7 @@ namespace Borg.Framework.GateKeeping.Data
         }
     }
 
-    public class IdentityDbContextFactory : IDbContextFactory<IdentityDbContext>
+    public class IdentityDbContextFactory : IDbContextFactory<GateKeepingDbContext>
     {
         private readonly BorgSettings _settings;
         private readonly string _cs = string.Empty;
@@ -107,15 +107,15 @@ namespace Borg.Framework.GateKeeping.Data
             _cs = "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;";
         }
 
-        public IdentityDbContext Create(DbContextFactoryOptions options)
+        public GateKeepingDbContext Create(DbContextFactoryOptions options)
         {
-            var builder = new DbContextOptionsBuilder<IdentityDbContext>();
+            var builder = new DbContextOptionsBuilder<GateKeepingDbContext>();
             if (_settings != null)
             {
                 var ops =
                     builder.UseSqlServer(_settings.Backoffice.Application.Data.Relational.ConnectionStringIndex["identity"])
                         .Options;
-                var context = new IdentityDbContext(ops);
+                var context = new GateKeepingDbContext(ops);
                 return context;
             }
             else
@@ -123,7 +123,7 @@ namespace Borg.Framework.GateKeeping.Data
                 var ops =
                     builder.UseSqlServer(_cs, optionsBuilder => optionsBuilder.MigrationsAssembly("Framework.Backoffice"))
                         .Options;
-                var context = new IdentityDbContext(ops);
+                var context = new GateKeepingDbContext(ops);
                 return context;
             }
         }

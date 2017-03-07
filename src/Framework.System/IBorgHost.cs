@@ -32,10 +32,7 @@ namespace Borg.Framework.System
         {
             RegisteredPlugins = registeredPlugins?.ToArray();
         }
+
         public IBorgPlugin[] RegisteredPlugins { get; }
- 
     }
-
-
 }
-

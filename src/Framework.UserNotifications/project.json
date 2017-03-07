@@ -3,12 +3,8 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
+    "Microsoft.AspNetCore.Identity": "1.1.0",
     "Infra.Core": {
-
-      "version": "1.0.0-*",
-      "target": "project"
-    },
-    "Infra.EFCore": {
       "version": "1.0.0-*",
       "target": "project"
     },
@@ -16,12 +12,8 @@
       "version": "1.0.0-*",
       "target": "project"
     },
-    "Framework.MVC.BuildingBlocks": {
-      "version": "1.0.0-*",
-      "target": "project"
-    },
-    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
-    "Microsoft.AspNetCore.Mvc.Core": "1.1.1"
+    "Framework.MVC.BuildingBlocks": "1.0.0-*",
+    "Framework.GateKeeping": "1.0.0-*"
   },
 
 

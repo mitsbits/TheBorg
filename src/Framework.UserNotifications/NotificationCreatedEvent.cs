@@ -1,7 +1,7 @@
-using Borg.Infra.CQRS;
 using System;
+using Borg.Infra.CQRS;
 
-namespace Borg.Framework.Services.Notifications
+namespace Borg.Framework.UserNotifications
 {
     public class NotificationCreatedEvent : IEvent
     {

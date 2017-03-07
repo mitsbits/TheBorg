@@ -1,9 +1,8 @@
-﻿
-using Borg.Framework.Services.Notifications;
+﻿using Borg.Framework.GateKeeping.Models;
+using Borg.Framework.UserNotifications;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Borg.Framework.GateKeeping.Models;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 {

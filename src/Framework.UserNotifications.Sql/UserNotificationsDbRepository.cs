@@ -2,7 +2,7 @@ using System;
 using Borg.Infra.EFCore;
 using Borg.Infra.Relational;
 
-namespace Borg.Framework.Sql.UserNotifications
+namespace Borg.Framework.UserNotifications.Sql
 {
     public class UserNotificationsDbRepository<T> : BaseReadWriteRepository<T, UserNotificationsDbContext>, ICRUDRespoditory<T> where T : class
     {

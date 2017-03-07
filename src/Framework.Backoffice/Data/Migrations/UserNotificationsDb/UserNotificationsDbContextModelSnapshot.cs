@@ -1,8 +1,8 @@
-﻿using System;
-using Borg.Framework.Sql.UserNotifications;
+﻿using Borg.Framework.UserNotifications.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System;
 
 namespace Borg.Framework.Backoffice.Data.Migrations.UserNotificationsDb
 {

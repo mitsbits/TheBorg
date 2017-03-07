@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Borg.Framework.System
 {
-    internal class SystemRoles : IEnumerable<Claim>
+    public class SystemRoles : IEnumerable<Claim>
     {
         public const string BorgClaimTypePrexix = "X-BORG:";
         public const string RoleClaimType       = ClaimTypes.Role;

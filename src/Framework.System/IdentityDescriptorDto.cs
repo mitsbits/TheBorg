@@ -13,6 +13,11 @@ namespace Borg.Framework.System
             _data = data;
         }
 
+        internal IdentityDescriptorDto()
+        {
+            _data = new Dictionary<string, List<Claim>>();
+        }
+
         string[] IBorgIdentityDescriptor.RoleNames => _data.Keys.ToArray();
 
         IEnumerable<Claim> IBorgIdentityDescriptor.Claims(string role)

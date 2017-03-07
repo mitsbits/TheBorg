@@ -1,10 +1,9 @@
-﻿using Borg.Framework.Services.Notifications;
+﻿using System.Threading.Tasks;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
-using System.Threading.Tasks;
 
-namespace Borg.Framework.Sql.UserNotifications
+namespace Borg.Framework.UserNotifications.Sql
 {
     public class SqlUserNotificationsStore : IUserNotificationsStore
     {

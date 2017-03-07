@@ -3,13 +3,13 @@ using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
 using Borg.Infra.Relational;
+using Borg.Infra.Storage.Assets;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media
 {

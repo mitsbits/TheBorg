@@ -1,13 +1,13 @@
-﻿using Borg.Infra.CQRS;
-using Borg.Infra.Messaging;
-using Borg.Infra.Relational;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Borg.Infra.CQRS;
+using Borg.Infra.Messaging;
+using Borg.Infra.Relational;
 
-namespace Borg.Framework.Services.Notifications
+namespace Borg.Framework.UserNotifications
 {
     public class InMemoryUserNotificationsStore : IUserNotificationsStore
     {

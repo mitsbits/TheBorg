@@ -1,12 +1,13 @@
-﻿using Borg.Framework.System;
+﻿using System;
+using Borg.Framework.Sql;
+using Borg.Framework.System;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
 
-namespace Borg.Framework.Sql.UserNotifications
+namespace Borg.Framework.UserNotifications.Sql
 {
     public class UserNotificationsDbContextFactory : BorgDbContextFactory<UserNotificationsDbContext, BorgSettings>
     {
-
+        //TODO: wtf?
         public UserNotificationsDbContextFactory() : base()
         {
             OnMigrationConfiguring += (out string connectionString, out Action<SqlServerDbContextOptionsBuilder> action) =>

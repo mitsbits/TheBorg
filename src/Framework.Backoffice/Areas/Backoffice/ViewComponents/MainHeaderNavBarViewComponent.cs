@@ -1,11 +1,10 @@
-﻿
-using Borg.Framework.Services.Notifications;
+﻿using Borg.Framework.GateKeeping.Models;
+using Borg.Framework.UserNotifications;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Borg.Framework.GateKeeping.Models;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.ViewComponents
 {

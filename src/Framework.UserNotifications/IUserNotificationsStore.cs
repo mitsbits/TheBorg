@@ -1,8 +1,8 @@
+using System.Threading.Tasks;
 using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
-using System.Threading.Tasks;
 
-namespace Borg.Framework.Services.Notifications
+namespace Borg.Framework.UserNotifications
 {
     public interface IUserNotificationsStore
     {

@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using Borg.Framework.MVC;
+﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
-using Borg.Framework.Services.Notifications;
+
 using Borg.Framework.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using IdentityServer4.Extensions;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -15,11 +13,8 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     public class HomeController : BackofficeController
     {
-        private readonly IUserNotificationsStore _userNotifications;
-    
-        public HomeController(IBackofficeService<BorgSettings> systemService, IUserNotificationsStore userNotifications) : base(systemService)
+        public HomeController(IBackofficeService<BorgSettings> systemService) : base(systemService)
         {
-            _userNotifications = userNotifications;
             var descriptor = System.BorgHost.IdentityDescriptor();
         }
 
@@ -30,7 +25,7 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
                 Title = System.Settings.Backoffice.Application.Title,
                 Subtitle = "Dashbord"
             });
-           await _userNotifications.Info(User.GetSubjectId(), "hey", "bro");
+
             return View();
         }
 

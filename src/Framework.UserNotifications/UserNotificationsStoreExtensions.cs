@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Borg.Framework.Services.Notifications;
+using Borg.Framework.UserNotifications;
 using Borg.Infra.Messaging;
 
 namespace Borg
