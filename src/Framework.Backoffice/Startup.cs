@@ -37,6 +37,7 @@ namespace Borg.Framework.Backoffice
             var builder = new ConfigurationBuilder()
                 .SetBasePath(srcPath)
                 .AddJsonFile("global.appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"global.appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 

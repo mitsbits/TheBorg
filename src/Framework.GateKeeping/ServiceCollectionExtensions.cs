@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
+using Borg.Framework.GateKeeping.Commands;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -72,6 +73,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRepository, IdentityDbQueryRepository<BorgUser>>();
             services.AddScoped<IQueryRepository<BorgUser>, IdentityDbQueryRepository<BorgUser>>();
             services.AddSingleton<IDbContextFactory<GateKeepingDbContext>, IdentityDbContextFactory>();
+
+
+            services.AddScoped<IHandlesCommand<UserAvatarCommand>, UserAvatarCommandHandler>();
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿
 @using Borg.Framework.GateKeeping.Models
+@using Borg.Framework.GateKeeping.Models.UserViewModels
 @using Microsoft.AspNetCore.Identity
 
 @model BorgUser
 @inject UserManager<BorgUser> _manager
 @{
     var avatar = (!string.IsNullOrWhiteSpace(Model.AvatatUrl())) ? Model.AvatatUrl() : Settings.Backoffice.Application.Logo;
-
+    var avatarViewModel = new UserAvatarViewModel() {UserAvatarUrl = avatar, UserId =await _manager.GetUserIdAsync(Model), UserName = Model.UserName};
 }
 @section contentheader
 {
@@ -28,17 +29,9 @@
             <div class="box-header">
                 <h4 class="box-title">@Model.UserName</h4>
             </div>
-            <div class="box-body">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-2"><img src="@avatar" class="img img-responsive img-bordered-sm" /></div>
-                        <div class="col-md-10"></div>
-                    </div>
-                    
 
-                    
-                </div>
-            </div>
+                @await Html.PartialAsync("Partials/UserAvatar", avatarViewModel)
+
             <div class="box-footer">
                 
                 

@@ -40,6 +40,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     new DefaultConflictingNamesResolver(), provider.GetService<IAssetMetadataStorage<int>>(), new DefaultFolderIntegerScopeFactory(), provider.GetService<AssetsDbContext>(), provider.GetService<IEventBus>());
             });
 
+            services.AddScoped<IAssetService<int>, MediaService>(provider => provider.GetService<IMediaService>() as MediaService);
+
             services.AddSingleton<IAssetUrlResolver, AssetUrlResolver>();
 
             services.AddScoped<IHandlesEvent<FileAddedToAssetEvent<int>>, CacheNewImage>();

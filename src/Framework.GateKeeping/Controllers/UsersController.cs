@@ -14,6 +14,9 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Borg.Framework.GateKeeping.Commands;
+using Borg.Framework.GateKeeping.Models.UserViewModels;
+using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.GateKeeping
 {
@@ -138,6 +141,16 @@ namespace Borg.Framework.GateKeeping
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Avatar(UserAvatarViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await Backoffice.Process(new UserAvatarCommand(model));
+            }
+            return RedirectToAction("Details", new {id = model.UserId});
         }
 
         private async Task<string[]> EnsureRolesExistInDb(CreateUserViewModel model)

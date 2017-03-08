@@ -1,0 +1,26 @@
+﻿@using Borg.Framework.GateKeeping.Models.UserViewModels
+@model  UserAvatarViewModel
+<div class="box-body">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4"><img src="@Model.UserAvatarUrl" class="img-bordered-sm img-thumbnail center-block" alt="@Model.UserName" /></div>
+        </div>
+    </div>
+    <form asp-controller="Users" asp-action="Avatar" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="UserAvatarUrl"></label>
+            <input type="text" asp-for="UserAvatarUrl" class="form-control" />
+            <span asp-validation-for="UserAvatarUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="File" class="control-label"></label>
+            <input asp-for="File" type="file" accept="image/*" />
+            <span asp-validation-for="File" class="text-danger"></span>
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="UserName" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default pull-right">Save Avatar</button>
+        </div>
+</form>
+</div>
