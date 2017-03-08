@@ -1,0 +1,122 @@
+{
+  "global": {
+    "system": {
+      "framework": "Borg",
+      "version": "1.0.0"
+    },
+    "backoffice": {
+      "framework": "Borg",
+      "version": "1.0.0",
+      "application": {
+        "title": "Borg Backoffice",
+        "logo": "http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png",
+        "baseUrl": "https://localhost:44381/",
+        "data": {
+          "relational": {
+            "connectionStrings": [
+              {
+                "key": "borg",
+                "value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                
+              },
+              {
+                "key": "identity",
+                "value": "Server=.\\x2014;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
+              }
+            ]
+          }
+        },
+        "storage": {
+          "sharedFolder": "K:\\Users\\Mitsbits\\Source\\Repos\\Borg",
+          "mediaFolder": "media"
+        }
+      },
+      "pager": {
+        "defaultRowCount": 20,
+        "maxRowCount": 500,
+        "pageVariable": "p",
+        "rowsVariable": "r"
+      },
+      "Logging": {
+        "IncludeScopes": false,
+        "LogLevel": {
+          "Default": "Debug",
+          "System": "Information",
+          "Microsoft": "Information"
+        }
+      },
+      "Serilog": {
+        "MinimumLevel": {
+          "Default": "Debug",
+          "Override": {
+            "Microsoft": "Warning"
+          }
+        },
+        "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+        "WriteTo": [
+          {
+            "Name": "File",
+            "Args": {
+              "restrictedToMinimumLevel": "Information",
+              "path": "..\\..\\Logs\\information.txt",
+              "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{SourceContext}] {Message}{NewLine}{Exception}",
+              "shared": true
+            }
+          },
+          {
+            "Name": "RollingFile",
+            "Args": {
+              "pathFormat": "..\\..\\Logs\\rollingfile-{Date}.txt",
+              "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{ThreadId}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}",
+              "shared": true
+            }
+          }
+        ],
+        "Properties": {
+          "Application": "Borg.Framework.Backoffice"
+        }
+      }
+    }
+
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Warning"
+      }
+    },
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "WriteTo": [
+      {
+        "Name": "File",
+        "Args": {
+          "restrictedToMinimumLevel": "Information",
+          "path": "..\\..\\Logs\\information.txt",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{SourceContext}] {Message}{NewLine}{Exception}",
+          "shared": true
+        }
+      },
+      {
+        "Name": "RollingFile",
+        "Args": {
+          "pathFormat": "..\\..\\Logs\\rollingfile-{Date}.txt",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{ThreadId}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}",
+          "shared": true
+        }
+      }
+    ],
+    "Properties": {
+      "Application": "Borg.Framework.Identity"
+    }
+  }
+}
