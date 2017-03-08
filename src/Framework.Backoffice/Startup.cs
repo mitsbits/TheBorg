@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
+using Borg.Framework.GateKeeping.Data.Seeds;
 using Borg.Framework.UserNotifications;
 
 namespace Borg.Framework.Backoffice
@@ -119,7 +120,7 @@ namespace Borg.Framework.Backoffice
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            //IdentityDbSeed.InitialiseIdentity(app);
+            IdentityDbSeed.InitialiseIdentity(app);
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

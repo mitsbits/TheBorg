@@ -57,7 +57,14 @@ namespace Borg.Framework.GateKeeping
         {
             var user = await _userManager.FindByIdAsync(id);
 
+          
             if (user == null) throw new FileNotFoundException(nameof(BorgUser));
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            foreach (var userClaim in userClaims)
+            {
+                user.Claims.Add(new IdentityUserClaim<string>() {ClaimType = userClaim.Type, ClaimValue = userClaim.Value});
+            }
 
             var page = new PageContent()
             {

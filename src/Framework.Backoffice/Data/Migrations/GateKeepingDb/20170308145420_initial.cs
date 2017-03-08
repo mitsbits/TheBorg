@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Borg.Framework.GateKeeping.Data.Migrations.IdentityDb
+namespace Borg.Framework.Backoffice.Data.Migrations.GateKeepingDb
 {
-    public partial class userprofiles : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

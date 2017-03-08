@@ -8,3 +8,7 @@ namespace Borg.Framework.GateKeeping.Models
 
     }
 }
+
+namespace Borg
+{
+}

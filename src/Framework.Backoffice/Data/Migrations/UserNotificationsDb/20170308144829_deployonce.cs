@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Borg.Framework.Backoffice.Data.Migrations.UserNotificationsDb
 {
-    public partial class initial : Migration
+    public partial class deployonce : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

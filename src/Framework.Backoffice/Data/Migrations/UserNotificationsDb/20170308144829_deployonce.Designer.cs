@@ -3,13 +3,15 @@ using Borg.Framework.UserNotifications.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Borg.Framework.Backoffice.Data.Migrations.UserNotificationsDb
 {
     [DbContext(typeof(UserNotificationsDbContext))]
-    partial class UserNotificationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170308144829_deployonce")]
+    partial class deployonce
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

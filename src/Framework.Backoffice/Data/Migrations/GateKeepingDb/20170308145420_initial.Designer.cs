@@ -1,20 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Borg.Framework.GateKeeping.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Borg.Framework.GateKeeping.Data.Migrations.IdentityDb
+namespace Borg.Framework.Backoffice.Data.Migrations.GateKeepingDb
 {
     [DbContext(typeof(GateKeepingDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170308145420_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Borg.Framework.Backoffice.Identity.Models.BorgUser", b =>
+            modelBuilder.Entity("Borg.Framework.GateKeeping.Models.BorgUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -181,7 +184,7 @@ namespace Borg.Framework.GateKeeping.Data.Migrations.IdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Borg.Framework.Backoffice.Identity.Models.BorgUser")
+                    b.HasOne("Borg.Framework.GateKeeping.Models.BorgUser")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -189,7 +192,7 @@ namespace Borg.Framework.GateKeeping.Data.Migrations.IdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Borg.Framework.Backoffice.Identity.Models.BorgUser")
+                    b.HasOne("Borg.Framework.GateKeeping.Models.BorgUser")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -202,7 +205,7 @@ namespace Borg.Framework.GateKeeping.Data.Migrations.IdentityDb
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Borg.Framework.Backoffice.Identity.Models.BorgUser")
+                    b.HasOne("Borg.Framework.GateKeeping.Models.BorgUser")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

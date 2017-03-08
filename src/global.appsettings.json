@@ -16,20 +16,20 @@
             "connectionStrings": [
               {
                 "key": "borg",
-                "value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
-                //"value": "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                //"value": "Server=.\\x2014;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                "value": "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
               },
               {
                 "key": "identity",
-                "value": "Server=.\\x2014;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
-                //"value": "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                //"value": "Server=.\\x2014;Database=borgidentity;Trusted_Connection=True;MultipleActiveResultSets=true;"
+                "value": "Server=.\\SQL2016;Database=borg;Trusted_Connection=True;MultipleActiveResultSets=true;"
               }
             ]
           }
         },
         "storage": {
-          //"sharedFolder": "K:\\Users\\dbitsanis.FUTURA\\Source\\Repos\\Borg", 
-          "sharedFolder": "K:\\Users\\Mitsbits\\Source\\Repos\\Borg",
+          "sharedFolder": "K:\\Users\\dbitsanis.FUTURA\\Source\\Repos\\Borg", 
+          //"sharedFolder": "K:\\Users\\Mitsbits\\Source\\Repos\\Borg",
           "mediaFolder": "media"
         }
       },

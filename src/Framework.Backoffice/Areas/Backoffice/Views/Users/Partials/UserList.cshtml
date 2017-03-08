@@ -4,7 +4,6 @@
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 @using Microsoft.EntityFrameworkCore
 @model Borg.Infra.Relational.IPagedResult<Borg.Framework.GateKeeping.Models.BorgUser>
-@inject BorgSettings _settings;
 @inject RoleManager<IdentityRole> _roleManager;
 @{
     var roles = await _roleManager.Roles.ToDictionaryAsync(r => r.Id, r => r.Name);
@@ -25,13 +24,13 @@
                 <tr>
                     <td>
                         <a asp-controller="Users" asp-action="Details" asp-route-id="@u.Id">
-                            @if (u.Claims.Any(x => x.ClaimType.Equals(BorgSpecificClaims.Profile.Avatar)))
+                            @if (!string.IsNullOrWhiteSpace(u.AvatatUrl()))
                             {
-                                <img src="@u.Claims.First(x => x.ClaimType.Equals(BorgSpecificClaims.Profile.Avatar)).ClaimValue" class="img-thumbnail" width="32" />
+                                <img src="@u.AvatatUrl()" class="img-thumbnail" width="32" />
                             }
                             else
                             {
-                                <img src="@_settings.Backoffice.Application.Logo" class="img-thumbnail" width="32" />
+                                <img src="@Settings.Backoffice.Application.Logo" class="img-thumbnail" width="32" />
                             }
                         </a>
                     </td>
