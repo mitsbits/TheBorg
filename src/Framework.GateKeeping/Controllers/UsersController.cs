@@ -32,6 +32,7 @@ namespace Borg.Framework.GateKeeping
             _roleManager = roleManager;
         }
 
+        [Route("[area]/users")]
         public async Task<IActionResult> Index(string q)
         {
             var page = new PageContent()
@@ -55,7 +56,7 @@ namespace Borg.Framework.GateKeeping
             return View(result);
         }
 
-        [Route("[area]/user/{id}")]
+        [Route("[area]/users/{id}")]
         public async Task<IActionResult> Details(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

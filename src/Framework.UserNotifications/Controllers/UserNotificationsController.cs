@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Borg.Framework.GateKeeping.Models;
+using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Identity;
 
-namespace Borg.Framework.UserNotifications.Controllers.API
+
+namespace Borg.Framework.UserNotifications.Controllers
 {
     [Area("Backoffice")]
-    [Route("[area]/api/[controller]")]
     [Authorize]
     public class UserNotificationsController : BackofficeController
     {
@@ -21,8 +22,28 @@ namespace Borg.Framework.UserNotifications.Controllers.API
             _service = service;
             _userManager = userManager;
         }
+ 
+        public async Task<IActionResult> Index()
+        {
+            var id = (await _userManager.GetUserAsync(User)).Id;
+            var model = await _service.Find(id, Pager.Current, Pager.RowCount);
+            PageContent(new PageContent()
+            {
+                Title = $"Notifications",
+                Subtitle = $"Page {model.Page} of {model.TotalPages}"
+            });
 
-        [HttpGet("")]
+            return  View(model);
+        }
+
+        public async Task<IActionResult> DeleteNotification(string id, string redirect)
+        {
+            await _service.Dismiss(id);
+            return Redirect(redirect);
+        }
+
+
+        [HttpGet("[area]/api/[controller]")]
         public async Task<IActionResult> Get(int p = 0, int r = 0)
         {
             r = (r == 0) ? Backoffice.Settings.Backoffice.Pager.DefaultRowCount : r;

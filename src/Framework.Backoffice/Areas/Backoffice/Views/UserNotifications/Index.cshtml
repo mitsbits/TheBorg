@@ -1,0 +1,151 @@
+﻿@using Borg.Infra.Messaging
+@using Microsoft.AspNetCore.Http.Extensions
+@model IPagedResult<IUserNotification>
+@{
+    var _collection = Model.Records.ToArray();
+    Func<ResponseStatus, string> _iconClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg)
+        {
+
+            case ResponseStatus.Info:
+                result = "fa fa-info";
+                break;
+            case ResponseStatus.Warning:
+                result = "fa fa-warning";
+                break;
+            case ResponseStatus.Error:
+                result = "fa fa-ban";
+                break;
+            case ResponseStatus.Success:
+                result = "fa fa-check";
+                break;
+
+        }
+        return result;
+    };
+
+    Func<ResponseStatus, string> _textClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg)
+        {
+
+            case ResponseStatus.Info:
+                result = "text-info";
+                break;
+            case ResponseStatus.Warning:
+                result = "text-warning";
+                break;
+            case ResponseStatus.Error:
+                result = "text-danger";
+                break;
+            case ResponseStatus.Success:
+                result = "text-success";
+                break;
+
+        }
+        return result;
+    };
+
+    Func<ResponseStatus, string> _btnClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg)
+        {
+
+            case ResponseStatus.Info:
+                result = "btn btn-xs btn-flat btn-info";
+                break;
+            case ResponseStatus.Warning:
+                result = "btn btn-xs btn-flat btn-warning";
+                break;
+            case ResponseStatus.Error:
+                result = "btn btn-xs btn-flat btn-danger";
+                break;
+            case ResponseStatus.Success:
+                result = "btn btn-xs btn-flat btn-success";
+                break;
+
+        }
+        return result;
+    };
+
+    Func<ResponseStatus, string> _bgClass = (msg) =>
+    {
+        var result = string.Empty;
+        switch (msg)
+        {
+
+            case ResponseStatus.Info:
+                result = "bg-info";
+                break;
+            case ResponseStatus.Warning:
+                result = "bg-warning";
+                break;
+            case ResponseStatus.Error:
+                result = "bg-danger";
+                break;
+            case ResponseStatus.Success:
+                result = "bg-success";
+                break;
+
+        }
+        return result;
+    };
+}
+@section contentheader
+{
+    <section class="content-header">
+    <h1>
+        @Content.Page.Title
+        <small>@Content.Page.Subtitle</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+}
+
+<div class="box box-default">
+
+    <div class="box-body ">
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped table-condensed sever-table">
+                <tbody>
+                @for (var i = 0; i< _collection.Length; i++)
+                {
+                    var notification = _collection[i];
+                    
+                    <tr class="@_bgClass(notification.ResponseStatus) @_textClass(notification.ResponseStatus)" >
+                        <td style="width: 1px;"><span><i class="@_iconClass(notification.ResponseStatus)"></i></span></td>
+                        <td >
+                          
+                                <span class="h4 no-margin">@notification.Title</span> <span> @notification.Message</span>
+                                               
+                        </td>
+                
+                        <td>
+                            <form asp-controller="UserNotifications" asp-action="DeleteNotification" method="post">
+                                <input type="hidden" name="id" value="@notification.NotificationIdentifier"/>
+                                <input type="hidden" name="redirect" value="@ViewContext.HttpContext.Request.GetDisplayUrl()" />
+                                <button type="submit" class="btn btn-xs btn-flat pull-right">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+            <!-- /.table -->
+        </div>
+        <!-- /.mail-box-messages -->
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer ">
+        <ul class="pull-right" pagination model="@Model" query="@ViewContext.HttpContext.Request.QueryString" settings="@Pagination.PaginationInfo.DefaultPager" url-generator="@Url.PagerAnchorGenerator(Device.Device)"></ul>
+    </div>
+</div>

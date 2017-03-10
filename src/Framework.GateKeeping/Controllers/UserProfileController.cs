@@ -23,6 +23,7 @@ namespace Borg.Framework.GateKeeping
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+
         public UserProfileController(
         IBackofficeService<BorgSettings> system,
         UserManager<BorgUser> userManager,
@@ -329,6 +330,7 @@ namespace Borg.Framework.GateKeeping
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
+
 
         #region Helpers
 
