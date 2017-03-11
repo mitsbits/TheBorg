@@ -7,8 +7,9 @@
     "NETStandard.Library": "1.6.1",
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Extensions.Logging.Abstractions": "1.1.0",
-    "Nito.AsyncEx.Core": "1.0.0-rc2-001",
-    "Microsoft.Extensions.DependencyModel": "1.1.0"
+    //"Nito.AsyncEx.Core": "1.0.0-rc2-001",
+    "Microsoft.Extensions.DependencyModel": "1.1.0",
+    "System.Threading.ThreadPool": "4.3.0"
   },
 
   "frameworks": {

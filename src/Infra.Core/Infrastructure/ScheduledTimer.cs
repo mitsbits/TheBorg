@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
+//using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,8 @@ namespace Borg.Infra
         private readonly Timer _timer;
         private readonly Func<Task<DateTime?>> _timerCallback;
         private readonly TimeSpan _minimumInterval;
-        private readonly AsyncLock _lock = new AsyncLock();
+        //private readonly AsyncLock _lock = new AsyncLock();
+        private readonly object _lock = new object();
         private bool _isRunning = false;
         private bool _shouldRunAgainImmediately = false;
 
@@ -48,7 +49,7 @@ namespace Borg.Infra
                 return;
             }
 
-            using (_lock.Lock())
+            lock (_lock)
             {
                 // already have an earlier scheduled time
                 if (_next > utcNow && utcDate > _next)
@@ -86,7 +87,7 @@ namespace Borg.Infra
 
             _logger.LogDebug("RunCallbackAsync");
 
-            using (await _lock.LockAsync())
+            lock (_lock)
             {
                 if (_isRunning)
                 {
