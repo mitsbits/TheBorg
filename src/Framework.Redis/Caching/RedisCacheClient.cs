@@ -1,10 +1,11 @@
 ﻿using Borg.Infra;
 using Borg.Infra.Caching;
-using Nito.AsyncEx;
+//using Nito.AsyncEx;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Borg.Framework.Redis
@@ -14,7 +15,8 @@ namespace Borg.Framework.Redis
         private readonly ConnectionMultiplexer _connectionMultiplexer;
         private readonly ISerializer _serializer;
 
-        private readonly AsyncLock _lock = new AsyncLock();
+        static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+        //private readonly AsyncLock _lock = new AsyncLock();
         private bool _scriptsLoaded;
         private LoadedLuaScript _setIfHigherScript;
         private LoadedLuaScript _setIfLowerScript;
@@ -330,8 +332,10 @@ namespace Borg.Framework.Redis
         {
             if (_scriptsLoaded)
                 return;
-
-            using (await _lock.LockAsync())
+            await semaphoreSlim.WaitAsync();
+            //using (await _lock.LockAsync())
+            //{
+            try
             {
                 if (_scriptsLoaded)
                     return;
@@ -352,6 +356,17 @@ namespace Borg.Framework.Redis
 
                 _scriptsLoaded = true;
             }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            finally
+            {
+                await semaphoreSlim.WaitAsync();
+            }
+
+            //}
         }
 
         private void ConnectionMultiplexerOnConnectionRestored(object sender, ConnectionFailedEventArgs connectionFailedEventArgs)
