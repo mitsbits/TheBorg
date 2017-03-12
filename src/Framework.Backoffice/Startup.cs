@@ -25,6 +25,7 @@ using System.IO;
 using Borg.Framework.GateKeeping.Data.Seeds;
 using Borg.Framework.UserNotifications;
 
+
 namespace Borg.Framework.Backoffice
 {
     public class Startup
@@ -43,14 +44,15 @@ namespace Borg.Framework.Backoffice
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .ReadFrom.Configuration(Configuration.GetSection("global:backoffice")).CreateLogger();
+                .ReadFrom.Configuration(Configuration.GetSection("global:backoffice"))
+                .WriteTo.File("..\\..\\Logs\\all.txt")
+                .CreateLogger();
         }
 
         //TODO: move to configuration
 
         public IHostingEnvironment Environment { get; }
         public IConfigurationRoot Configuration { get; }
-
         private BorgSettings Settings { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -123,7 +125,7 @@ namespace Borg.Framework.Backoffice
         {
             IdentityDbSeed.InitialiseIdentity(app);
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(Configuration.GetSection("global:backoffice:Logging"));
             loggerFactory.AddDebug();
             loggerFactory.AddSerilog();
 

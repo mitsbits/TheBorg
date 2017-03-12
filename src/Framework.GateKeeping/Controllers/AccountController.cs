@@ -10,6 +10,7 @@ using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
 using Borg.Infra.CQRS;
+using Borg.Infra.Postal;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,6 @@ namespace Borg.Framework.GateKeeping
     {
         private readonly UserManager<BorgUser> _userManager;
         private readonly SignInManager<BorgUser> _signInManager;
-        private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IIdentityServerInteractionService _interaction;
@@ -41,7 +41,6 @@ namespace Borg.Framework.GateKeeping
             IBackofficeService<BorgSettings> system,
             UserManager<BorgUser> userManager,
             SignInManager<BorgUser> signInManager,
-            IEmailSender emailSender,
             ISmsSender smsSender,
             IIdentityServerInteractionService interaction,
             IHttpContextAccessor httpContext,
@@ -49,7 +48,7 @@ namespace Borg.Framework.GateKeeping
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
+
             _smsSender = smsSender;
             _logger = System.CreateLogger<AccountController>();
             _interaction = interaction;
@@ -457,7 +456,8 @@ namespace Borg.Framework.GateKeeping
             var message = "Your security code is: " + code;
             if (model.SelectedProvider == "Email")
             {
-                await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
+                await Backoffice.SendSingleMail(new MailAddress(await _userManager.GetEmailAsync(user)),
+                    "Security Code", message);
             }
             else if (model.SelectedProvider == "Phone")
             {

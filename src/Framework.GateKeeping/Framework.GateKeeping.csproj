@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.MVC.BuildingBlocks\Framework.MVC.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\Framework.Postal\Framework.Postal.csproj" />
     <ProjectReference Include="..\Framework.System\Framework.System.csproj" />
     <ProjectReference Include="..\Infra.Core\Infra.Core.csproj" />
     <ProjectReference Include="..\Infra.EFCore\Infra.EFCore.csproj" />

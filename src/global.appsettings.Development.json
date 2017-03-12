@@ -37,6 +37,16 @@
         "pageVariable": "p",
         "rowsVariable": "r"
       },
+      "smtp": {
+        "name": "backoffice",
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "useName": "testrdms1@gmail.com",
+        "password": "t3strdms",
+        "ssl": "true",
+        "trackHeadersOnSend": [ "X-BORG", "X-MAILER" ]
+      }, 
+
       "Logging": {
         "IncludeScopes": false,
         "LogLevel": {
@@ -60,7 +70,7 @@
               "restrictedToMinimumLevel": "Information",
               "path": "..\\..\\Logs\\information.txt",
               "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{SourceContext}] {Message}{NewLine}{Exception}",
-              "shared": true
+              "shared": false
             }
           },
           {
@@ -68,7 +78,7 @@
             "Args": {
               "pathFormat": "..\\..\\Logs\\rollingfile-{Date}.txt",
               "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{ThreadId}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}",
-              "shared": true
+              "shared": false
             }
           }
         ],
@@ -78,45 +88,5 @@
       }
     }
 
-  },
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Debug",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
-  },
-
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Debug",
-      "Override": {
-        "Microsoft": "Warning"
-      }
-    },
-    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
-    "WriteTo": [
-      {
-        "Name": "File",
-        "Args": {
-          "restrictedToMinimumLevel": "Information",
-          "path": "..\\..\\Logs\\information.txt",
-          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{SourceContext}] {Message}{NewLine}{Exception}",
-          "shared": true
-        }
-      },
-      {
-        "Name": "RollingFile",
-        "Args": {
-          "pathFormat": "..\\..\\Logs\\rollingfile-{Date}.txt",
-          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level,3:u}] [{Application}] [{ThreadId}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}",
-          "shared": true
-        }
-      }
-    ],
-    "Properties": {
-      "Application": "Borg.Framework.Identity"
-    }
   }
 }

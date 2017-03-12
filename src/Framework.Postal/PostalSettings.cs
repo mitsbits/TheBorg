@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Borg.Infra.Postal;
 
 namespace Borg.Framework.Postal
 {

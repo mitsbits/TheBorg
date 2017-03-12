@@ -5,6 +5,7 @@ using Borg.Framework.GateKeeping.Models.ManageViewModels;
 using Borg.Framework.GateKeeping.Services;
 using Borg.Framework.MVC;
 using Borg.Framework.System;
+using Borg.Infra.Postal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace Borg.Framework.GateKeeping
     {
         private readonly UserManager<BorgUser> _userManager;
         private readonly SignInManager<BorgUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
@@ -28,12 +29,11 @@ namespace Borg.Framework.GateKeeping
         IBackofficeService<BorgSettings> system,
         UserManager<BorgUser> userManager,
         SignInManager<BorgUser> signInManager,
-        IEmailSender emailSender,
         ISmsSender smsSender):base(system)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
+  
             _smsSender = smsSender;
             _logger = System.CreateLogger<UserProfileController>();
         }

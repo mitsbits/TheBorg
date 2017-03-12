@@ -1,5 +1,7 @@
 ﻿using Borg.Infra.DTO;
+using Borg.Infra.Postal;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Borg.Infra.Postal
@@ -13,3 +15,4 @@ namespace Borg.Infra.Postal
         MailAddress ServiceAccount();
     }
 }
+

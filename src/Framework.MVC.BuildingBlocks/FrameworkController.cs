@@ -1,7 +1,6 @@
 ﻿using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Borg.Framework.System;
-using Borg.Infra.Messaging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +19,6 @@ namespace Borg.Framework.MVC
         {
             System = system;
             Logger = System.CreateLogger(GetType());
-            Logger.LogDebug("{@Controller} is born", this);
         }
 
         protected TContent PageContent<TContent>(TContent content = default(TContent)) where TContent : IPageContent

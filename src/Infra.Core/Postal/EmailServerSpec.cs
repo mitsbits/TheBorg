@@ -1,4 +1,6 @@
-﻿namespace Borg.Framework.Postal
+﻿
+
+namespace Borg.Infra.Postal
 {
     public abstract class EmailServerSpec : NamedSpec
     {

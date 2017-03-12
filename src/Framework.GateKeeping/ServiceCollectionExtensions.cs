@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using Borg.Framework.GateKeeping.Commands;
+using Borg.Infra.Postal;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -63,7 +64,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddAspNetIdentity<BorgUser>()
                 .AddTemporarySigningCredential();
 
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<IEmailAccountService, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddScoped<IHandlesQueryRequest<UsersQueryRequest>, UsersQueryRequestHandler>();

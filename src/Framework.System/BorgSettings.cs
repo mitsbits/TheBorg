@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Borg.Infra.Postal;
 
 namespace Borg.Framework.System
 {
@@ -21,6 +22,8 @@ namespace Borg.Framework.System
         public string Version { get; set; }
         public ApplicationSettings Application { get; set; }
         public PagerSettings Pager { get; set; } = new PagerSettings();
+
+        public SmtpSpec Smtp { get; set; }
     }
 
     public class PagerSettings
@@ -39,6 +42,8 @@ namespace Borg.Framework.System
         public string BaseUrl { get; set; }
         public DataSettings Data { get; set; }
         public StorageSettings Storage { get; set; }
+
+
     }
 
     public class StorageSettings
