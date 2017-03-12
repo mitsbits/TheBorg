@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
 
-namespace Borg.Infra.Core.Infrastructure
+namespace Borg.Infra.Infrastructure
 {
     public class LegacyAppDomain
     {
