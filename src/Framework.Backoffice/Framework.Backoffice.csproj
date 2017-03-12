@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="1.4.1-dev-10147" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.GateKeeping\Framework.GateKeeping.csproj" />
+    <ProjectReference Include="..\Framework.Media\Framework.Media.csproj" />
+    <ProjectReference Include="..\Framework.MVC.BuildingBlocks\Framework.MVC.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\Framework.MVC.HtmlPager\Framework.MVC.HtmlPager.csproj" />
+    <ProjectReference Include="..\Framework.Sql\Framework.Sql.csproj" />
+    <ProjectReference Include="..\Framework.System.Domain\Framework.System.Domain.csproj" />
+    <ProjectReference Include="..\Framework.System\Framework.System.csproj" />
+    <ProjectReference Include="..\Framework.UserNotifications.Sql\Framework.UserNotifications.Sql.csproj" />
+    <ProjectReference Include="..\Infra.EFCore\Infra.EFCore.csproj" />
+  </ItemGroup>
+
+</Project>

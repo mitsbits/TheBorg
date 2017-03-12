@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>User notifications SQL store for the Borg framework</Description>
+    <Authors>mitsbits@gmail.com</Authors>
+    <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
+    <AssemblyName>Borg.Framework.UserNotifications.Sql</AssemblyName>
+    <PackageId>Framework.UserNotifications.Sql</PackageId>
+    <PackageTags>net core;net 46;borg;infrastructure;user notifications;alerts;sql server;</PackageTags>
+    <PackageIconUrl>http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png</PackageIconUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/mitsbits/Borg</RepositoryUrl>
+    <RootNamespace>Borg.Framework.UserNotifications.Sql</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Sql\Framework.Sql.csproj" />
+    <ProjectReference Include="..\Framework.System\Framework.System.csproj" />
+    <ProjectReference Include="..\Framework.UserNotifications\Framework.UserNotifications.csproj" />
+  </ItemGroup>
+
+</Project>

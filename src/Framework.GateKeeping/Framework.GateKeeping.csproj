@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Identity support for the Borg framework</Description>
+    <Authors>mitsbits@gmail.com</Authors>
+    <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
+    <AssemblyName>Borg.Framework.GateKeeping</AssemblyName>
+    <PackageId>Framework.GateKeeping</PackageId>
+    <PackageTags>net core;net 46;borg;infrastructure;identity;claims;authentication;</PackageTags>
+    <PackageIconUrl>http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png</PackageIconUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/mitsbits/Borg</RepositoryUrl>
+    <RootNamespace>Borg.Framework.GateKeeping</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="1.0.0" />
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.MVC.BuildingBlocks\Framework.MVC.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\Framework.System\Framework.System.csproj" />
+    <ProjectReference Include="..\Infra.Core\Infra.Core.csproj" />
+    <ProjectReference Include="..\Infra.EFCore\Infra.EFCore.csproj" />
+  </ItemGroup>
+
+</Project>

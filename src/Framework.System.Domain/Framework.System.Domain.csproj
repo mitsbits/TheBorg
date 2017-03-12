@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Plugin System domain classes for the Borg framework</Description>
+    <Authors>mitsbits@gmail.com</Authors>
+    <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
+    <AssemblyName>Borg.Framework.System.Domain</AssemblyName>
+    <PackageId>Framework.System.Domain</PackageId>
+    <PackageTags>net core;net 46;borg;infrastructure;plugins;host;</PackageTags>
+    <PackageIconUrl>http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png</PackageIconUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/mitsbits/Borg</RepositoryUrl>
+    <RootNamespace>Borg.Framework.System.Domain</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infra.Core\Infra.Core.csproj" />
+  </ItemGroup>
+
+</Project>
