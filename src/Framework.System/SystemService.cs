@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Borg.Framework.System;
 using Borg.Infra;
 using Microsoft.Extensions.Logging;
 
-namespace Borg.Framework.Backoffice
+namespace Borg.Framework.System
 {
     public class SystemService : ISystemService<BorgSettings>
     {

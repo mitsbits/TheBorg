@@ -91,7 +91,7 @@ namespace Borg.Infra.DTO
             }
             else
             {
-                _bucket.Add(new Tiding() { Key = key, Value = value });
+                _bucket.Add(new Tiding(key, value));
             }
         }
 
@@ -144,7 +144,7 @@ namespace Borg.Infra.DTO
                 }
                 else
                 {
-                    _bucket.Add(new Tiding() { Key = key, Value = value });
+                    _bucket.Add(new Tiding(key, value));
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace Borg.Infra.DTO
             }
             else
             {
-                _bucket.Add(new Tiding() { Key = item.Key, Value = item.Value });
+                _bucket.Add(new Tiding(item.Key, item.Value));
             }
         }
 

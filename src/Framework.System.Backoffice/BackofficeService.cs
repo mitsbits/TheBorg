@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Borg.Framework.Postal;
-using Borg.Framework.System;
 using Borg.Infra;
 using Borg.Infra.CQRS;
 using Borg.Infra.DTO;
@@ -11,12 +10,12 @@ using Borg.Infra.Messaging;
 using Borg.Infra.Postal;
 using Microsoft.Extensions.Logging;
 
-namespace Borg.Framework.Backoffice
+namespace Borg.Framework.System.Backoffice
 {
     public class BackofficeService : SystemService, IBackofficeService<BorgSettings>
     {
-        public BackofficeService( IBorgHost  borgHost, ILoggerFactory loggerFactory, BorgSettings settings, ISerializer serializer, ICommandBus commands, IEventBus events, IQueryBus queries, IBroadcaster broadcaster) 
-            : base(borgHost, loggerFactory,  settings,  serializer)
+        public BackofficeService(IBorgHost borgHost, ILoggerFactory loggerFactory, BorgSettings settings, ISerializer serializer, ICommandBus commands, IEventBus events, IQueryBus queries, IBroadcaster broadcaster)
+            : base((IBorgHost)borgHost, loggerFactory, (BorgSettings)settings, serializer)
         {
             Commands = commands;
             Events = events;

@@ -2,14 +2,9 @@
 {
     public class Tiding : Catalogued, IWeighted
     {
-        private readonly Tidings _children;
 
-        public Tiding()
-        {
-            _children = new Tidings();
-        }
 
-        public Tiding(string key, string value) : this()
+        public Tiding(string key, string value = "") 
         {
             Key = key;
             Value = value;
@@ -17,10 +12,7 @@
 
         public virtual double Weight { get; set; }
 
-        public virtual Tidings Children
-        {
-            get { return _children; }
-        }
+        public virtual Tidings Children { get; } = new Tidings();
     }
 
     public interface IWeighted

@@ -23,8 +23,9 @@ using Serilog;
 using System;
 using System.IO;
 using Borg.Framework.GateKeeping.Data.Seeds;
+using Borg.Framework.System.Backoffice;
+using Borg.Framework.System.Backoffice.UserSession;
 using Borg.Framework.UserNotifications;
-
 
 namespace Borg.Framework.Backoffice
 {
@@ -115,6 +116,8 @@ namespace Borg.Framework.Backoffice
             services.AddBorgHost(Settings);
 
             services.AddScoped<ISerializer, JsonNetSerializer>();
+
+            services.AddScoped<IUserSession, UserSession>();
 
             services.AddMvc()/*.AddRazorOptions(options => options.AddEmbeddedAdminLteViewsForBackOffice())*/;
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();

@@ -5,6 +5,7 @@ using Borg.Framework.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Borg.Framework.System.Backoffice.UserSession;
 
 namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
 {
@@ -13,9 +14,16 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     public class HomeController : BackofficeController
     {
-        public HomeController(IBackofficeService<BorgSettings> systemService) : base(systemService)
+        private readonly IUserSession _userSession;
+
+        public HomeController(IBackofficeService<BorgSettings> systemService, IUserSession userSession) : base(systemService)
         {
-            var descriptor = System.BorgHost.IdentityDescriptor();
+            _userSession = userSession;
+
+            var lkj = _userSession.SessionStart;
+            _userSession.Setting("myKey", "myValue");
+
+            var val = _userSession.Setting<string>("myKey");
         }
 
         public async Task<IActionResult> Index()

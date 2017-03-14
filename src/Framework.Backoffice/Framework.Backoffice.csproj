@@ -8,6 +8,13 @@
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
     <RootNamespace>Borg.Framework.Backoffice</RootNamespace>
     <AssemblyName>Borg.Framework.Backoffice</AssemblyName>
+    <PackageIconUrl>http://icons.iconarchive.com/icons/icons8/windows-8/128/Cinema-Borg-Head-icon.png</PackageIconUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/mitsbits/Borg</RepositoryUrl>
+    <Authors>mitsbits@gmail.com</Authors>
+    <Description>Web UI for Borg Framework back office</Description>
+    <Copyright>mitsbits@gmail.com</Copyright>
+    <PackageTags>net core;net 46;borg;infrastructure;framework;asp.net mvc;</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
@@ -29,6 +36,7 @@
     <ProjectReference Include="..\Framework.MVC.BuildingBlocks\Framework.MVC.BuildingBlocks.csproj" />
     <ProjectReference Include="..\Framework.MVC.HtmlPager\Framework.MVC.HtmlPager.csproj" />
     <ProjectReference Include="..\Framework.Sql\Framework.Sql.csproj" />
+    <ProjectReference Include="..\Framework.System.Backoffice\Framework.System.Backoffice.csproj" />
     <ProjectReference Include="..\Framework.System.Domain\Framework.System.Domain.csproj" />
     <ProjectReference Include="..\Framework.System\Framework.System.csproj" />
     <ProjectReference Include="..\Framework.UserNotifications.Sql\Framework.UserNotifications.Sql.csproj" />
