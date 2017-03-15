@@ -14,16 +14,11 @@ namespace Borg.Framework.Backoffice.Areas.Backoffice.Controllers
     [Authorize]
     public class HomeController : BackofficeController
     {
-        private readonly IUserSession _userSession;
 
-        public HomeController(IBackofficeService<BorgSettings> systemService, IUserSession userSession) : base(systemService)
+
+        public HomeController(IBackofficeService<BorgSettings> systemService) : base(systemService)
         {
-            _userSession = userSession;
-
-            var lkj = _userSession.SessionStart;
-            _userSession.Setting("myKey", "myValue");
-
-            var val = _userSession.Setting<string>("myKey");
+            
         }
 
         public async Task<IActionResult> Index()

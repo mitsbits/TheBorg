@@ -6,6 +6,7 @@
 @using Borg.Framework.System
 @using Borg.Framework.Media
 @using Borg
+@using Borg.Framework.System.Backoffice.UserSession
 @using Borg.Infra
 @using Borg.Infra.Storage.Assets
 @using Borg.Framework.UserNotifications
@@ -14,6 +15,7 @@
 @inject IDeviceAccessor<IDevice> Device
 @inject BorgSettings Settings
 @inject IAssetUrlResolver AssetUrlResolver
+@inject IUserSession BorgUserSession 
 @*TODO: must remove serializer from here*@
 @inject ISerializer Serializer 
 

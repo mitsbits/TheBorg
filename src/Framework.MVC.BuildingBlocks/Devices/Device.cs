@@ -23,7 +23,7 @@ namespace Borg.Framework.MVC.BuildingBlocks.Devices
             Controller = (context.ActionDescriptor.RouteValues.ContainsKey(ControllerKey)) ? context.ActionDescriptor.RouteValues[ControllerKey] : string.Empty;
             Area = (context.ActionDescriptor.RouteValues.ContainsKey(AreaKey)) ? context.ActionDescriptor.RouteValues[AreaKey] : string.Empty;
             Action = (context.ActionDescriptor.RouteValues.ContainsKey(ActionKey)) ? context.ActionDescriptor.RouteValues[ActionKey] : string.Empty;
-
+            Path = context.HttpContext.Request.Path;
         }
     }
 

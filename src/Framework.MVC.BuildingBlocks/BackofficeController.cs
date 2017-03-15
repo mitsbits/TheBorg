@@ -3,11 +3,13 @@ using System.Linq;
 using Borg.Framework.MVC.BuildingBlocks.Interactions;
 using Borg.Framework.System;
 using Borg.Infra.Messaging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 
 namespace Borg.Framework.MVC
 {
+    [Area("backoffice")]
     public abstract class BackofficeController : FrameworkController
     {
         protected BackofficeController(IBackofficeService<BorgSettings> systemService) : base(systemService)
