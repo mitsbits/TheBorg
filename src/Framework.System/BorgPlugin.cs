@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-
 namespace Borg.Framework.System
 {
     [Obsolete("not very handy")]
@@ -23,5 +22,7 @@ namespace Borg.Framework.System
         {
             if (!_db.ContainsKey(role)) _db.Add(role, new List<BorgPrefixedClaim>());
         }
+
+        public IBorgFeature[] Features { get; }
     }
 }

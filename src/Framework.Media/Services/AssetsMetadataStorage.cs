@@ -4,9 +4,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Borg.Framework.System;
 
 namespace Borg.Framework.Media
 {
+    [BorgModule]
     public class AssetsMetadataStorage : IAssetMetadataStorage<int>, IDisposable
     {
         private readonly ILogger Loger;

@@ -3,6 +3,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Borg.Framework.System;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Extensions;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Borg.Framework.GateKeeping.Account
 {
+    [BorgModule]
     public class AccountService
     {
         private readonly IClientStore _clientStore;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Borg.Framework.Postal;
+using Borg.Framework.System;
 using Borg.Infra.DTO;
 using Borg.Infra.Postal;
 using Microsoft.Extensions.Logging;
@@ -10,14 +11,17 @@ namespace Borg.Framework.GateKeeping.Services
     // This class is used by the application to send Email and SMS
     // when you turn on two-factor authentication in ASP.NET Identity.
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
+    [BorgModule]
     public class AuthMessageSender : IEmailAccountService, ISmsSender
     {
         private readonly ILogger<AuthMessageSender> _logger;
         private readonly IEmailAccountService emails = new NullEmailService();
+
         public AuthMessageSender(ILogger<AuthMessageSender> logger)
         {
             _logger = logger;
         }
+
         public Task SendEmailAsync(string email, string subject, string message)
         {
             // Plug in your email service here to send an email.

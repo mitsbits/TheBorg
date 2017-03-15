@@ -7,9 +7,11 @@ namespace Borg.Framework.GateKeeping
         public GateKeepingPlugin()
         {
             IdentityDescriptor = BuildDescriptor();
+            Features = new IBorgFeature[] { new GateKeepingFeature(), new BorgSystemFeature(), };
         }
 
         public IBorgIdentityDescriptor IdentityDescriptor { get; }
+        public IBorgFeature[] Features { get; }
 
         private static IBorgIdentityDescriptor BuildDescriptor()
         {
@@ -18,6 +20,13 @@ namespace Borg.Framework.GateKeeping
                 .AddRolesToBorgClaim("GateKeeping", "create", SystemRoles.Author)
                 .AddRolesToBorgClaim("GateKeeping", "view", SystemRoles.ReadOnly)
                 .Descriptor();
+        }
+    }
+
+    public class GateKeepingFeature : BorgFeature
+    {
+        public GateKeepingFeature() : base("Gate Keeping")
+        {
         }
     }
 }

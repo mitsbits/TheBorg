@@ -7,7 +7,6 @@ using Borg.Framework.GateKeeping.Models;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
 using Microsoft.AspNetCore.Identity;
 
-
 namespace Borg.Framework.UserNotifications.Controllers
 {
     [Area("Backoffice")]
@@ -22,7 +21,7 @@ namespace Borg.Framework.UserNotifications.Controllers
             _service = service;
             _userManager = userManager;
         }
- 
+
         public async Task<IActionResult> Index()
         {
             var id = (await _userManager.GetUserAsync(User)).Id;
@@ -33,7 +32,7 @@ namespace Borg.Framework.UserNotifications.Controllers
                 Subtitle = $"Page {model.Page} of {model.TotalPages}"
             });
 
-            return  View(model);
+            return View(model);
         }
 
         public async Task<IActionResult> DeleteNotification(string id, string redirect)
@@ -41,7 +40,6 @@ namespace Borg.Framework.UserNotifications.Controllers
             await _service.Dismiss(id);
             return Redirect(redirect);
         }
-
 
         [HttpGet("[area]/api/[controller]")]
         public async Task<IActionResult> Get(int p = 0, int r = 0)

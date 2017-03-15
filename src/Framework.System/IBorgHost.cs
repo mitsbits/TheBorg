@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
 namespace Borg.Framework.System
@@ -12,6 +11,7 @@ namespace Borg.Framework.System
     public interface IBorgPlugin
     {
         IBorgIdentityDescriptor IdentityDescriptor { get; }
+        IBorgFeature[] Features { get; }
     }
 
     public interface IBorgIdentityDescriptor
@@ -24,15 +24,6 @@ namespace Borg.Framework.System
     public interface IBorgFeature
     {
         string Name { get; }
-    }
-
-    public class BorgHost : IBorgHost
-    {
-        public BorgHost(IEnumerable<IBorgPlugin> registeredPlugins)
-        {
-            RegisteredPlugins = registeredPlugins?.ToArray();
-        }
-
-        public IBorgPlugin[] RegisteredPlugins { get; }
+        bool Enabled { get; }
     }
 }

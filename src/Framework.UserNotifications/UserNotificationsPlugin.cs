@@ -17,5 +17,7 @@ namespace Borg.Framework.UserNotifications
                 .AddRolesToBorgClaim("UserNotifications", "manage", SystemRoles.SysAdmin, SystemRoles.AppAdmin, SystemRoles.Editor)
                 .Descriptor();
         }
+
+        public IBorgFeature[] Features { get; }
     }
 }

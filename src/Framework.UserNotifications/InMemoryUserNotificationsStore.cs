@@ -3,12 +3,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Borg.Framework.System;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
 
 namespace Borg.Framework.UserNotifications
 {
+    [BorgModule]
     public class InMemoryUserNotificationsStore : IUserNotificationsStore
     {
         private readonly IEventBus _events;

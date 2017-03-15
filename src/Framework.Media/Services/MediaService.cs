@@ -7,16 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Borg.Framework.System;
 using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media
 {
+    [BorgModule]
     public class MediaService : BaseAssetService<int>, IMediaService, IDisposable
     {
         private readonly AssetsDbContext _dbContext;
         private readonly ICRUDRespoditory<AssetSpec> _repo;
         private readonly ICRUDRespoditory<FileSpec> _fileRepo;
-
 
         public MediaService(ILoggerFactory loggerFactory, IFileStorage storage, IUniqueKeyProvider<int> keyProvider, IConflictingNamesResolver namesResolver, IAssetMetadataStorage<int> db, IFolderScopeFactory<int> folderScope, AssetsDbContext dbContext, IEventBus events) : base(loggerFactory, storage, keyProvider, namesResolver, db, folderScope, events)
         {
@@ -26,6 +27,7 @@ namespace Borg.Framework.Media
         }
 
         #region IMediaService
+
         public async Task<IPagedResult<AssetSpec>> Assets(Expression<Func<AssetSpec, bool>> predicate, int page, int size, IEnumerable<OrderByInfo<AssetSpec>> orderBy, params Expression<Func<AssetSpec, dynamic>>[] paths)
         {
             var data = await _repo.FindAsync(predicate, page, size, orderBy, paths);
@@ -59,8 +61,9 @@ namespace Borg.Framework.Media
             if (state == AssetState.Suspended) asset.Deactivate();
             await _repo.UpdateAsync(asset);
             await _dbContext.SaveChangesAsync();
-        } 
-        #endregion
+        }
+
+        #endregion IMediaService
 
         #region IDisposable Support
 

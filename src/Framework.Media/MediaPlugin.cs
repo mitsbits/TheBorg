@@ -19,5 +19,7 @@ namespace Borg.Framework.Media
                 .AddRolesToBorgClaim("Media", "view", SystemRoles.ReadOnly)
                 .Descriptor();
         }
+
+        public IBorgFeature[] Features { get; }
     }
 }

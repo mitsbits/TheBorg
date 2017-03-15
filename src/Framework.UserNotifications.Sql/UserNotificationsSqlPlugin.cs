@@ -10,5 +10,6 @@ namespace Borg.Framework.UserNotifications.Sql
         }
 
         public IBorgIdentityDescriptor IdentityDescriptor { get; }
+        public IBorgFeature[] Features { get; }
     }
 }

@@ -3,6 +3,7 @@ using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.Media.Services
 {
+    [BorgModule]
     public class AssetUrlResolver : IAssetUrlResolver
     {
         private readonly BorgSettings _settings;

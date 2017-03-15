@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Borg.Framework.System;
 using Borg.Infra.CQRS;
 using Borg.Infra.Messaging;
 using Borg.Infra.Relational;
 
 namespace Borg.Framework.UserNotifications.Sql
 {
+    [BorgModule]
     public class SqlUserNotificationsStore : IUserNotificationsStore
     {
         private readonly IEventBus _events;
