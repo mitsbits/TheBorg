@@ -28,7 +28,7 @@
           }
         },
         "storage": {
-          "sharedFolder": "K:\\Users\\dbitsanis.FUTURA\\Source\\Repos\\Borg", 
+          "sharedFolder": "K:\\Users\\dbitsanis.FUTURA\\Source\\Repos\\Borg",
           //"sharedFolder": "K:\\Users\\Mitsbits\\Source\\Repos\\Borg",
           "mediaFolder": "media"
         }
@@ -38,6 +38,15 @@
         "maxRowCount": 500,
         "pageVariable": "p",
         "rowsVariable": "r"
+      },
+      "smtp": {
+        "name": "backoffice",
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "useName": "testrdms1@gmail.com",
+        "password": "t3strdms",
+        "ssl": "true",
+        "trackHeadersOnSend": [ "X-BORG", "X-MAILER" ]
       },
       "Logging": {
         "IncludeScopes": false,
