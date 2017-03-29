@@ -16,5 +16,7 @@ namespace Borg.Infra.Storage.Assets
         Task AddVersion(TKey id, IVersionSpec spec);
 
         Task<IAssetSpec<TKey>> Get(TKey id);
+
+        Task<IVersionSpec> GetVersion(TKey id, int version);
     }
 }

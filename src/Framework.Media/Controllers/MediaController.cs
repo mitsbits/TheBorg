@@ -115,5 +115,15 @@ namespace Borg.Framework.Media
             }
             return RedirectToAction("Asset", new { id = model.Id });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RestoreVersion(RestoreVersionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _mediaService.RestoreOldVersion(model.Id, model.Version);
+            }
+            return RedirectToAction("Asset", new { id = model.Id });
+        }
     }
 }

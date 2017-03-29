@@ -1,15 +1,14 @@
 using Borg.Framework.Media;
-
 using Borg.Infra.Relational;
+using Borg.Infra.Storage;
 using System.Linq;
 using System.Threading.Tasks;
-using Borg.Infra.Storage;
 
 namespace Borg
 {
     public static class IFileSpecExtensions
     {
-        private static string[] _images = { "image/jpeg" };
+        private static readonly string[] _images = { "image/jpeg" };
 
         public static bool IsImage(this IFileSpec spec)
         {

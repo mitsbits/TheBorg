@@ -111,5 +111,39 @@ namespace Borg.Infra.Storage.Assets
                 throw;
             }
         }
+
+        public Task<IAssetSpec<TKey>> RestoreOldVersion(TKey id, int version)
+        {
+            try
+            {
+                AssetSpec<TKey> spec;
+                lock (_lock)
+                {
+                    spec = _db[id].Item1;
+                }
+                if (spec == null) throw new AssetNotFoundException<TKey>(id);
+                var versions = _db[id].Item2;
+
+                var oldVersion = versions.Find(x => x.Version == version);
+
+                if (oldVersion == null) throw new VersionNotFoundException<TKey>(id, version);
+
+                var file = oldVersion.FileSpec;
+
+                var newVersion = new VersionSpec(versions.Max(x => x.Version) + 1,
+                    new FileSpec(file.FullPath, file.Name, file.CreationDate, file.LastWrite, file.LastRead, file.SizeInBytes, file.MimeType));
+
+                versions.Add(newVersion);
+
+                spec = new AssetSpec<TKey>(spec.Id, spec.State, newVersion, spec.Name);
+                _db[id] = Tuple.Create(spec, versions);
+                return Task.FromResult((IAssetSpec<TKey>)spec);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

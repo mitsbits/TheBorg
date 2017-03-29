@@ -1,10 +1,11 @@
+using Borg.Framework.System;
 using Borg.Infra.Relational;
+using Borg.Infra.Storage;
 using Borg.Infra.Storage.Assets;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Borg.Framework.System;
 
 namespace Borg.Framework.Media
 {
@@ -89,6 +90,15 @@ namespace Borg.Framework.Media
 
         public void Dispose()
         {
+        }
+
+        public async Task<IVersionSpec> GetVersion(int id, int version)
+        {
+            var asset = await _repo.GetAsync(x => x.Id == id, assetSpec => assetSpec.Versions);
+            if (asset == null) throw new AssetNotFoundException<int>(id);
+            var oldVersion = asset.Versions.Single(x => x.Version == version);
+            if (oldVersion == null) throw new VersionNotFoundException<int>(id, version);
+            return oldVersion;
         }
     }
 }

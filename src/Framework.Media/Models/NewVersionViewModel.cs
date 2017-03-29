@@ -14,4 +14,16 @@ namespace Borg.Framework.Media.Models
             get; set;
         }
     }
+
+    public class RestoreVersionViewModel
+    {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
+        public int Version
+        {
+            get; set;
+        }
+    }
 }

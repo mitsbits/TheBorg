@@ -14,5 +14,7 @@ namespace Borg.Infra.Storage.Assets
         Task Delete(TKey id);
 
         Task<IAssetSpec<TKey>> AddNewVersion(TKey id, byte[] content, string fileName, string contentType = "");
+
+        Task<IAssetSpec<TKey>> RestoreOldVersion(TKey id, int version);
     }
 }

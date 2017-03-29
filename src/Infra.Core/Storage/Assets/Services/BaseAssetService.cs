@@ -110,6 +110,20 @@ namespace Borg.Infra.Storage.Assets
             return dto;
         }
 
+        public async Task<IAssetSpec<TKey>> RestoreOldVersion(TKey id, int version)
+        {
+            IAssetSpec<TKey> spec = await Db.Get(id);
+            if (spec == null) throw new AssetNotFoundException<TKey>(id);
+
+            var oldVersion = await Db.GetVersion(id, version);
+            if (oldVersion == null) throw new VersionNotFoundException<TKey>(id, version);
+            var file = oldVersion.FileSpec;
+            var newVersion = new VersionSpec(spec.Versions.Max(x => x.Version) + 1,
+                new FileSpec(file.FullPath, file.Name, file.CreationDate, file.LastWrite, file.LastRead, file.SizeInBytes, file.MimeType));
+            await Db.AddVersion(id, newVersion);
+            return await Db.Get(id);
+        }
+
         #endregion IAssetService
 
         protected virtual async Task<IAssetSpec<TKey>> AddVersionAndReturnDto(TKey id, IAssetSpec<TKey> spec, IFileSpec filespec)

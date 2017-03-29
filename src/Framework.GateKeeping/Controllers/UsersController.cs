@@ -1,5 +1,7 @@
-﻿using Borg.Framework.GateKeeping.Models;
+﻿using Borg.Framework.GateKeeping.Commands;
+using Borg.Framework.GateKeeping.Models;
 using Borg.Framework.GateKeeping.Models.AccountViewModels;
+using Borg.Framework.GateKeeping.Models.UserViewModels;
 using Borg.Framework.GateKeeping.Queries;
 using Borg.Framework.MVC;
 using Borg.Framework.MVC.BuildingBlocks.Devices;
@@ -14,9 +16,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Borg.Framework.GateKeeping.Commands;
-using Borg.Framework.GateKeeping.Models.UserViewModels;
-using Borg.Infra.Storage.Assets;
 
 namespace Borg.Framework.GateKeeping
 {
@@ -61,13 +60,12 @@ namespace Borg.Framework.GateKeeping
         {
             var user = await _userManager.FindByIdAsync(id);
 
-          
             if (user == null) throw new FileNotFoundException(nameof(BorgUser));
 
             var userClaims = await _userManager.GetClaimsAsync(user);
             foreach (var userClaim in userClaims)
             {
-                user.Claims.Add(new IdentityUserClaim<string>() {ClaimType = userClaim.Type, ClaimValue = userClaim.Value});
+                user.Claims.Add(new IdentityUserClaim<string>() { ClaimType = userClaim.Type, ClaimValue = userClaim.Value });
             }
 
             var page = new PageContent()
@@ -145,13 +143,14 @@ namespace Borg.Framework.GateKeeping
         }
 
         [HttpPost]
+        [Route("[area]/users/Avatar")]
         public async Task<IActionResult> Avatar(UserAvatarViewModel model)
         {
             if (ModelState.IsValid)
             {
                 await Backoffice.Process(new UserAvatarCommand(model));
             }
-            return RedirectToAction("Details", new {id = model.UserId});
+            return RedirectToAction("Details", new { id = model.UserId });
         }
 
         private async Task<string[]> EnsureRolesExistInDb(CreateUserViewModel model)

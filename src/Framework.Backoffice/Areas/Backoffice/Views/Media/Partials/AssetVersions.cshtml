@@ -25,16 +25,30 @@
                         <th>Size</th>
                         <th>Created On</th>
                         <th>Mime</th>
+                        <th></th>
                 </thead>
                 <tbody>
                     @foreach (VersionSpec v in Model.Versions.OrderByDescending(x => x.Version))
                     {
                         <tr>
-                            <td> @v.Version </td>
+                            <td>@v.Version</td>
                             <td>@v.FileSpec.Name</td>
                             <td>@v.FileSpec.SizeInBytes.BytesDisplay()</td>
                             <td>@v.FileSpec.CreationDate.ToLocalTime().ToString("d/M/yy HH:mm")</td>
                             <td>@v.FileSpec.MimeType</td>
+                            <td>
+                                @if (Model.CurrentFile.Version != v.Version)
+                                {
+                                    <form asp-controller="Media" asp-action="RestoreVersion" method="post">
+                                        <input type="hidden" name="Id" value="@Model.Id"/>
+                                        <input type="hidden" name="Version" value="@v.Version" />
+                                        <input type="hidden" name="RedirectUrl" value="@Device.Device.Path"/>
+                                        <button type="submit" class="btn btn-default btn-xs pull-right">
+                                            <span class="glyphicon glyphicon-upload"></span>
+                                        </button>
+                                    </form>
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>

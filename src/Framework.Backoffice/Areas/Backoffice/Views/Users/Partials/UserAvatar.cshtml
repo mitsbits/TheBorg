@@ -6,7 +6,7 @@
             <div class="col-sm-4 col-sm-offset-4"><img src="@Model.UserAvatarUrl" class="img-bordered-sm img-thumbnail center-block" alt="@Model.UserName" /></div>
         </div>
     </div>
-    <form asp-controller="Users" asp-action="Avatar" method="post" enctype="multipart/form-data">
+    <form asp-controller="Users" asp-action="Avatar" asp-area="backoffice" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label asp-for="UserAvatarUrl"></label>
             <input type="text" asp-for="UserAvatarUrl" class="form-control" />
